@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./Header.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faBasketShopping } from "@fortawesome/free-solid-svg-icons";
@@ -8,6 +8,11 @@ import Cart from "../Cart/Cart";
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false); //Para saber si el menu esta abierto o cerrado
   const [isCartOpen, setIsCartOpen] = useState(false); //Para saber si el carrito esta abierto o cerrado
+  const [isAccountOpen, setIsAccountOpen] = useState(false); //Para saber si el carrito esta abierto o cerrado
+
+  const menuRef = useRef(null);
+  const accountRef = useRef(null);
+  const cartRef = useRef(null);
 
   // Funcion para alternar el estado del menu
   const toggleMenu = () => {
@@ -17,6 +22,29 @@ export default function Header() {
   const onCartToggle = () => {
     setIsCartOpen(!isCartOpen);
   };
+  const toggleAccount = () => {
+    setIsAccountOpen(!isAccountOpen);
+  };
+
+  // Cierra el menú si se hace clic fuera de él
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+      if (accountRef.current && !accountRef.current.contains(event.target)) {
+        setIsAccountOpen(false);
+      }
+      if (cartRef.current && !cartRef.current.contains(event.target)) {
+        setIsCartOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuRef,accountRef, cartRef]);
 
   return (
     <>
@@ -60,8 +88,20 @@ export default function Header() {
         </nav>
         {/* Menu superpuesto */}
         {isMenuOpen && (
-          <div className={styles.overlayMenu}>
+          <div className={styles.overlayMenu} ref={menuRef}>
             <ul>
+              <li
+                onClick={toggleAccount}
+                className={isAccountOpen ? styles.accountActive : ""}
+              >
+                Mi cuenta
+                {isAccountOpen && (
+                  <div className={styles.accountSubmenu} ref={accountRef}>
+                    <li>Mis datos</li>
+                    <li>Mi biblioteca</li>
+                  </div>
+                )}
+              </li>
               <li>Todos los libros</li>
               <li>Ficción</li>
               <li>No Ficción</li>
@@ -69,11 +109,10 @@ export default function Header() {
               <li>Fantasía</li>
               <li>Thriller</li>
               <li>Romance</li>
-              <li>Mi cuenta</li>
             </ul>
           </div>
         )}
-        {isCartOpen && <Cart />}
+        {isCartOpen && <Cart cartRef={cartRef} />}
       </header>
     </>
   );

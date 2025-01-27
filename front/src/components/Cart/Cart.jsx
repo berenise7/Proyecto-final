@@ -1,12 +1,92 @@
-import React from 'react'
+import React, { useState } from "react";
 import styles from "./Cart.module.css";
 
-export default function Cart() {
+export default function Cart(props) {
+  const { cartRef } = props;
+
+  // Estado de ejemplo para los productos del carrito
+  const [cartItems, setCartItems] = useState([
+    { id: 1, name: "Libro 1", price: 15.99, quantity: 1 },
+    { id: 2, name: "Libro 2", price: 20.49, quantity: 2 },
+  ]);
+
+  // Función para incrementar la cantidad del producto
+  const incrementQuantity = (id) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id && item.quantity > 0
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      )
+    );
+  };
+
+  // Función para disminuir la cantidad de un producto
+  const decrementQuantity = (id) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+    );
+  };
+
+  //Funcion para eliminar productos del carrito
+  const removeItem = (id) => {
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  };
+
+  // Calcular todo el total
+  const calculateTotal = () => {
+    return cartItems
+      .reduce((acc, item) => acc + item.price * item.quantity, 0)
+      .toFixed(2);
+  };
+  
   return (
-    <div className={styles.overlayCart}>
-      <div className={styles.cartContent}>
-        <h2>Carrito de compras</h2>
+    <div className={styles.overlayCart} ref={cartRef}>
+      <div className={styles.cartContainer}>
+        <h2>Tu carrito</h2>
+        {cartItems.length === 0 ? (
+          <p>Tu carrito está vacío.</p>
+        ) : (
+          <div className={styles.cartItems}>
+            {cartItems.map((item) => (
+              <div key={item.id} className={styles.cartItem}>
+                <div className={styles.itemInfo}>
+                  <p className={styles.itemName}>{item.name}</p>
+                  <p className={styles.itemPrice}>{item.price.toFixed(2)}€</p>
+                </div>
+                <div className={styles.itemControls}>
+                  <button
+                    className={styles.quantityButton}
+                    onClick={() => decrementQuantity(item.id)}
+                  >
+                    -
+                  </button>
+                  <span className={styles.quantity}>{item.quantity}</span>
+                  <button
+                    className={styles.quantityButton}
+                    onClick={() => incrementQuantity(item.id)}
+                  >
+                    +
+                  </button>
+                </div>
+                <button
+                  className={styles.removeButton}
+                  onClick={() => removeItem(item.id)}
+                >
+                  Eliminar
+                </button>
+              </div>
+            ))}
+            <div className={styles.cartTotal}>
+              <h3>Total: {calculateTotal()}€</h3>
+            </div>
+          </div>
+        )}
       </div>
     </div>
-  )
+  );
 }

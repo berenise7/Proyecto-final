@@ -1,0 +1,97 @@
+.overlayCart {
+    font-family: "Poppins", serif;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    /* Se posiciona en relación al contenedor .navbar */
+    top: 100%;
+    /* Empieza justo debajo del contenedor */
+    right: 0;
+    width: 20%;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+.cartContainer{
+    padding: 1.25em;
+}
+
+.cartContainer h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.cartItems {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.cartItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.itemInfo {
+    flex: 1;
+}
+
+.itemName {
+    font-weight: bold;
+}
+
+.itemPrice {
+    color: #666;
+}
+
+.itemControls {
+    display: flex;
+    align-items: center;
+}
+
+.quantityButton {
+    background-color: #f2eadf;
+    border: 1px solid #ddd;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 0 5px;
+}
+
+.quantityButton:hover {
+    background-color: #e6ded3;
+}
+
+.quantity {
+    font-weight: bold;
+    padding: 0 5px;
+}
+
+.removeButton {
+    background-color: #59485b;
+    border: none;
+    color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.removeButton:hover {
+    background-color: #3d373d;
+}
+
+.cartTotal {
+    margin-top: 15px;
+    text-align: right;
+}
+
+.cartTotal h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+}

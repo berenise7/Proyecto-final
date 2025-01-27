@@ -30,13 +30,16 @@
 }
 
 .menuIcon {
+    cursor: pointer;
+    margin: 0 !important;
     font-size: 2em;
-
+    color: #59485b;
 }
 
-.navbar h1>a:hover {
+.menuIcon:hover {
     color: #3d373d;
 }
+
 
 .logoContainer {
     display: flex;
@@ -52,8 +55,13 @@
 
 }
 
+.iconLogo img {
+    height: 12em;
+}
+
 .navbar h1 {
     margin: 0;
+    padding-right: 1em;
     font-family: "Poppins", serif;
     font-size: 2em;
     font-weight: 700;
@@ -64,6 +72,10 @@
 
 }
 
+.navbar h1>a:hover {
+    color: #3d373d;
+}
+
 .searchBar {
     padding: 0.5rem;
     width: 50rem;
@@ -71,7 +83,11 @@
     border: 1px solid #ccc;
 }
 
-
+.searchBar:focus {
+    border: 2px solid #59485b;
+    /* Cambia el color del borde */
+    outline: none;
+}
 
 .bottomRow {
     display: flex;
@@ -93,33 +109,45 @@
     flex-direction: row;
     justify-content: center;
     width: 200px;
+    color: #59485b;
+    font-weight: 600;
 }
+
+
 
 .navLinks a,
 .navLinks p {
+
     margin: 0 10px;
 }
 
+.navLinks a:hover {
+    color: #3d373d;
+}
+
 .cartIcon {
+    cursor: pointer;
     font-size: 2em;
+    color: #59485b;
+}
+
+.cartIcon:hover {
+    color: #3d373d;
 }
 
 .overlayMenu ul {
-    /* display: flex;
-    flex-direction: column;
-    list-style: none;
-    padding: 0;
-    align-items: flex-start; */
+    font-family: "Poppins", serif;
     display: flex;
     flex-direction: column;
     list-style: none;
     padding: 0;
+    margin: 0;
     position: absolute;
     /* Se posiciona en relación al contenedor .navbar */
     top: 100%;
     /* Empieza justo debajo del contenedor */
     left: 0;
-    width: 100%;
+    width: 20%;
     background-color: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transform: translateY(0);
@@ -128,12 +156,59 @@
 
 .overlayMenu li {
     margin: 10px 0;
-    padding: 10px
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
+    /* Necesario para posicionar el submenú */
+}
+
+.overlayMenu li:hover {
+    background-color: #f2eadf;
+}
+
+/* Submenú de "Mi cuenta" */
+.accountSubmenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 10px;
+    /* Espacio entre "Mi cuenta" y el submenú */
+    /* padding-left: 10px; */
+    /* Alinea hacia la derecha respecto a "Mi cuenta" */
+    background-color: #f9f9f9;
+    border-left: 2px solid #ccc;
+    display: none;
+    /* Oculto por defecto */
+}
+
+.accountSubmenu li {
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.accountSubmenu li:hover {
+    background-color: #f2eadf;
+    border: 2px solid #59485b;
+}
+
+.accountActive {
+    background-color: #f2eadf;
+}
+
+/* Mostrar el submenú cuando isAccountOpen está activo */
+.overlayMenu li.accountActive .accountSubmenu {
+    display: block;
 }
 
 @media (max-width: 1650px) {
-     /* Estructura del contenedor principal */
-     .navbar nav {
+
+    /* Estructura del contenedor principal */
+    .navbar {
+        padding-left: 1.3em;
+    }
+
+    .navbar nav {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -146,7 +221,6 @@
         align-items: center;
         justify-content: space-between;
         gap: 10px;
-
         width: 100%;
         box-sizing: border-box;
     }
@@ -156,16 +230,15 @@
     }
 
     .iconLogo img {
-        max-width: 100px;
+        max-width: 150px;
         /* Tamaño reducido del logo */
         height: auto;
     }
 
     .navbar h1 {
+        padding: 0;
         font-size: 1.2em;
-        /* Tamaño reducido del título */
         margin-left: 10px;
-        /* Separación entre logo y título */
     }
 
     /* Segunda fila: barra de búsqueda */
@@ -194,7 +267,7 @@
     .navLinks a,
     .navLinks p {
         font-size: 0.9rem;
-        margin: 0 ;
+        margin: 0 10px !important;
     }
 
     .cartIcon {
@@ -205,6 +278,9 @@
 }
 
 @media (max-width: 768px) {
+    .navbar {
+        padding-left: 0;
+    }
 
     /* Estructura del contenedor principal */
     .navbar nav {
@@ -212,83 +288,58 @@
         flex-direction: column;
         align-items: center;
         width: 100%;
+        margin: 1em 0;
     }
 
     /* Primera fila: menú, logo y título */
     .navbar nav .topRow {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding: 10px 20px;
-        box-sizing: border-box;
+        padding: 0px 20px;
+        margin-bottom: .5em;
     }
 
     .menuIcon {
         font-size: 1.5em;
+        margin: 0;
         /* Tamaño del icono del menú */
     }
 
-    .iconLogo img {
-        max-width: 50px;
-        /* Tamaño reducido del logo */
-        height: auto;
+    .iconLogo {
+        height: 0;
     }
 
-    .navbar h1 {
-        font-size: 1.2em;
-        /* Tamaño reducido del título */
-        margin-left: 10px;
-        /* Separación entre logo y título */
+    .iconLogo img {
+        max-width: 0px;
     }
 
     /* Segunda fila: barra de búsqueda */
     .searchBar {
         width: 90%;
         /* Ocupa casi todo el ancho */
-        margin: 10px 0;
-        font-size: 0.9rem;
     }
 
     /* Tercera fila: navLinks y cartIcon */
     .navbar nav .bottomRow {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 90%;
+        width: 95%;
     }
 
     .navLinks {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
+        margin: 0;
     }
 
-    .navLinks a,
-    .navLinks p {
-        font-size: 0.9rem;
-        margin: 0 10px;
-    }
 
     .cartIcon {
         font-size: 1.5em;
-        margin-left: 20px;
-        /* Separación del carrito */
+    }
+
+    .overlayMenu ul {
+        width: 30%;
     }
 }
 
-
-
-/* Pantallas muy pequeñas (móviles verticales) */
 @media (max-width: 480px) {
-    .iconLogo img {
-        max-width: 60px;
-        /* Ajusta el logo aún más */
-    }
 
     .navbar h1 {
-        font-size: 1.2em;
+        font-size: 1em;
         /* Ajusta el tamaño del título */
     }
 
@@ -300,38 +351,25 @@
     }
 
     .navLinks {
-        flex-direction: column;
-        /* Cambia los enlaces a columna */
-        align-items: center;
-        /* Centra los enlaces */
+        justify-content: space-around;
     }
+
 
     .navLinks a,
     .navLinks p {
-        margin: 5px 0;
         font-size: 0.8rem;
+        margin: 5px 0;
         /* Ajusta el tamaño */
     }
 
     .menuIcon,
     .cartIcon {
-        font-size: 1.2em;
+        font-size: 1.5em;
         /* Más pequeño para móviles */
     }
 
-    .overlayMenu {
-        position: fixed;
-        /* Menú ocupa toda la pantalla en móviles */
-        top: 0;
-        left: 0;
-        height: 100%;
-        z-index: 1000;
-        background-color: rgba(255, 255, 255, 0.9);
-        padding: 20px;
+    .overlayMenu ul {
+        width: 45%;
     }
 
-    .overlayMenu li {
-        font-size: 1rem;
-        text-align: center;
-    }
 }
