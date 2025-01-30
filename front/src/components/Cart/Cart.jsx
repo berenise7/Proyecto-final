@@ -2,13 +2,9 @@ import React, { useState } from "react";
 import styles from "./Cart.module.css";
 
 export default function Cart(props) {
-  const { cartRef } = props;
+  const { cartRef, cartItems, setCartItems } = props;
 
   // Estado de ejemplo para los productos del carrito
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: "Libro 1", price: 15.99, quantity: 1 },
-    { id: 2, name: "Libro 2", price: 20.49, quantity: 2 },
-  ]);
 
   // Función para incrementar la cantidad del producto
   const incrementQuantity = (id) => {
@@ -43,13 +39,13 @@ export default function Cart(props) {
       .reduce((acc, item) => acc + item.price * item.quantity, 0)
       .toFixed(2);
   };
-  
+
   return (
     <div className={styles.overlayCart} ref={cartRef}>
       <div className={styles.cartContainer}>
-        <h2>Tu carrito</h2>
+        <h2>Tu cesta</h2>
         {cartItems.length === 0 ? (
-          <p>Tu carrito está vacío.</p>
+          <p>Tu cesta está vacía.</p>
         ) : (
           <div className={styles.cartItems}>
             {cartItems.map((item) => (
@@ -86,6 +82,9 @@ export default function Cart(props) {
             </div>
           </div>
         )}
+      </div>
+      <div className={styles.payButtonWrapper}>
+        <button className={styles.payButton}>Ir a pagar</button>
       </div>
     </div>
   );

@@ -3,22 +3,23 @@
     display: flex;
     flex-direction: column;
     list-style: none;
-    padding: 0;
+    padding: 0 0 1.2em 1.2em;
     margin: 0;
     position: absolute;
     /* Se posiciona en relación al contenedor .navbar */
     top: 100%;
     /* Empieza justo debajo del contenedor */
     right: 0;
-    width: 20%;
+    width: 25%;
     background-color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.1);
     transform: translateY(0);
     transition: transform 0.3s ease;
 }
 
-.cartContainer{
+.cartContainer {
     padding: 1.25em;
+    
 }
 
 .cartContainer h2 {
@@ -27,9 +28,10 @@
 }
 
 .cartItems {
-    max-height: 300px;
+    max-height: 60vh;
     overflow-y: auto;
 }
+
 
 .cartItem {
     display: flex;
@@ -74,7 +76,7 @@
 }
 
 .removeButton {
-    background-color: #59485b;
+    background-color: #694a6d;
     border: none;
     color: #fff;
     padding: 5px 10px;
@@ -83,7 +85,7 @@
 }
 
 .removeButton:hover {
-    background-color: #3d373d;
+    background-color: #5c3e56;
 }
 
 .cartTotal {
@@ -94,4 +96,72 @@
 .cartTotal h3 {
     font-size: 1.2rem;
     font-weight: bold;
+}
+.payButtonWrapper{
+    display: flex;
+    justify-content: center; /* Centra el botón horizontalmente */
+    margin-top: 20px; /* Espacio superior */
+}
+.payButton{
+    font-family: "Poppins", serif;
+    background-color: #694a6d;
+    border: none;
+    color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    text-transform: uppercase;
+    width: 90%;
+}
+.payButton:hover{
+    background-color: #5c3e56;
+}
+
+@media (max-width: 1650px) {
+    .overlayCart {
+        width: 40%;
+
+    }
+}
+
+@media (max-width: 768px) {
+    .overlayCart {
+        width: 50%;
+    }
+
+    .cartContainer h2 {
+        font-size: 1.25rem;
+    }
+
+    .cartItems {
+        max-height: 60vh;
+    }
+   
+    .quantityButton {
+        padding: 4px;
+        margin: 0 3px;
+    }
+
+    .removeButton {
+        padding: 4px 8px;
+    }
+
+    .cartTotal h3 {
+        font-size: 1rem;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .overlayCart {
+        width: 100%; 
+    }
+
+    .cartContainer h2 {
+        font-size: 1rem; 
+    }
+
+    .cartTotal h3 {
+        font-size: 0.9rem; 
+    }
 }

@@ -9,33 +9,62 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false); //Para saber si el menu esta abierto o cerrado
   const [isCartOpen, setIsCartOpen] = useState(false); //Para saber si el carrito esta abierto o cerrado
   const [isAccountOpen, setIsAccountOpen] = useState(false); //Para saber si el carrito esta abierto o cerrado
+  // Estado de ejemplo para los productos del carrito
+  const [cartItems, setCartItems] = useState([
+    { id: 1, name: "Libro 1", price: 15.99, quantity: 1 },
+    { id: 2, name: "Libro 2", price: 20.49, quantity: 2 },
+    { id: 3, name: "Libro 2", price: 20.49, quantity: 2 },
+    { id: 4, name: "Libro 2", price: 20.49, quantity: 2 },
+    { id: 5, name: "Libro 2", price: 20.49, quantity: 2 },
+    { id: 6, name: "Libro 2", price: 20.49, quantity: 2 },
+    { id: 7, name: "Libro 2", price: 20.49, quantity: 2 },
+  ]);
 
+  const buttonMenuRef = useRef(null);
+  const buttonAccountRef = useRef(null);
+  const buttonCartRef = useRef(null);
   const menuRef = useRef(null);
   const accountRef = useRef(null);
   const cartRef = useRef(null);
 
   // Funcion para alternar el estado del menu
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = (event) => {
+    event.stopPropagation();
+    setIsMenuOpen((prevState) => !prevState);
+  };
+  const toggleAccount = () => {
+    setIsAccountOpen((prevState) => !prevState);
   };
   // Funcion para alternar el estado del carrito
   const onCartToggle = () => {
-    setIsCartOpen(!isCartOpen);
-  };
-  const toggleAccount = () => {
-    setIsAccountOpen(!isAccountOpen);
+    setIsCartOpen((prevState) => !prevState);
   };
 
-  // Cierra el menú si se hace clic fuera de él
+  // Cierra el menú, mi cuenta o el carrito si se hace clic fuera de él o se vuelve a clicar en el boton
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        buttonMenuRef.current &&
+        !buttonMenuRef.current.contains(event.target)
+      ) {
         setIsMenuOpen(false);
       }
-      if (accountRef.current && !accountRef.current.contains(event.target)) {
+      if (
+        accountRef.current &&
+        !accountRef.current.contains(event.target) &&
+        buttonAccountRef.current &&
+        !buttonAccountRef.current.contains(event.target)
+      ) {
         setIsAccountOpen(false);
       }
-      if (cartRef.current && !cartRef.current.contains(event.target)) {
+      if (
+        cartRef.current &&
+        !cartRef.current.contains(event.target) &&
+        buttonCartRef.current &&
+        !buttonCartRef.current.contains(event.target)
+      ) {
         setIsCartOpen(false);
       }
     };
@@ -44,7 +73,7 @@ export default function Header() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [menuRef,accountRef, cartRef]);
+  }, []);
 
   return (
     <>
@@ -53,7 +82,11 @@ export default function Header() {
         <nav>
           {/* Icono de menú, que activa o desactiva el estado isMenuOpen */}
           <div className={styles.topRow}>
-            <div className={styles.menuIcon} onClick={toggleMenu}>
+            <div
+              className={styles.menuIcon}
+              onClick={toggleMenu}
+              ref={buttonMenuRef}
+            >
               <FontAwesomeIcon icon={faBars} />
             </div>
             <div className={styles.logoContainer}>
@@ -82,10 +115,15 @@ export default function Header() {
             </div>
             {/* Ícono del carrito, que activa o desactiva el estado isCartOpen */}
             <div className={styles.cartIcon}>
-              <FontAwesomeIcon icon={faBasketShopping} onClick={onCartToggle} />
+              <FontAwesomeIcon
+                icon={faBasketShopping}
+                onClick={onCartToggle}
+                ref={buttonCartRef}
+              />
             </div>
           </div>
         </nav>
+
         {/* Menu superpuesto */}
         {isMenuOpen && (
           <div className={styles.overlayMenu} ref={menuRef}>
@@ -93,10 +131,15 @@ export default function Header() {
               <li
                 onClick={toggleAccount}
                 className={isAccountOpen ? styles.accountActive : ""}
+                ref={buttonAccountRef}
               >
                 Mi cuenta
                 {isAccountOpen && (
-                  <div className={styles.accountSubmenu} ref={accountRef}>
+                  <div
+                    className={styles.accountSubmenu}
+                    ref={accountRef}
+                    onClick={(event) => event.stopPropagation()}
+                  >
                     <li>Mis datos</li>
                     <li>Mi biblioteca</li>
                   </div>
@@ -112,7 +155,13 @@ export default function Header() {
             </ul>
           </div>
         )}
-        {isCartOpen && <Cart cartRef={cartRef} />}
+        {isCartOpen && (
+          <Cart
+            cartRef={cartRef}
+            cartItems={cartItems}
+            setCartItems={setCartItems}
+          />
+        )}
       </header>
     </>
   );

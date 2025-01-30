@@ -37,7 +37,7 @@
 }
 
 .menuIcon:hover {
-    color: #3d373d;
+    color: #5c3e56;
 }
 
 
@@ -73,7 +73,7 @@
 }
 
 .navbar h1>a:hover {
-    color: #3d373d;
+    color: #5c3e56;
 }
 
 .searchBar {
@@ -99,7 +99,7 @@
 
 .menuIcon,
 .searchBar,
-.navLinks,
+/* .navLinks, */
 .cartIcon {
     margin: 0 1em;
 }
@@ -122,7 +122,7 @@
 }
 
 .navLinks a:hover {
-    color: #3d373d;
+    color: #5c3e56;
 }
 
 .cartIcon {
@@ -132,7 +132,7 @@
 }
 
 .cartIcon:hover {
-    color: #3d373d;
+    color: #5c3e56;
 }
 
 .overlayMenu ul {
@@ -149,7 +149,7 @@
     left: 0;
     width: 20%;
     background-color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
     transform: translateY(0);
     transition: transform 0.3s ease;
 }
@@ -243,7 +243,7 @@
 
     /* Segunda fila: barra de búsqueda */
     .searchBar {
-        width: 70%;
+        width: 60%;
         /* Ocupa casi todo el ancho */
         margin: 10px 0;
         font-size: 0.9rem;
@@ -254,7 +254,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: .5em;
         width: 30%;
+        margin-right: 1em;
     }
 
     .navLinks {
@@ -267,12 +269,12 @@
     .navLinks a,
     .navLinks p {
         font-size: 0.9rem;
-        margin: 0 10px !important;
+        margin: 0 0.625em !important;
     }
 
     .cartIcon {
-        font-size: 1.7em;
-        margin-left: 20px;
+        font-size: 1.8em;
+        padding-right: 20px;
         /* Separación del carrito */
     }
 }
@@ -298,7 +300,7 @@
     }
 
     .menuIcon {
-        font-size: 1.5em;
+        font-size: 1.7em;
         margin: 0;
         /* Tamaño del icono del menú */
     }
@@ -328,11 +330,26 @@
 
 
     .cartIcon {
-        font-size: 1.5em;
+        font-size: 1.7em;
     }
 
     .overlayMenu ul {
-        width: 30%;
+        width: 35%;
+    }
+
+    .overlayMenu li {
+        margin: 5px 0;
+        padding: 15px;
+    }
+
+    .accountSubmenu {
+        border-left: none;
+        background-color: white;
+    }
+
+    .accountSubmenu li {
+        padding: 10px;
+        font-size: 1rem;
     }
 }
 
@@ -370,6 +387,16 @@
 
     .overlayMenu ul {
         width: 45%;
+    }
+
+    .overlayMenu li {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .accountSubmenu li {
+        padding: 8px;
+        font-size: 0.8rem;
     }
 
 }
