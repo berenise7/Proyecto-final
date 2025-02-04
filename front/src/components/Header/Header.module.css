@@ -5,7 +5,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 100;
     background-color: #f2eadf;
     width: 100%;
 }
@@ -95,12 +97,11 @@
     /* Por defecto, enlaces y carrito van al final */
     align-items: center;
     gap: 1rem;
+    width: 25%;
 }
 
 .menuIcon,
-.searchBar,
-/* .navLinks, */
-.cartIcon {
+.searchBar {
     margin: 0 1em;
 }
 
@@ -108,7 +109,7 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    width: 200px;
+    width: 100%;
     color: #59485b;
     font-weight: 600;
 }
@@ -117,8 +118,11 @@
 
 .navLinks a,
 .navLinks p {
-
     margin: 0 10px;
+}
+
+.navLinks a {
+    cursor: pointer;
 }
 
 .navLinks a:hover {
@@ -126,12 +130,30 @@
 }
 
 .cartIcon {
-    cursor: pointer;
+    position: relative;
+    display: inline-block;
     font-size: 2em;
     color: #59485b;
+    cursor: pointer;
+    margin-right: 10px;
 }
 
-.cartIcon:hover {
+.cartIcon span {
+    position: absolute;
+    top: -8px;
+    right: -13px;
+    /* Color del círculo */
+    color: #59485b;
+    font-size: 0.6em;
+    font-weight: 700;
+    width: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cartIcon:hover,
+.cartIcon span:hover {
     color: #5c3e56;
 }
 

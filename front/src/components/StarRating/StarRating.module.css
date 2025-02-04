@@ -1,0 +1,20 @@
+.stars {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .starFull {
+    color: #f5c518; /* Amarillo */
+    font-size: 22px;
+  }
+  
+  .starHalf {
+    color: #f5c518; /* Amarillo */
+    font-size: 22px;
+  }
+  
+  .starEmpty {
+    color: #ccc; /* Gris */
+    font-size: 22px;
+  }

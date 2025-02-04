@@ -1,24 +1,21 @@
 import Link from "next/link";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, use } from "react";
 import styles from "./Header.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faBasketShopping } from "@fortawesome/free-solid-svg-icons";
 import Cart from "../Cart/Cart";
+import { useCart } from "@/core/contexts/CartContext";
+import { useRouter } from "next/router";
 
 export default function Header() {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false); //Para saber si el menu esta abierto o cerrado
   const [isCartOpen, setIsCartOpen] = useState(false); //Para saber si el carrito esta abierto o cerrado
   const [isAccountOpen, setIsAccountOpen] = useState(false); //Para saber si el carrito esta abierto o cerrado
-  // Estado de ejemplo para los productos del carrito
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: "Libro 1", price: 15.99, quantity: 1 },
-    { id: 2, name: "Libro 2", price: 20.49, quantity: 2 },
-    { id: 3, name: "Libro 2", price: 20.49, quantity: 2 },
-    { id: 4, name: "Libro 2", price: 20.49, quantity: 2 },
-    { id: 5, name: "Libro 2", price: 20.49, quantity: 2 },
-    { id: 6, name: "Libro 2", price: 20.49, quantity: 2 },
-    { id: 7, name: "Libro 2", price: 20.49, quantity: 2 },
-  ]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Uso el context del carrito
+  const { cart, totalQuantity, handleLogout } = useCart();
 
   const buttonMenuRef = useRef(null);
   const buttonAccountRef = useRef(null);
@@ -75,6 +72,23 @@ export default function Header() {
     };
   }, []);
 
+  // Verificar si existe el token
+  useEffect(() => {
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    console.log("🔎 Token encontrado:", token);
+    setIsAuthenticated(!!token);
+  }, []);
+
+  // Funcion para cerrar sesion
+  // const handleLogout = () => {
+  //   console.log("🚪 Cerrando sesión...");
+  //   localStorage.removeItem("token");
+  //   sessionStorage.removeItem("token");
+  //   setIsAuthenticated(false);
+  //   router.push("/");
+  // };
+
   return (
     <>
       {/* Contenedor para la barra de navegación  */}
@@ -108,11 +122,19 @@ export default function Header() {
           {/* Barra de búsqueda para buscar libros por autor, título, etc. */}
           <div className={styles.bottomRow}>
             {/* Enlaces de navegación a las páginas de registro y login */}
-            <div className={styles.navLinks}>
-              <Link href="/user/register">Register</Link>
-              <p>/</p>
-              <Link href="/user/login">Login</Link>
-            </div>
+            {isAuthenticated ? (
+              <div className={styles.navLinks}>
+                <Link href="/user/account">Mi cuenta</Link>
+                <p>/</p>
+                <a onClick={handleLogout}>Cerra sesión</a>
+              </div>
+            ) : (
+              <div className={styles.navLinks}>
+                <Link href="/user/register">Register</Link>
+                <p>/</p>
+                <Link href="/user/login">Login</Link>
+              </div>
+            )}
             {/* Ícono del carrito, que activa o desactiva el estado isCartOpen */}
             <div className={styles.cartIcon}>
               <FontAwesomeIcon
@@ -120,6 +142,8 @@ export default function Header() {
                 onClick={onCartToggle}
                 ref={buttonCartRef}
               />
+              {cart.length === 0 ? "" : <span>{totalQuantity}</span>}
+              {/* Muestra la cantidad de productos en el carrito */}
             </div>
           </div>
         </nav>
@@ -155,13 +179,7 @@ export default function Header() {
             </ul>
           </div>
         )}
-        {isCartOpen && (
-          <Cart
-            cartRef={cartRef}
-            cartItems={cartItems}
-            setCartItems={setCartItems}
-          />
-        )}
+        {isCartOpen && <Cart cartRef={cartRef} />}
       </header>
     </>
   );

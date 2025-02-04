@@ -1,0 +1,210 @@
+.container {
+    position: relative;
+
+    max-width: 90rem;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 3em;
+}
+
+.container a {
+    position: absolute;
+    /* Posiciona el enlace de manera absoluta */
+    top: 10px;
+    /* Arriba */
+    left: 10px;
+    padding-bottom: 1em;
+}
+
+.imageContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+    max-width: 25%;
+}
+
+
+.image {
+    max-width: 60%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.details {
+    flex: 2;
+    display: flex;
+    flex-direction: row;
+    gap: 3em;
+
+}
+
+.details1 {
+    width: 70%;
+}
+
+.details2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.details p {
+    margin: 0;
+
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.author {
+    font-size: 18px;
+    color: #555;
+}
+
+.isbn {
+    color: #555;
+    font-size: 14px;
+}
+
+.price {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #694a6d;
+    margin: .5em 0 !important;
+}
+
+.description {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #444;
+    margin-top: 15px !important;
+    white-space: pre-line;
+}
+
+.ratings {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.stars {
+    color: #f5c518;
+    /* Color dorado tipo estrella */
+    font-size: 20px;
+}
+
+.ratingText {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.button {
+    padding: 15px 50px;
+    background-color: #694a6d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #5c3e56;
+}
+
+.like {
+    margin-top: 1em !important;
+}
+
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .imageContainer {
+        max-width: 40%;
+        justify-content: center;
+    }
+
+    .details {
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    .details1 {
+        width: 100%;
+    }
+
+    .price {
+        font-size: 2rem;
+    }
+
+    .description {
+        font-size: 14px;
+    }
+
+    .button {
+        width: 100%;
+        padding: 12px;
+    }
+}
+
+/* Pantallas muy pequeñas (móviles) */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .imageContainer {
+        max-width: 50%;
+    }
+
+    .image {
+        max-width: 80%;
+    }
+
+    .details {
+        gap: 1em;
+    }
+
+    .details1 {
+        width: 100%;
+    }
+
+    .details2 {
+        align-items: flex-start;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    .author {
+        font-size: 16px;
+    }
+
+    .price {
+        font-size: 2rem;
+    }
+
+    .description {
+        font-size: 13px;
+    }
+
+    .button {
+        padding: 12px;
+    }
+}
