@@ -18,6 +18,7 @@ export const CartProvider = ({ children }) => {
             if (savedCart) {
                 setCart(JSON.parse(savedCart));  // Cargar el carrito guardado
             }
+           
         }
     }, []);
 
@@ -27,6 +28,7 @@ export const CartProvider = ({ children }) => {
         if (token && cart.length > 0) {
             localStorage.setItem(`cart_${token}`, JSON.stringify(cart));  // Guardar el carrito cada vez que cambia
         }
+       
     }, [cart]);
 
     // Función para agregar un libro al carrito
@@ -99,11 +101,18 @@ export const CartProvider = ({ children }) => {
         router.push("/"); // Redirigir a la página de inicio
     };
 
+    
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, incrementQuantity, decrementQuantity, calculateTotal, totalQuantity, formatPrice, handleLogout }}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, incrementQuantity, decrementQuantity, calculateTotal, totalQuantity, formatPrice, handleLogout, }}>
             {children}
         </CartContext.Provider>
     );
 };
 
-export const useCart = () => useContext(CartContext);
+export const useCart = () => {
+    const context = useContext(CartContext);
+    if (!context) {
+        throw new Error("useAuth debe usarse dentro de un AuthProvider");
+    }
+    return context;
+};

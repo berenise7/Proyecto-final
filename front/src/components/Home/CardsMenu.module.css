@@ -11,6 +11,7 @@
     display: flex;
     gap: 20px;
     overflow-x: auto;
+
 }
 
 .productList a{
@@ -31,6 +32,8 @@
     text-align: center;
     height: 100%;
     position: relative;
+    overflow: hidden;
+
 }
 
 .productCard img {
@@ -77,14 +80,23 @@
     font-size: 16px;
 }
 
+.actions {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    position: absolute;
+    bottom: -50px; /* Inicialmente los botones están fuera de la tarjeta */
+    left: 50%;
+    transform: translateX(-50%) translateY(50px); /* Desplazados hacia abajo fuera de la tarjeta */
+    opacity: 0; /* Inicialmente invisibles */
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Animación suave */
+    background-color: #fff;
+}
 
 /* Ocultar el botón inicialmente */
-.productCard button {
-    display: none;
-    position: absolute;
-    bottom: 10px; /* Ajusta la posición según lo que prefieras */
-    left: 50%;
-    transform: translateX(-50%);
+.actions button {
+    /* display: none;
+    position: absolute; */
     background-color: #694a6d;
     color: white;
     padding: 10px 20px;
@@ -92,10 +104,13 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
+    display: inline-flex; /* Usa inline-flex para mantener los botones en línea */
 }
 
 /* Mostrar el botón cuando el ratón esté sobre la tarjeta */
-.productCard:hover button {
-    display: block;
+.productCard:hover .actions  {
+    display: flex;
+    transform: translateX(-50%) translateY(-65px); /* Los botones se mueven hacia arriba */
+    opacity: 1; /* Los botones se vuelven visibles */
     
 }

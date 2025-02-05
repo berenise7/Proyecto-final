@@ -1,14 +1,15 @@
 .container {
+    display: flex;
     position: relative;
-
     max-width: 90rem;
-    margin: 40px auto;
+    margin: 2.5rem auto;
     padding: 20px;
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
     gap: 3em;
+    width: 95%;
+    justify-content: center;
 }
 
 .container a {
@@ -127,65 +128,63 @@
 .like {
     margin-top: 1em !important;
 }
-
-@media (max-width: 1024px) {
+/* (pantallas menores a 1650px) */
+@media (max-width: 1650px) {
     .container {
-        flex-direction: column;
-        padding: 10px;
+        margin: 2.5rem auto;
+        width: 80%;
+        max-width: 75rem;
     }
 
-    .imageContainer {
-        max-width: 40%;
-        justify-content: center;
-    }
-
-    .details {
-        flex-direction: column;
-        gap: 1em;
-    }
-
-    .details1 {
-        width: 100%;
-    }
-
-    .price {
-        font-size: 2rem;
-    }
-
-    .description {
-        font-size: 14px;
-    }
-
-    .button {
-        width: 100%;
-        padding: 12px;
-    }
 }
 
-/* Pantallas muy pequeñas (móviles) */
-@media (max-width: 768px) {
+/* Tablets (pantallas menores a 1024px) */
+@media screen and (max-width: 1024px) {
     .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 2em;
         padding: 15px;
     }
 
     .imageContainer {
         max-width: 50%;
+        align-items: center;
+
     }
 
-    .image {
+    .details {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .details1,
+    .details2 {
+        width: 100%;
+    }
+
+    .price {
+        font-size: 2em;
+    }
+}
+
+/* Móviles (pantallas menores a 768px) */
+@media screen and (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .imageContainer {
         max-width: 80%;
     }
 
     .details {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
         gap: 1em;
-    }
-
-    .details1 {
-        width: 100%;
-    }
-
-    .details2 {
-        align-items: flex-start;
     }
 
     .title {
@@ -197,14 +196,17 @@
     }
 
     .price {
-        font-size: 2rem;
-    }
-
-    .description {
-        font-size: 13px;
+        font-size: 1.8em;
     }
 
     .button {
-        padding: 12px;
+        padding: 10px 30px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .imageContainer {
+        align-items: flex-end;
     }
 }

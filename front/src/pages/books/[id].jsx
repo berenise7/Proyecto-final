@@ -1,27 +1,42 @@
-import Header from "@/components/Header/Header";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import Header from "@/components/Header/Header";
+import StarRating from "@/components/StarRating/StarRating";
 import products from "@/api/productos";
 import { useCart } from "@/core/contexts/CartContext";
+import { useFavorites } from "@/core/contexts/FavoritesContext";
 import styles from "@/pages/books/book.module.css";
-import StarRating from "@/components/StarRating/StarRating";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function book() {
   const { addToCart, formatPrice } = useCart();
+  const { favorites, setFavorites } = useFavorites();
   const router = useRouter();
-  const { id } = router.query;
 
   const [showFull, setShowFull] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
 
+  //   Buscar el producto por su id
+  const { id } = router.query;
+  const product = products.find((p) => p.url === `/books/${id}`);
+
+  useEffect(() => {
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    if (token) {
+      // Verificar si el producto ya está en los favoritos
+      const isAlreadyFavorite = product
+        ? favorites.some((fav) => fav.id === product.id)
+        : false;
+      setIsFavorite(isAlreadyFavorite);
+    }
+  }, [favorites, product]);
+
   // Número de caracteres visibles antes de "Ver más"
   const MAX_LENGTH = 300;
-
-  //   Buscar el producto por su id
-  const product = products.find((p) => p.url === `/books/${id}`);
 
   // Si no se encuentra el producto
   if (!product) {
@@ -31,6 +46,26 @@ export default function book() {
   // Para volver a la página anterior
   const goBack = () => {
     router.back();
+  };
+
+  // Funcion para agregar a favoritos
+  const handleAddToFavorites = () => {
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    if (!token) {
+      alert("Por favor, inicia sesión para agregar a favoritos");
+      return;
+    }
+
+    if (isFavorite) {
+      // Eliminar del arreglo de favoritos
+      const updatedFavorites = favorites.filter((fav) => fav.id !== product.id);
+      setFavorites(updatedFavorites);
+    } else {
+      // Agregar al arreglo de favoritos
+      setFavorites([...favorites, product]);
+    }
+    setIsFavorite(!isFavorite); // Cambiar el estado del favorito
   };
 
   // Para calcular la valoracion total
@@ -103,8 +138,9 @@ export default function book() {
             ) : (
               <p>No hay stock</p>
             )}
-            <p className={`link ${styles.like}`}>
-              <FontAwesomeIcon icon={faHeart} /> Añadir a favoritos
+            <p className={`link ${styles.like}`} onClick={handleAddToFavorites}>
+              <FontAwesomeIcon icon={isFavorite ? faHeartSolid : faHeart} />
+              {isFavorite ? " Añadido a favoritos" : " Añadir a favoritos"}
             </p>
           </div>
         </div>
