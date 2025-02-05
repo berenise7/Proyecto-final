@@ -1,44 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import styles from "./UserLogin.module.css";
 import * as Yup from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useAuth } from "@/core/contexts/AuthContext";
 
 export default function UserLoginFormik() {
-  const router = useRouter();
-
-  const [showPassword, setShowPassword] = useState(false);
-  const [loginError, setLoginError] = useState("");
-
-  const testUser = {
-    email: "test@correo.com",
-    password: "Prueba123!",
-  };
-
-  const handleLogin = (values) => {
-    console.log("Valores ingresados:", values); 
-    if (
-      values.email === testUser.email &&
-      values.password === testUser.password
-    ) {
-      const fakeToken = "1234567890abcdef"; //  Token simulado
-      if (values.rememberMe) {
-        console.log("✅ Guardando token en localStorage");
-        localStorage.setItem("token", fakeToken); // Guardar en localStorage (sesión persistente)
-      } else {
-        console.log("✅ Guardando token en sessionStorage");
-        sessionStorage.setItem("token", fakeToken); // Guardar en sessionStorage (se borra al cerrar navegador)
-      }
-      console.log("🔄 Redirigiendo a /home...");
-      router.push("/");
-    } else {
-      console.log("❌ Error: Credenciales incorrectas");
-      setLoginError("Correo o contraseña incorrectos");
-    }
-  };
+  const { loginError, showPassword, setShowPassword, handleLogin } = useAuth();
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Correo inválido").required("Correo requerido"),

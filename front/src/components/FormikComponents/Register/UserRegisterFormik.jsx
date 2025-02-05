@@ -12,7 +12,6 @@ export default function UserRegisterFormik() {
   const [imageFile, setImageFile] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [password, setPassword] = useState("");
 
   const toggleGenres = () => {
     setShowGenres((prev) => !prev);
