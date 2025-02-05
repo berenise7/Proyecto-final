@@ -101,7 +101,7 @@ export default function book() {
             </p>
             {/* ⭐ Sección de Valoraciones */}
             {/* Si son preventa o nuevos no se muestra las valoraciones */}
-            {product.isPreventa == false && product.isNew == false ? (
+            {product.isPresale == false && product.isNew == false ? (
               <div className={styles.ratings}>
                 <StarRating rating={averageRating} />
                 <span className={styles.ratingText}>

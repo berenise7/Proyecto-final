@@ -136,12 +136,12 @@ export default function Header() {
               </div>
             )}
             {/* Ícono del carrito, que activa o desactiva el estado isCartOpen */}
-            <div className={styles.cartIcon}>
-              <FontAwesomeIcon
-                icon={faBasketShopping}
-                onClick={onCartToggle}
-                ref={buttonCartRef}
-              />
+            <div
+              className={styles.cartIcon}
+              onClick={onCartToggle}
+              ref={buttonCartRef}
+            >
+              <FontAwesomeIcon icon={faBasketShopping} />
               {cart.length === 0 ? "" : <span>{totalQuantity}</span>}
               {/* Muestra la cantidad de productos en el carrito */}
             </div>
