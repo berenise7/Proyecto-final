@@ -18,7 +18,7 @@ export const CartProvider = ({ children }) => {
             if (savedCart) {
                 setCart(JSON.parse(savedCart));  // Cargar el carrito guardado
             }
-           
+
         }
     }, []);
 
@@ -28,7 +28,7 @@ export const CartProvider = ({ children }) => {
         if (token && cart.length > 0) {
             localStorage.setItem(`cart_${token}`, JSON.stringify(cart));  // Guardar el carrito cada vez que cambia
         }
-       
+
     }, [cart]);
 
     // Función para agregar un libro al carrito
@@ -94,14 +94,23 @@ export const CartProvider = ({ children }) => {
     const handleLogout = () => {
         localStorage.removeItem("token");
         sessionStorage.removeItem("token");
+
         localStorage.removeItem(`cart_${localStorage.getItem("token")}`);
+
         // O si usas sessionStorage:
         sessionStorage.removeItem(`cart_${sessionStorage.getItem("token")}`);
+
         setCart([]); // Limpiar el carrito
-        router.push("/"); // Redirigir a la página de inicio
+
+        if (router.pathname === "/") {
+            router.reload(); // Recargar la página si ya estamos en Home
+        } else {
+            router.push("/"); // Redirigir a la página de inicio
+        }
+
     };
 
-    
+
     return (
         <CartContext.Provider value={{ cart, addToCart, removeFromCart, incrementQuantity, decrementQuantity, calculateTotal, totalQuantity, formatPrice, handleLogout, }}>
             {children}

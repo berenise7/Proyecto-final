@@ -22,7 +22,7 @@ export default function Recommendations() {
         <div className={styles.productList}>
           {filteredProducts.map((product, index) => (
             <div className={styles.productCard} key={index}>
-              <Link href={product.url}>
+              <Link href={`${product.url}/${product.id}`}>
                 <img src={product.image} alt={product.title} />
                 <div className={styles.productInfo}>
                   {product.quantity >= 1 ? (

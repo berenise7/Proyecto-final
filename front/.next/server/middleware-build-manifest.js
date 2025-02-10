@@ -10,11 +10,6 @@ self.__BUILD_MANIFEST = {
   "rootMainFiles": [],
   "rootMainFilesTree": {},
   "pages": {
-    "/": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/index.js"
-    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -25,10 +20,15 @@ self.__BUILD_MANIFEST = {
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/books/[id]": [
+    "/myaccount/favorites": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/books/[id].js"
+      "static/chunks/pages/myaccount/favorites.js"
+    ],
+    "/reading-journal/[title]/[id]": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/reading-journal/[title]/[id].js"
     ]
   },
   "ampFirstPages": []

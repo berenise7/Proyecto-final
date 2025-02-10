@@ -14,13 +14,14 @@
 
 }
 
-.productList a{
+.productList a {
     cursor: pointer;
     text-decoration: none;
-  /* Quita el subrayado */
-  color: inherit;
-  /* Mantiene el color del texto original */
+    /* Quita el subrayado */
+    color: inherit;
+    /* Mantiene el color del texto original */
 }
+
 .productCard {
     display: flex;
     flex-direction: column;
@@ -46,14 +47,17 @@
 
 .badge {
     position: absolute;
-    top: 10px; /* Ajusta para que esté más cerca de la parte superior de la imagen */
-    left: 10px; /* Ajusta para que esté más cerca de la parte izquierda de la imagen */
+    top: 10px;
+    /* Ajusta para que esté más cerca de la parte superior de la imagen */
+    left: 10px;
+    /* Ajusta para que esté más cerca de la parte izquierda de la imagen */
     background-color: #694a6d;
     color: white;
     padding: 5px;
     font-size: 12px;
     border-radius: 5px;
-    z-index: 10; /* Asegura que el badge esté por encima de la imagen */
+    z-index: 10;
+    /* Asegura que el badge esté por encima de la imagen */
 }
 
 .title {
@@ -87,11 +91,15 @@
     flex-direction: row;
     gap: 10px;
     position: absolute;
-    bottom: -50px; /* Inicialmente los botones están fuera de la tarjeta */
+    bottom: -50px;
+    /* Inicialmente los botones están fuera de la tarjeta */
     left: 50%;
-    transform: translateX(-50%) translateY(50px); /* Desplazados hacia abajo fuera de la tarjeta */
-    opacity: 0; /* Inicialmente invisibles */
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Animación suave */
+    transform: translateX(-50%) translateY(50px);
+    /* Desplazados hacia abajo fuera de la tarjeta */
+    opacity: 0;
+    /* Inicialmente invisibles */
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    /* Animación suave */
     background-color: #fff;
 }
 
@@ -106,13 +114,21 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-    display: inline-flex; /* Usa inline-flex para mantener los botones en línea */
+    display: inline-flex;
+    /* Usa inline-flex para mantener los botones en línea */
+}
+
+.actions button:hover {
+    background: #5c3e56;
+
 }
 
 /* Mostrar el botón cuando el ratón esté sobre la tarjeta */
-.productCard:hover .actions  {
+.productCard:hover .actions {
     display: flex;
-    transform: translateX(-50%) translateY(-65px); /* Los botones se mueven hacia arriba */
-    opacity: 1; /* Los botones se vuelven visibles */
-    
+    transform: translateX(-50%) translateY(-65px);
+    /* Los botones se mueven hacia arriba */
+    opacity: 1;
+    /* Los botones se vuelven visibles */
+
 }

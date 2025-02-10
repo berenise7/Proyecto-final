@@ -1,6 +1,6 @@
 const products = [
     {
-        id: 1,
+        id: "1",
         title: 'Alas de Ónix (Empíreo 3)',
         author: 'Rebecca Yarros',
         genre: ["Fantasía", "Romance"],
@@ -18,7 +18,7 @@ const products = [
         url: `/books/alas-de-onix`,
     },
     {
-        id: 2,
+        id: "2",
         title: 'Fearless (Edición Especial Limitada)',
         author: 'Lauren Roberts',
         genre: ["Fantasía", "Romance"],
@@ -36,7 +36,7 @@ const products = [
         url: '/books/fearless',
     },
     {
-        id: 3,
+        id: "3",
         title: 'El corazón de una Bridgerton (BRIDGERTON 6) (ED. ESPECIAL)',
         author: 'Julia Quinn',
         genre: ["Romance"],
@@ -54,7 +54,7 @@ const products = [
         url: '/books/bridgerton-6',
     },
     {
-        id: 4,
+        id: "4",
         title: 'Reina de Sombras (EDICIÓN LIMITADA)',
         author: 'Sarah J. Maas',
         genre: ["Fantasía", "Romance"],
@@ -72,7 +72,7 @@ const products = [
         url: '/books/reina-de-sombras',
     },
     {
-        id: 5,
+        id: "5",
         title: 'Nacida de Sangre y Cenizas',
         author: 'Jennifer L. Armentrout',
         genre: ["Fantasía", "Romance"],
@@ -90,7 +90,7 @@ const products = [
         url: '/books/nacida_de_sangre_y_cenizas',
     },
     {
-        id: 6,
+        id: "6",
         title: 'Taming 7 (LOS CHICOS DE TOMMEN 5)',
         author: 'Chloe Walsh',
         genre: ["Drama", "Romance"],
@@ -108,7 +108,7 @@ const products = [
         url: '/books/taming-7',
     },
     {
-        id: 7,
+        id: "7",
         title: 'Hasta que caiga la Luna',
         author: 'Sarah A. Parker',
         genre: ["Fantasía", "Romance"],
@@ -126,7 +126,7 @@ const products = [
         url: '/books/hasta-que-caiga-la-luna',
     },
     {
-        id: 8,
+        id: "8",
         title: 'La caída del rey',
         author: 'Marie Niehoff',
         genre: ["Fantasía", "Romance"],
@@ -144,7 +144,7 @@ const products = [
         url: '/books/la-caida-del-rey',
     },
     {
-        id: 9,
+        id: "9",
         title: 'El imperio de los condenados',
         author: 'Jay Kristoff',
         genre: ["Fantasía"],
@@ -162,7 +162,7 @@ const products = [
         url: '/books/el-imperio-de-los-condenados',
     },
     {
-        id: 10,
+        id: "10",
         title: 'Una corte de Rosas y Espinas',
         author: 'Sarah J. Maas',
         genre: ["Fantasía", "Romance"],
@@ -180,7 +180,7 @@ const products = [
         url: '/books/una-corte-de-rosas-y-espinas',
     },
     {
-        id: 11,
+        id: "11",
         title: 'Trono de Cristal (Edicion Espacial Limitada)',
         author: 'Sarah J. Maas',
         genre: ["Fantasía", "Romance"],

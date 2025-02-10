@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faBasketShopping } from "@fortawesome/free-solid-svg-icons";
 import Cart from "../Cart/Cart";
 import { useCart } from "@/core/contexts/CartContext";
+import { useAuth } from "@/core/contexts/AuthContext";
 import { useRouter } from "next/router";
 
 export default function Header() {
@@ -16,6 +17,7 @@ export default function Header() {
 
   // Uso el context del carrito
   const { cart, totalQuantity, handleLogout } = useCart();
+  // Uso el context de auth
 
   const buttonMenuRef = useRef(null);
   const buttonAccountRef = useRef(null);
@@ -80,15 +82,6 @@ export default function Header() {
     setIsAuthenticated(!!token);
   }, []);
 
-  // Funcion para cerrar sesion
-  // const handleLogout = () => {
-  //   console.log("🚪 Cerrando sesión...");
-  //   localStorage.removeItem("token");
-  //   sessionStorage.removeItem("token");
-  //   setIsAuthenticated(false);
-  //   router.push("/");
-  // };
-
   return (
     <>
       {/* Contenedor para la barra de navegación  */}
@@ -130,9 +123,9 @@ export default function Header() {
               </div>
             ) : (
               <div className={styles.navLinks}>
-                <Link href="/user/register">Register</Link>
+                <Link href="/user/register">Registrarse</Link>
                 <p>/</p>
-                <Link href="/user/login">Login</Link>
+                <Link href="/user/login">Iniciar Sesión</Link>
               </div>
             )}
             {/* Ícono del carrito, que activa o desactiva el estado isCartOpen */}
@@ -164,8 +157,24 @@ export default function Header() {
                     ref={accountRef}
                     onClick={(event) => event.stopPropagation()}
                   >
-                    <li>Mis datos</li>
-                    <li>Mi biblioteca</li>
+                    {!isAuthenticated ? (
+                      <div>
+                        <li>
+                          <Link href="/user/register">Registrarse</Link>
+                        </li>{" "}
+                        <li>
+                          <Link href="/user/login">Iniciar sesión</Link>
+                        </li>
+                      </div>
+                    ) : (
+                      <div>
+                        <li>Mis datos</li>
+                        <li>Mi biblioteca</li>
+                        <li>
+                          <Link href="/myaccount/favorites">Mis favoritos</Link>
+                        </li>
+                      </div>
+                    )}
                   </div>
                 )}
               </li>
