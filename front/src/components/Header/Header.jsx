@@ -1,11 +1,10 @@
 import Link from "next/link";
-import React, { useState, useEffect, useRef, use } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import styles from "./Header.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faBasketShopping } from "@fortawesome/free-solid-svg-icons";
-import Cart from "../Cart/Cart";
+import DropDownCart from "../cart/DropDownCart";
 import { useCart } from "@/core/contexts/CartContext";
-import { useAuth } from "@/core/contexts/AuthContext";
 import { useRouter } from "next/router";
 
 export default function Header() {
@@ -82,6 +81,11 @@ export default function Header() {
     setIsAuthenticated(!!token);
   }, []);
 
+  // Mostrar mensaje de carga hasta que se haya verificado el estado de autenticación
+  if (isAuthenticated === null) {
+    return <p>Cargando...</p>;
+  }
+
   return (
     <>
       {/* Contenedor para la barra de navegación  */}
@@ -98,9 +102,9 @@ export default function Header() {
             </div>
             <div className={styles.logoContainer}>
               {/* Logo de la página que funciona como enlace a la página principal */}
-              <Link href="/" className={styles.iconLogo}>
-                <img src="/assets/images/logo/logo192.png" alt="logo" />
-              </Link>
+
+              <img src="/assets/images/logo/logo192.png" alt="logo" />
+
               {/* Título de la página que funciona como enlace a la página principal */}
               <h1>
                 <Link href="/">Literary Haven</Link>
@@ -119,7 +123,7 @@ export default function Header() {
               <div className={styles.navLinks}>
                 <Link href="/user/account">Mi cuenta</Link>
                 <p>/</p>
-                <a onClick={handleLogout}>Cerra sesión</a>
+                <a onClick={handleLogout}>Cerrar sesión</a>
               </div>
             ) : (
               <div className={styles.navLinks}>
@@ -168,10 +172,20 @@ export default function Header() {
                       </div>
                     ) : (
                       <div>
-                        <li>Mis datos</li>
-                        <li>Mi biblioteca</li>
                         <li>
-                          <Link href="/myaccount/favorites">Mis favoritos</Link>
+                          <Link href="/myaccount/my-data/my-data">
+                            Mis datos
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/myaccount/my-library/my-library">
+                            Mis lecturas terminadas
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/myaccount/favorites/favorites">
+                            Mis favoritos
+                          </Link>
                         </li>
                       </div>
                     )}
@@ -188,7 +202,7 @@ export default function Header() {
             </ul>
           </div>
         )}
-        {isCartOpen && <Cart cartRef={cartRef} />}
+        {isCartOpen && <DropDownCart cartRef={cartRef} />}
       </header>
     </>
   );

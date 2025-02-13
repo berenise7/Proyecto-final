@@ -1,0 +1,93 @@
+.cartContainer {
+    font-family: "Poppins", serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    max-width: 70%;
+    margin: 1em auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    position: relative;
+}
+
+.cartContent {
+    width: 70%;
+}
+
+.cartItems {
+    margin-bottom: 2rem;
+}
+
+.cartItem {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.priceActions {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.cartActions {
+    gap: 10px;
+}
+
+
+.removeBtn {
+    background: #694a6d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.removeBtn:hover {
+    background: #5c3e56;
+}
+
+.cartSummary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    font-size: 1.2rem;
+}
+
+.cartActions {
+    display: flex;
+    gap: 10px;
+}
+
+.checkoutBtn,
+.continueShoppingBtn {
+    background-color: #694a6d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.checkoutBtn:hover,
+.continueShoppingBtn:hover {
+    background-color: #5c3e56;
+}
+
+.continueShoppingBtn {
+    background-color: #d1c39e;
+    ;
+}
+
+.continueShoppingBtn:hover {
+    background-color: #b1a17c;
+    ;
+}

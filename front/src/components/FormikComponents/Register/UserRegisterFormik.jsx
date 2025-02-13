@@ -1,12 +1,19 @@
-import { Formik, Form, ErrorMessage, Field } from "formik";
-import styles from "./UserRegister.module.css";
 import React, { useState } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import Link from "next/link";
+import {
+  faEye,
+  faEyeSlash,
+  faChevronLeft,
+} from "@fortawesome/free-solid-svg-icons";
+import styles from "./UserRegister.module.css";
 
 export default function UserRegisterFormik() {
+  const router = useRouter();
+
   const [showGenres, setShowGenres] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -35,6 +42,10 @@ export default function UserRegisterFormik() {
     alert(JSON.stringify(formData, null, 2)); // El `null, 2` es para dar formato al JSON de forma legible
 
     console.log(formData);
+  };
+
+  const goBack = () => {
+    router.back();
   };
 
   const validationSchema = Yup.object({
@@ -83,6 +94,9 @@ export default function UserRegisterFormik() {
 
   return (
     <div className={styles.formContainer}>
+      <a className="back" onClick={goBack}>
+        <FontAwesomeIcon icon={faChevronLeft} /> Volver atras
+      </a>
       <h2 className={styles.formTitle}>Registro</h2>
       <Formik
         initialValues={{
@@ -359,7 +373,8 @@ export default function UserRegisterFormik() {
           </button>
           <div className={styles.link}>
             <p>
-              ¿Ya tienes una cuenta? <Link href="/user/login">Inicia sesión</Link>
+              ¿Ya tienes una cuenta?{" "}
+              <Link href="/user/login">Inicia sesión</Link>
             </p>
           </div>
         </Form>

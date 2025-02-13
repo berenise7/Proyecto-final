@@ -10,8 +10,6 @@
 .productList {
     display: flex;
     gap: 20px;
-    overflow-x: auto;
-
 }
 
 .productList a {
@@ -34,7 +32,12 @@
     height: 100%;
     position: relative;
     overflow: hidden;
+    transition: transform 0.2s ease-in-out;
 
+}
+
+.productCard:hover{
+    transform: scale(1.05);
 }
 
 .productCard img {
@@ -116,6 +119,8 @@
     font-size: 14px;
     display: inline-flex;
     /* Usa inline-flex para mantener los botones en línea */
+    align-items: center;
+
 }
 
 .actions button:hover {

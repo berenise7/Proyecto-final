@@ -1,0 +1,73 @@
+.checkoutContainer {
+    font-family: "Poppins", serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    max-width: 70%;
+    margin: 1em auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    position: relative;
+}
+
+.checkoutContent {
+    display: flex;
+    flex-direction: row;
+    gap: 35px;
+    justify-content: space-between;
+    width: 70%;
+
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.form input,
+.form select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.submitBtn {
+
+    background-color: #694a6d;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.submitBtn:hover {
+    background-color: #5c3e56;
+}
+
+.orderSummary {
+    border-radius: 5px;
+    flex: 0.6;
+    align-self: flex-start;
+}
+
+.orderItem {
+    list-style: none;
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.backToCartBtn {
+    background-color: #ccc;
+    color: black;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

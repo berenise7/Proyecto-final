@@ -7,9 +7,9 @@ const users = [
         address: "malaga",
         email: "rodriguezcuencaberenise@gmail.com",
         password: "Prueba123!",
-        birthday: "14/11/1995",
+        birthday: "1995-11-14",
         rol: "admin",
-        favoriteGenre: ["romance, fantasia, thriller, comedia"],
+        favoriteGenre: ["Romance", "Fantasía", "Thriller", "Comedia"],
         photo: "",
     },
     {
@@ -22,7 +22,7 @@ const users = [
         password: "Prueba123!",
         birthday: "27/11/1997",
         rol: "user",
-        favoriteGenre: ["fantasia, thriller, comedia"],
+        favoriteGenre: ["Fantasía", "Thriller", "Comedia"],
         photo: "",
     },
 ]

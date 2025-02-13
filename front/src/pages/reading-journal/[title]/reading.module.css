@@ -6,26 +6,23 @@
     background: #fff;
     border-radius: 15px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    font-family: "Arial", sans-serif;
 }
 
+/* Contenedor Principal */
 .titleContainer {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-around;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 60px;
-    padding: 15px;
-    border-radius: 10px;
+    gap: 5em;
 }
 
+/* Contenedor de la imagen del libro */
 .imageContainer {
     width: 140px;
     height: 200px;
     overflow: hidden;
     border: 2px solid #694a6d;
     border-radius: 10px;
-    background: white;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,15 +35,7 @@
     object-fit: cover;
 }
 
-.title {
-    font-family: "Poppins", serif;
-    font-size: 2rem;
-    font-weight: bold;
-    color: #694a6d;
-    margin: 0;
-}
-
-/* Contenedor de las estrellas del rating */
+/* Estrellas */
 .ratingContainer {
     display: flex;
     justify-content: center;
@@ -67,18 +56,34 @@
     transform: scale(1.2);
 }
 
+.titleContainerInfo {
+    width: 70%;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #694a6d;
+    margin: 0;
+}
+
+
+/* Formulario */
 .form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
 }
 
-x .form label {
+.form label {
     font-weight: bold;
     color: #444;
 }
 
-.form input {
+/* Estilo para inputs */
+.form input,
+.form textarea {
+    font-family: "Poppins", serif;
     width: 100%;
     padding: 10px;
     margin: 8px 0;
@@ -94,18 +99,122 @@ x .form label {
     outline: none;
 }
 
-.rating-container {
+/* Sección de progreso de lectura */
+.bookProgressInfo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+}
+
+.ratingAndDetails {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    gap: 5em;
+}
+
+/* Ratings */
+.ratings {
+    width: 100%;
+    background-color: #f8f6f4;
+    border: 3px solid #f2eadf;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.ratings div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ratings div div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     gap: 5px;
 }
 
-.rating-container svg {
+.ratings div div svg {
     cursor: pointer;
-    font-size: 22px;
+    font-size: 20px;
+    color: #694a6d;
     transition: transform 0.2s ease-in-out;
+    margin: 0 !important;
 }
 
-.rating-container svg:hover {
+.ratings div div svg:hover {
     transform: scale(1.2);
+}
+
+/* Formato y Tipo */
+.formatType {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.formatType div {
+    flex: 1;
+}
+
+.submitButton {
+    font-family: "Poppins", serif;
+    background-color: #694a6d;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: .5rem;
+    width: 100%;
+    transition: background-color 0.3s ease;
+    display: block;
+
+}
+
+.submitButton:hover {
+    background-color: #5c3e56;
+}
+
+/* Media Queries */
+@media (max-width: 1493px) {
+    .container {
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 829px) {
+    .container {
+        max-width: 90%;
+    }
+
+    .titleContainer {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .titleContainerInfo {
+        width: 100%;
+    }
+
+    .bookProgressInfo div {
+        justify-items: baseline;
+    }
+
+    .ratingAndDetails {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .ratings {
+        /* grid-template-columns: 1fr; */
+        width: 70%;
+    }
 }

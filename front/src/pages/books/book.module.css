@@ -12,14 +12,7 @@
     justify-content: center;
 }
 
-.container a {
-    position: absolute;
-    /* Posiciona el enlace de manera absoluta */
-    top: 10px;
-    /* Arriba */
-    left: 10px;
-    padding-bottom: 1em;
-}
+
 
 .imageContainer {
     flex: 1;

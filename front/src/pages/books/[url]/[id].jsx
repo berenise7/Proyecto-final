@@ -81,7 +81,7 @@ export default function book() {
     <div>
       <Header />
       <div className={styles.container}>
-        <a className="link" onClick={goBack}>
+        <a className="back" onClick={goBack}>
           <FontAwesomeIcon icon={faChevronLeft} /> Volver atras
         </a>
         {/* Imagen del libro */}

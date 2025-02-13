@@ -10,9 +10,33 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background-color: #f8f8f8;
- 
+
 }
 
+h2{
+  text-transform: uppercase;
+  color: #59485b;
+}
+
+input{
+  font-family: "Poppins", serif;
+}
+
+/* Para quitar los botones de incremento y decremento en un input type number (Chrome, Safari, Edge)*/
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Para firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+button{
+  font-family: "Poppins", serif;
+}
 .page-container {
   display: flex;
   justify-content: center;
@@ -22,17 +46,34 @@ body {
   padding: 20px;
 }
 
-.link{
+.link {
   color: #694a6d;
   text-decoration: none;
   cursor: pointer;
 }
 
-.link:hover{
+.link:hover {
   color: #5c3e56;
   text-decoration: underline;
 }
 
-.bold{
+.bold {
   font-weight: bold;
+}
+
+.back{
+  color: #694a6d;
+  text-decoration: none;
+  cursor: pointer;
+  position: absolute;
+  /* Posiciona el enlace de manera absoluta */
+  top: 10px;
+  /* Arriba */
+  left: 10px;
+  padding-bottom: 1em;
+}
+
+.back:hover{
+  color: #5c3e56;
+  text-decoration: underline;
 }
