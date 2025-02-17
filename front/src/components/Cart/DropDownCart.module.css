@@ -183,6 +183,22 @@
     background: #5c3e56;
 }
 
+.showcartBtn{
+    font-family: "Poppins", serif;
+    text-transform: uppercase;
+    font-weight: 600;
+    width: 90%;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+    background: #694a6d;
+    color: white;
+    margin: 1em;
+}
 @media (max-width: 1650px) {
     .cart {
         width: 40%;
@@ -202,7 +218,7 @@
 
     }
 
-    .checkoutBtn {
+    .checkoutBtn, .showcartBtn {
         position: relative;
         /* Para evitar que el botón quede fijo en la parte inferior */
         margin-bottom: 10px;
@@ -215,9 +231,10 @@
     .cart,
     .emptyCart {
         width: 100%;
+        height: auto;
         margin-left: 1em;
         padding: 0;
-        height: auto;
+
     }
 
     .cartList {
@@ -227,8 +244,8 @@
 
     }
 
-    .checkoutBtn {
-        margin: 1em auto;
+    .checkoutBtn, .showcartBtn {
+        margin: .7em auto;
     }
 
 }

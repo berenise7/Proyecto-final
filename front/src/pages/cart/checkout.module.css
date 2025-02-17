@@ -71,3 +71,60 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
+@media (max-width: 1024px) {
+    .orderSummary ul {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .checkoutContent {
+        flex-direction: column-reverse;
+        gap: 0;
+    }
+
+    .form {
+        width: 100%;
+    }
+
+    .orderSummary {
+        width: 100%;
+    }
+
+    .orderItem {
+        font-size: 14px;
+    }
+
+    .submitBtn {
+        padding: 12px;
+    }
+
+    .backToCartBtn {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .checkoutContainer {
+        padding: 1rem;
+    }
+
+    .form input,
+    .form select {
+        padding: 8px;
+    }
+
+    .orderSummary ul {
+        padding: 0;
+    }
+
+    .submitBtn {
+        padding: 12px;
+    }
+
+    .backToCartBtn {
+        padding: 12px;
+    }
+}

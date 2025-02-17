@@ -197,6 +197,24 @@ const products = [
         ratings: [5, 5, 4, 5, 3],
         url: '/books/trono-de-cristal',
     },
+    {
+        id: "12",
+        title: 'Trono de Cristal (Edicion Espacial Limitada)',
+        author: 'Sarah J. Maas',
+        genre: ["Fantasía", "Romance"],
+        editorial: "Editorial Hidra",
+        isbn: "9788410163621",
+        price: 24.65,
+        quantity: 10,
+        image: '/assets/images/books/trono_de_cristal.png',
+        isNew: false,
+        isPresale: false,
+        bestSeller: false,
+        isRecommendation: true,
+        description: "En las tenebrosas minas de sal de Endovier, una muchacha de dieciocho años cumple cadena perpetua. Es una asesina profesional, la mejor en lo suyo, pero ha cometido un error fatal. La han capturado. El joven capitán Westfall le ofrece un trato: la libertad a cambio de un enorme sacrificio. Celaena debe representar al príncipe en un torneo a muerte, en el que deberá luchar con los asesinos y ladrones más peligrosos del reino. Viva o muerta, Celaena será libre. Tanto si gana como si pierde, está a punto de descubrir su verdadero destino. Pero ¿qué pasará entretanto con su corazón de asesina?",
+        ratings: [5, 5, 4, 5, 3],
+        url: '/books/trono-de-cristal',
+    },
 
 ];
 

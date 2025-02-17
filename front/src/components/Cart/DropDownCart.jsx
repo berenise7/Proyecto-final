@@ -4,11 +4,11 @@ import styles from "./DropDownCart.module.css";
 import { useFavorites } from "@/core/contexts/FavoritesContext";
 import { useCart } from "@/core/contexts/CartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import {
   faPlus,
   faMinus,
   faTrashCan,
-  faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 
@@ -48,7 +48,7 @@ export default function DropDownCart(props) {
           <ul className={styles.cartList}>
             {cart.map((product) => (
               <li key={product.id} className={styles.cartItem}>
-                <Link href={product.url}>
+                <Link href={`${product.url}/${product.id}`}>
                   <img
                     src={product.image}
                     alt={product.title}
@@ -56,7 +56,7 @@ export default function DropDownCart(props) {
                   />
                 </Link>
                 <div className={styles.cartInfo}>
-                  <Link href={product.url}>
+                  <Link href={`${product.url}/${product.id}`}>
                     <h3>{product.title}</h3>
                   </Link>
                   <p>{product.author}</p>
@@ -104,7 +104,7 @@ export default function DropDownCart(props) {
             Total: {formatPrice(calculateTotal())}€
           </div>
 
-          <button className={styles.checkoutBtn}>
+          <button className={styles.showcartBtn}>
             <Link href="/cart/cart">Ver carrito</Link>
           </button>
           <button className={styles.checkoutBtn}>

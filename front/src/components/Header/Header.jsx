@@ -103,7 +103,7 @@ export default function Header() {
             <div className={styles.logoContainer}>
               {/* Logo de la página que funciona como enlace a la página principal */}
 
-              <img src="/assets/images/logo/logo192.png" alt="logo" />
+              <img src="/assets/images/logo/logo192.png" alt="logo" className={styles.iconLogo}/>
 
               {/* Título de la página que funciona como enlace a la página principal */}
               <h1>
@@ -175,6 +175,11 @@ export default function Header() {
                         <li>
                           <Link href="/myaccount/my-data/my-data">
                             Mis datos
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/cart/cart">
+                            Mis carrito
                           </Link>
                         </li>
                         <li>

@@ -88,9 +88,8 @@
 
 .photoContainer {
     display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 10px;
 }
 
@@ -209,7 +208,9 @@
     margin-top: 1rem;
 }
 
-.editButton, .submitButton, .cancelButton {
+.editButton,
+.submitButton,
+.cancelButton {
     background-color: #694a6d;
     color: white;
     padding: 10px 15px;
@@ -220,7 +221,9 @@
     transition: background-color 0.3s ease;
 }
 
-.editButton:hover, .submitButton:hover, .cancelButton:hover {
+.editButton:hover,
+.submitButton:hover,
+.cancelButton:hover {
     background-color: #5c3e56;
 }
 
@@ -255,9 +258,73 @@
     }
 }
 
+@media (max-width: 1100px) {
+
+    /* Ajuste de contenedor principal */
+    .formContainer {
+        max-width: 90%;
+        /* Reducir el tamaño para pantallas medianas */
+        padding: 1.5rem;
+    }
+
+    /* Ajustar el tamaño del título */
+    .formTitle {
+        font-size: 1.3rem;
+    }
+
+    /* Ajustar las columnas de la cuadrícula */
+    .formGrid2 {
+        grid-template-columns: 1fr;
+        /* Cambiar a una sola columna */
+        gap: 1em;
+    }
+
+    .formGrid3 {
+        grid-template-columns: 1fr;
+        gap: 1em;
+    }
+
+    /* Ajuste de los botones */
+    .submitButton,
+    .toggleButton {
+        width: 100%;
+    }
+
+    /* Ajustes para los contenedores de género */
+    .genresContainer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* Ajustar los inputs y campos de formulario */
+    .input {
+        font-size: 0.9rem;
+    }
+
+    .photoContainer {
+        flex-direction: column;
+        
+    }
+
+    .labelPhoto {
+        width: 80%;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .checkboxGroup {
+        width: 100%;
+    }
+
+    .checkboxColumn {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+}
+
 @media (max-width: 768px) {
 
-    /* Para pantallas pequeñas como tablets y móviles */
     .formContainer {
         max-width: 90%;
         padding: 1rem;
@@ -267,16 +334,13 @@
         font-size: 1.2rem;
     }
 
-    /* Ajustar las columnas a una sola columna */
     .formGrid2 {
         grid-template-columns: 1fr;
-        /* Una sola columna */
         gap: 1em;
     }
 
     .formGrid3 {
         grid-template-columns: 1fr;
-        /* Una sola columna */
         gap: 1em;
     }
 
@@ -287,7 +351,6 @@
 
 
 
-    /* Ajuste en el botón de submit */
     .submitButton {
         width: 100%;
     }

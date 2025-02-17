@@ -246,8 +246,7 @@
 
     /* Primera fila: menú, logo y título */
     .navbar nav .topRow {
-        display: flex;
-        align-items: center;
+
         justify-content: space-between;
         gap: 10px;
         width: 100%;
@@ -260,8 +259,6 @@
 
     .iconLogo img {
         max-width: 150px;
-        /* Tamaño reducido del logo */
-        height: auto;
     }
 
     .navbar h1 {
@@ -274,7 +271,7 @@
     .searchBar {
         width: 60%;
         /* Ocupa casi todo el ancho */
-        margin: 10px 0;
+        margin: 0 10px ;
         font-size: 0.9rem;
     }
 
@@ -285,7 +282,7 @@
         align-items: center;
         gap: .5em;
         width: 30%;
-        margin-right: 1em;
+        margin-right: 1.5em;
     }
 
     .navLinks {
@@ -300,33 +297,29 @@
         font-size: 0.9rem;
         margin: 0 0.625em !important;
     }
-
-    .cartIcon {
-        font-size: 1.8em;
-        padding-right: 20px;
-        /* Separación del carrito */
-    }
 }
 
 @media (max-width: 768px) {
     .navbar {
         padding-left: 0;
+        height: auto;
     }
 
     /* Estructura del contenedor principal */
     .navbar nav {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        width: 100%;
-        margin: 1em 0;
+        height: auto;
+        margin-bottom: 1em;
     }
 
     /* Primera fila: menú, logo y título */
-    .navbar nav .topRow {
+    .topRow {
         padding: 0px 20px;
-        margin-bottom: .5em;
+        /* margin-bottom: .5em; */
+        height: 130px;
     }
+
 
     .menuIcon {
         font-size: 1.7em;
@@ -334,13 +327,8 @@
         /* Tamaño del icono del menú */
     }
 
-    .iconLogo {
-        height: 0;
-    }
 
-    .iconLogo img {
-        max-width: 0px;
-    }
+
 
     /* Segunda fila: barra de búsqueda */
     .searchBar {
@@ -349,17 +337,20 @@
     }
 
     /* Tercera fila: navLinks y cartIcon */
-    .navbar nav .bottomRow {
-        width: 95%;
+    .bottomRow {
+        width: 100% !important;
     }
 
     .navLinks {
         margin: 0;
+        margin-left: 3em;
+        justify-content: flex-start;
     }
 
 
     .cartIcon {
         font-size: 1.7em;
+        margin-right: 2em;
     }
 
     .overlayMenu ul {
@@ -389,6 +380,11 @@
         /* Ajusta el tamaño del título */
     }
 
+    .iconLogo {
+        height: 0;
+        max-width: 0px;
+    }
+
     .searchBar {
         width: 100%;
         /* Ocupa todo el ancho */
@@ -396,9 +392,7 @@
         /* Reduce el tamaño de texto */
     }
 
-    .navLinks {
-        justify-content: space-around;
-    }
+   
 
 
     .navLinks a,

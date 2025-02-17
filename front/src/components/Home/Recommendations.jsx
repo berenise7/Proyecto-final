@@ -1,26 +1,64 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import products from "@/api/productos";
 import styles from "@/components/Home/CardsMenu.module.css";
 import { useCart } from "@/core/contexts/CartContext";
 import { useFavorites } from "@/core/contexts/FavoritesContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
-import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeart as faHeartSolid,
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
 export default function Recommendations() {
   const { addToCart, formatPrice } = useCart();
   const { favorites, toggleFavorite } = useFavorites();
+  const [page, setPage] = useState(1);
+   const [itemsPerPage, setItemsPerPage] = useState(5);
+ 
+   // Detectar el tamaño de la pantalla y ajustar itemsPerPage
+   useEffect(() => {
+     const updateItemsPerPage = () => {
+       if (window.innerWidth < 480) {
+         setItemsPerPage(2); // Menos productos en pantallas muy pequeñas
+       } else if (window.innerWidth < 768) {
+         setItemsPerPage(3); // Menos productos en pantallas pequeñas
+       } else if (window.innerWidth < 1024) {
+         setItemsPerPage(4); // Productos intermedios en pantallas medianas
+       } else {
+         setItemsPerPage(5); // Productos por defecto en pantallas grandes
+       }
+     };
+ 
+     // Llamar a la función al cargar la página y cada vez que la ventana cambie de tamaño
+     updateItemsPerPage();
+     window.addEventListener("resize", updateItemsPerPage);
+ 
+     // Limpiar el event listener cuando el componente se desmonte
+     return () => {
+       window.removeEventListener("resize", updateItemsPerPage);
+     };
+   }, []);
 
   // Muestra solo los best sellers
-  const filteredProducts = products.filter((product) => product.isRecommendation);
+  const filteredProducts = products.filter(
+    (product) => product.isRecommendation
+  );
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const displayedProducts = filteredProducts.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
 
   return (
     <>
-      <div className={styles.topSellers}>
+      <div className={styles.container}>
         <h2>Recomendaciones</h2>
         <div className={styles.productList}>
-          {filteredProducts.map((product, index) => (
+          {displayedProducts.map((product, index) => (
             <div className={styles.productCard} key={index}>
               <Link href={`${product.url}/${product.id}`}>
                 <img src={product.image} alt={product.title} />
@@ -64,6 +102,36 @@ export default function Recommendations() {
               </div>
             </div>
           ))}
+        </div>
+        {/* Paginación con flechas e indicadores */}
+        <div className={styles.paginationContainer}>
+          <button
+            className={styles.paginationArrow}
+            onClick={() => setPage(page - 1)}
+            disabled={page === 1}
+          >
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </button>
+
+          <div className={styles.paginationDots}>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <span
+                key={index}
+                className={`${styles.paginationDot} ${
+                  page === index + 1 ? styles.activeDot : ""
+                }`}
+                onClick={() => setPage(index + 1)}
+              ></span>
+            ))}
+          </div>
+
+          <button
+            className={styles.paginationArrow}
+            onClick={() => setPage(page + 1)}
+            disabled={page === totalPages}
+          >
+            <FontAwesomeIcon icon={faChevronRight} />
+          </button>
         </div>
       </div>
     </>

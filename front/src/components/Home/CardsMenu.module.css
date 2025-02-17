@@ -1,4 +1,4 @@
-.topSellers {
+.container {
     padding: 20px;
     width: 100%;
     max-width: 1200px;
@@ -36,7 +36,7 @@
 
 }
 
-.productCard:hover{
+.productCard:hover {
     transform: scale(1.05);
 }
 
@@ -120,12 +120,10 @@
     display: inline-flex;
     /* Usa inline-flex para mantener los botones en línea */
     align-items: center;
-
 }
 
 .actions button:hover {
     background: #5c3e56;
-
 }
 
 /* Mostrar el botón cuando el ratón esté sobre la tarjeta */
@@ -136,4 +134,59 @@
     opacity: 1;
     /* Los botones se vuelven visibles */
 
+}
+
+.paginationContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.paginationArrow {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #694a6d;
+    transition: color 0.2s ease-in-out;
+}
+
+
+.paginationArrow[disabled] {
+    color: #ccc;
+    cursor: default;
+}
+
+.paginationDots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.paginationDot {
+    width: 12px;
+    height: 12px;
+    background-color: #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.paginationDot:hover {
+    background-color: #777;
+}
+
+.activeDot {
+    background-color: #694a6d;
+    /* Color de la imagen que subiste */
+}
+
+
+
+@media (max-width: 1024px){
+    .productCard{
+        align-items: normal ;
+    }
 }
