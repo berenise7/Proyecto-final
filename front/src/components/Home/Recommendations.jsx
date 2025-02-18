@@ -16,31 +16,39 @@ export default function Recommendations() {
   const { addToCart, formatPrice } = useCart();
   const { favorites, toggleFavorite } = useFavorites();
   const [page, setPage] = useState(1);
-   const [itemsPerPage, setItemsPerPage] = useState(5);
- 
-   // Detectar el tamaño de la pantalla y ajustar itemsPerPage
-   useEffect(() => {
-     const updateItemsPerPage = () => {
-       if (window.innerWidth < 480) {
-         setItemsPerPage(2); // Menos productos en pantallas muy pequeñas
-       } else if (window.innerWidth < 768) {
-         setItemsPerPage(3); // Menos productos en pantallas pequeñas
-       } else if (window.innerWidth < 1024) {
-         setItemsPerPage(4); // Productos intermedios en pantallas medianas
-       } else {
-         setItemsPerPage(5); // Productos por defecto en pantallas grandes
-       }
-     };
- 
-     // Llamar a la función al cargar la página y cada vez que la ventana cambie de tamaño
-     updateItemsPerPage();
-     window.addEventListener("resize", updateItemsPerPage);
- 
-     // Limpiar el event listener cuando el componente se desmonte
-     return () => {
-       window.removeEventListener("resize", updateItemsPerPage);
-     };
-   }, []);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Verificar si existe el token
+  useEffect(() => {
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    console.log("🔎 Token encontrado:", token);
+    setIsAuthenticated(!!token);
+  }, []);
+  // Detectar el tamaño de la pantalla y ajustar itemsPerPage
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth < 480) {
+        setItemsPerPage(2); // Menos productos en pantallas muy pequeñas
+      } else if (window.innerWidth < 768) {
+        setItemsPerPage(3); // Menos productos en pantallas pequeñas
+      } else if (window.innerWidth < 1024) {
+        setItemsPerPage(4); // Productos intermedios en pantallas medianas
+      } else {
+        setItemsPerPage(5); // Productos por defecto en pantallas grandes
+      }
+    };
+
+    // Llamar a la función al cargar la página y cada vez que la ventana cambie de tamaño
+    updateItemsPerPage();
+    window.addEventListener("resize", updateItemsPerPage);
+
+    // Limpiar el event listener cuando el componente se desmonte
+    return () => {
+      window.removeEventListener("resize", updateItemsPerPage);
+    };
+  }, []);
 
   // Muestra solo los best sellers
   const filteredProducts = products.filter(
@@ -90,15 +98,19 @@ export default function Recommendations() {
                 ) : (
                   ""
                 )}
-                <button onClick={() => toggleFavorite(product)}>
-                  <FontAwesomeIcon
-                    icon={
-                      favorites.some((fav) => fav.id === product.id)
-                        ? faHeartSolid
-                        : faHeart
-                    }
-                  />
-                </button>
+                {isAuthenticated ? (
+                  <button onClick={() => toggleFavorite(product)}>
+                    <FontAwesomeIcon
+                      icon={
+                        favorites.some((fav) => fav.id === product.id)
+                          ? faHeartSolid
+                          : faHeart
+                      }
+                    />
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           ))}

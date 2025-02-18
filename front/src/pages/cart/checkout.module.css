@@ -4,7 +4,7 @@
     flex-direction: column;
     align-items: center;
     padding: 2rem;
-    max-width: 70%;
+    max-width: 80%;
     margin: 1em auto;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -18,7 +18,7 @@
     flex-direction: row;
     gap: 35px;
     justify-content: space-between;
-    width: 70%;
+    width: 100%;
 
 }
 
@@ -26,7 +26,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    flex: 1;
+    flex: 0.4;
 }
 
 .form input,
@@ -58,9 +58,100 @@
 }
 
 .orderItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distribuye elementos */
+    width: 100%;
     list-style: none;
     padding: 5px 0;
     border-bottom: 1px solid #ddd;
+    position: relative;
+}
+
+.orderItem p {
+    font-size: 13px;
+    color: #777;
+    margin: 2px 0;
+}
+
+.cartImage {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    min-width: 100px;
+    max-height: 100%;
+}
+
+.cartInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1; /* Permite que tome el espacio restante */
+    margin-left: 10px; /* Ajusta la separación con la imagen */
+}
+
+.cartInfo h4 {
+    margin: 0;
+}
+
+.price {
+    font-size: 18px !important;
+    font-weight: bold;
+    color: #666 !important;
+}
+
+.quantityControls {
+    display: flex;
+    align-items: center;
+}
+
+.quantityBtn {
+    background: #eee;
+    border: none;
+    padding: 3px 6px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #694a6d;
+}
+
+.quantity {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 5px;
+}
+
+.cartActions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end; /* Asegura que los botones se alineen a la derecha */
+    margin-left: auto; /* Empuja el div hacia la derecha */
+}
+
+.removeBtn {
+    background: #694a6d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.favButton {
+    background: #694a6d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.removeBtn:hover,
+.favButton:hover {
+    background: #5c3e56;
 }
 
 .backToCartBtn {

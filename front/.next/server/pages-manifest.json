@@ -2,7 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/cart/cart": "pages/cart/cart.js",
-  "/books/[url]/[id]": "pages/books/[url]/[id].js",
-  "/cart/checkout": "pages/cart/checkout.js"
+  "/books/all-books": "pages/books/all-books.js",
+  "/books/[url]/[id]": "pages/books/[url]/[id].js"
 }

@@ -1,12 +1,29 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faHeart as faHeartSolid,
+  faTrashCan,
+  faChevronLeft,
+  faPlus,
+  faMinus,
+} from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import styles from "./checkout.module.css";
 import { useCart } from "@/core/contexts/CartContext";
+import { useFavorites } from "@/core/contexts/FavoritesContext";
 import Header from "@/components/Header/Header";
 
-
 export default function checkout() {
-  const { cart, calculateTotal, formatPrice } = useCart();
+  const {
+    cart,
+    removeFromCart,
+    incrementQuantity,
+    decrementQuantity,
+    calculateTotal,
+    formatPrice,
+  } = useCart();
+  const { favorites, setFavorites } = useFavorites();
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -24,6 +41,17 @@ export default function checkout() {
     e.preventDefault();
     console.log("Formulario enviado", formData);
     alert("Compra realizada con éxito!");
+  };
+
+  const toggleFavorite = (product) => {
+    setFavorites((prevFavorites) => {
+      const isFavorite = prevFavorites.some((fav) => fav.id === product.id);
+      if (isFavorite) {
+        return prevFavorites.filter((fav) => fav.id !== product.id); // Quitar de favoritos
+      } else {
+        return [...prevFavorites, product]; // Agregar a favoritos
+      }
+    });
   };
 
   return (
@@ -93,18 +121,67 @@ export default function checkout() {
           <hr />
           <div className={styles.orderSummary}>
             <h3>Resumen del pedido</h3>
-            <ul>
+            <ul className={styles.cartList}>
               {cart.map((product) => (
                 <li key={product.id} className={styles.orderItem}>
-                  {product.title} x{product.quantity} -{" "}
-                  {formatPrice(product.price * product.quantity)}€
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className={styles.cartImage}
+                  />
+                  <div>
+                    <div className={styles.cartInfo}>
+                      <h4>{product.title}</h4>
+                      <p>{product.author}</p>
+                      <p className={styles.price}>
+                        {formatPrice(product.price * product.quantity)}€
+                      </p>
+                      <div className={styles.quantityControls}>
+                        <button
+                          className={styles.quantityBtn}
+                          onClick={() => decrementQuantity(product.id)}
+                        >
+                          <FontAwesomeIcon icon={faMinus} size="lg" />
+                        </button>
+                        <span className={styles.quantity}>
+                          {product.quantity}
+                        </span>
+                        <button
+                          className={styles.quantityBtn}
+                          onClick={() => incrementQuantity(product.id)}
+                        >
+                          <FontAwesomeIcon icon={faPlus} size="lg" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className={styles.cartActions}>
+                    <button
+                      className={styles.removeBtn}
+                      onClick={() => removeFromCart(product.id)}
+                    >
+                      <FontAwesomeIcon icon={faTrashCan} size="lg" />
+                    </button>
+                    <button
+                      onClick={() => toggleFavorite(product)}
+                      className={styles.favButton}
+                    >
+                      <FontAwesomeIcon
+                        icon={
+                          favorites.some((fav) => fav.id === product.id)
+                            ? faHeartSolid
+                            : faHeart
+                        }
+                      />
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
             <h4>Total: {formatPrice(calculateTotal())}€</h4>
-            <Link href="/cart/cart">
+            <Link href="/">
               <button className={styles.backToCartBtn}>
-                Volver al carrito
+                Seguir comprando
               </button>
             </Link>
           </div>

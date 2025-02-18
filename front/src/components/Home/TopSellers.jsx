@@ -17,7 +17,16 @@ export default function topSellers() {
   const { favorites, toggleFavorite } = useFavorites();
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Verificar si existe el token
+  useEffect(() => {
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    console.log("🔎 Token encontrado:", token);
+    setIsAuthenticated(!!token);
+  }, []);
+  
   // Detectar el tamaño de la pantalla y ajustar itemsPerPage
   useEffect(() => {
     const updateItemsPerPage = () => {
@@ -89,15 +98,19 @@ export default function topSellers() {
                 ) : (
                   ""
                 )}
-                <button onClick={() => toggleFavorite(product)}>
-                  <FontAwesomeIcon
-                    icon={
-                      favorites.some((fav) => fav.id === product.id)
-                        ? faHeartSolid
-                        : faHeart
-                    }
-                  />
-                </button>
+                {isAuthenticated ? (
+                  <button onClick={() => toggleFavorite(product)}>
+                    <FontAwesomeIcon
+                      icon={
+                        favorites.some((fav) => fav.id === product.id)
+                          ? faHeartSolid
+                          : faHeart
+                      }
+                    />
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           ))}

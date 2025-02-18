@@ -20,15 +20,15 @@ self.__BUILD_MANIFEST = {
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/cart/cart": [
+    "/books/[url]/[id]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/cart/cart.js"
+      "static/chunks/pages/books/[url]/[id].js"
     ],
-    "/cart/checkout": [
+    "/books/all-books": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/cart/checkout.js"
+      "static/chunks/pages/books/all-books.js"
     ]
   },
   "ampFirstPages": []

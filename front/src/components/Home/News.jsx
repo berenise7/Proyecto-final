@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import products from "@/api/productos";
 import styles from "@/components/Home/CardsMenu.module.css";
 import { useCart } from "@/core/contexts/CartContext";
@@ -16,31 +16,40 @@ export default function HomeLiterary() {
   const { addToCart, formatPrice } = useCart();
   const { favorites, toggleFavorite } = useFavorites();
   const [page, setPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(5);
-  
-    // Detectar el tamaño de la pantalla y ajustar itemsPerPage
-    useEffect(() => {
-      const updateItemsPerPage = () => {
-        if (window.innerWidth < 480) {
-          setItemsPerPage(2); // Menos productos en pantallas muy pequeñas
-        } else if (window.innerWidth < 768) {
-          setItemsPerPage(3); // Menos productos en pantallas pequeñas
-        } else if (window.innerWidth < 1024) {
-          setItemsPerPage(4); // Productos intermedios en pantallas medianas
-        } else {
-          setItemsPerPage(5); // Productos por defecto en pantallas grandes
-        }
-      };
-  
-      // Llamar a la función al cargar la página y cada vez que la ventana cambie de tamaño
-      updateItemsPerPage();
-      window.addEventListener("resize", updateItemsPerPage);
-  
-      // Limpiar el event listener cuando el componente se desmonte
-      return () => {
-        window.removeEventListener("resize", updateItemsPerPage);
-      };
-    }, []);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Verificar si existe el token
+  useEffect(() => {
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    console.log("🔎 Token encontrado:", token);
+    setIsAuthenticated(!!token);
+  }, []);
+
+  // Detectar el tamaño de la pantalla y ajustar itemsPerPage
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth < 480) {
+        setItemsPerPage(2); // Menos productos en pantallas muy pequeñas
+      } else if (window.innerWidth < 768) {
+        setItemsPerPage(3); // Menos productos en pantallas pequeñas
+      } else if (window.innerWidth < 1024) {
+        setItemsPerPage(4); // Productos intermedios en pantallas medianas
+      } else {
+        setItemsPerPage(5); // Productos por defecto en pantallas grandes
+      }
+    };
+
+    // Llamar a la función al cargar la página y cada vez que la ventana cambie de tamaño
+    updateItemsPerPage();
+    window.addEventListener("resize", updateItemsPerPage);
+
+    // Limpiar el event listener cuando el componente se desmonte
+    return () => {
+      window.removeEventListener("resize", updateItemsPerPage);
+    };
+  }, []);
   // Muestra solo los best sellers
   const filteredProducts = products.filter(
     (product) => product.isRecommendation
@@ -88,7 +97,7 @@ export default function HomeLiterary() {
                 ) : (
                   ""
                 )}
-                <button onClick={() => toggleFavorite(product)}>
+                {isAuthenticated ? <button onClick={() => toggleFavorite(product)}>
                   <FontAwesomeIcon
                     icon={
                       favorites.some((fav) => fav.id === product.id)
@@ -96,13 +105,13 @@ export default function HomeLiterary() {
                         : faHeart
                     }
                   />
-                </button>
+                </button> : ""}
               </div>
             </div>
           ))}
         </div>
-           {/* Paginación con flechas e indicadores */}
-           <div className={styles.paginationContainer}>
+        {/* Paginación con flechas e indicadores */}
+        <div className={styles.paginationContainer}>
           <button
             className={styles.paginationArrow}
             onClick={() => setPage(page - 1)}

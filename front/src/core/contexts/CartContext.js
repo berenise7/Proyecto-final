@@ -101,13 +101,7 @@ export const CartProvider = ({ children }) => {
         sessionStorage.removeItem(`cart_${sessionStorage.getItem("token")}`);
 
         setCart([]); // Limpiar el carrito
-
-        if (router.pathname === "/") {
-            router.reload(); // Recargar la página si ya estamos en Home
-        } else {
-            router.push("/"); // Redirigir a la página de inicio
-        }
-
+        router.reload(); // Recargar la página si ya estamos en Home
     };
 
 

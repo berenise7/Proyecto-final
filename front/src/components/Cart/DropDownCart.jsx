@@ -103,10 +103,6 @@ export default function DropDownCart(props) {
           <div className={styles.total}>
             Total: {formatPrice(calculateTotal())}€
           </div>
-
-          <button className={styles.showcartBtn}>
-            <Link href="/cart/cart">Ver carrito</Link>
-          </button>
           <button className={styles.checkoutBtn}>
             <Link href="/cart/checkout">Ir a pagar</Link>
           </button>

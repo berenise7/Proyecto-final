@@ -1,11 +1,12 @@
 import Link from "next/link";
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./Header.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faBasketShopping } from "@fortawesome/free-solid-svg-icons";
 import DropDownCart from "../cart/DropDownCart";
 import { useCart } from "@/core/contexts/CartContext";
 import { useRouter } from "next/router";
+import { useAuth } from "@/core/contexts/AuthContext";
 
 export default function Header() {
   const router = useRouter();
@@ -17,7 +18,8 @@ export default function Header() {
   // Uso el context del carrito
   const { cart, totalQuantity, handleLogout } = useCart();
   // Uso el context de auth
-
+  const { user } = useAuth;
+  
   const buttonMenuRef = useRef(null);
   const buttonAccountRef = useRef(null);
   const buttonCartRef = useRef(null);
@@ -103,7 +105,11 @@ export default function Header() {
             <div className={styles.logoContainer}>
               {/* Logo de la página que funciona como enlace a la página principal */}
 
-              <img src="/assets/images/logo/logo192.png" alt="logo" className={styles.iconLogo}/>
+              <img
+                src="/assets/images/logo/logo192.png"
+                alt="logo"
+                className={styles.iconLogo}
+              />
 
               {/* Título de la página que funciona como enlace a la página principal */}
               <h1>
@@ -178,11 +184,6 @@ export default function Header() {
                           </Link>
                         </li>
                         <li>
-                          <Link href="/cart/cart">
-                            Mis carrito
-                          </Link>
-                        </li>
-                        <li>
                           <Link href="/myaccount/my-library/my-library">
                             Mis lecturas terminadas
                           </Link>
@@ -197,7 +198,9 @@ export default function Header() {
                   </div>
                 )}
               </li>
-              <li>Todos los libros</li>
+              <li>
+                <Link href="/books/all-books">Todos los libros</Link>
+              </li>
               <li>Ficción</li>
               <li>No Ficción</li>
               <li>Juvenil</li>
