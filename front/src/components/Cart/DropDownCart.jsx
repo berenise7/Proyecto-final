@@ -5,16 +5,10 @@ import { useFavorites } from "@/core/contexts/FavoritesContext";
 import { useCart } from "@/core/contexts/CartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
-import {
-  faPlus,
-  faMinus,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faMinus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 
-export default function DropDownCart(props) {
-  const { cartRef } = props;
-
+export default function DropDownCart({ cartRef }) {
   // Uso de context
   const {
     cart,

@@ -284,7 +284,7 @@ export default function UserRegisterFormik() {
                           <Field
                             type="checkbox"
                             name="favoriteGenre"
-                            value="romance"
+                            value="Romance"
                             className={styles.checkbox}
                           />
                           Romance
@@ -293,7 +293,7 @@ export default function UserRegisterFormik() {
                           <Field
                             type="checkbox"
                             name="favoriteGenre"
-                            value="comedia"
+                            value="Comedia"
                             className={styles.checkbox}
                           />
                           Comedia
@@ -302,7 +302,7 @@ export default function UserRegisterFormik() {
                           <Field
                             type="checkbox"
                             name="favoriteGenre"
-                            value="drama"
+                            value="Drama"
                             className={styles.checkbox}
                           />
                           Drama
@@ -313,7 +313,7 @@ export default function UserRegisterFormik() {
                           <Field
                             type="checkbox"
                             name="favoriteGenre"
-                            value="terror"
+                            value="Terror"
                             className={styles.checkbox}
                           />
                           Terror
@@ -322,7 +322,7 @@ export default function UserRegisterFormik() {
                           <Field
                             type="checkbox"
                             name="favoriteGenre"
-                            value="fantasía"
+                            value="Fantasía"
                             className={styles.checkbox}
                           />
                           Fantasía
@@ -331,7 +331,7 @@ export default function UserRegisterFormik() {
                           <Field
                             type="checkbox"
                             name="favoriteGenre"
-                            value="thriller"
+                            value="Thriller"
                             className={styles.checkbox}
                           />
                           Thriller

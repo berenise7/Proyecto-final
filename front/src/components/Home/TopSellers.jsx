@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import products from "@/api/productos";
 import styles from "@/components/Home/CardsMenu.module.css";
+import { getAllBooks } from "@/api/booksFetch";
 import { useCart } from "@/core/contexts/CartContext";
 import { useFavorites } from "@/core/contexts/FavoritesContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,6 +18,22 @@ export default function topSellers() {
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const booksData = await getAllBooks();
+      console.log(booksData);
+      if (booksData) {
+        // Actualiza el estado con los libros obtenidos
+        setBooks(booksData.data);
+      } else {
+        console.error("La respuesta no es un array", booksData);
+        setError("No se pudieron cargar los libros. Intenta más tarde.");
+      }
+    };
+    fetchBooks();
+  }, []);
 
   // Verificar si existe el token
   useEffect(() => {
@@ -26,7 +42,7 @@ export default function topSellers() {
     console.log("🔎 Token encontrado:", token);
     setIsAuthenticated(!!token);
   }, []);
-  
+
   // Detectar el tamaño de la pantalla y ajustar itemsPerPage
   useEffect(() => {
     const updateItemsPerPage = () => {
@@ -52,57 +68,55 @@ export default function topSellers() {
   }, []);
 
   // Muestra solo los best sellers
-  const filteredProducts = products.filter(
-    (product) => product.isRecommendation
-  );
-
+  const filteredProducts = books.filter((book) => book.bestSeller);
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const displayedProducts = filteredProducts.slice(
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );
+
   return (
     <>
       <div className={styles.container}>
         <h2>Más vendidos</h2>
         <div className={styles.productList}>
-          {displayedProducts.map((product, index) => (
+          {displayedProducts.map((book, index) => (
             <div className={styles.productCard} key={index}>
-              <Link href={`${product.url}/${product.id}`}>
-                <img src={product.image} alt={product.title} />
+              <Link href={`${book.url}/${book._id}`}>
+                <img src={book.image} alt={book.title} />
                 <div className={styles.productInfo}>
-                  {product.quantity >= 1 ? (
-                    (product.isNew && (
+                  {book.quantity >= 1 ? (
+                    (book.isNewBook && (
                       <span className={styles.badge}>Nuevo</span>
                     )) ||
-                    (product.isPresale && (
+                    (book.isPresale && (
                       <span className={styles.badge}>Preventa</span>
                     ))
                   ) : (
                     <span className={styles.badge}>Sin stock</span>
                   )}
-                  <h3 className={styles.title}>{product.title}</h3>
-                  <p className={styles.author}>{product.author}</p>
+                  <h3 className={styles.title}>{book.title}</h3>
+                  <p className={styles.author}>{book.author}</p>
                   <p>
                     <span className={styles.price}>
-                      {formatPrice(product.price)}€
+                      {formatPrice(book.price)}€
                     </span>
                   </p>
-                  <p>{product.cover}</p>
-                  {/* <Link href={product.url}>Ver más</Link> */}
+                  <p>{book.cover}</p>
+                  {/* <Link href={book.url}>Ver más</Link> */}
                 </div>
               </Link>
               <div className={styles.actions}>
-                {product.quantity >= 1 ? (
-                  <button onClick={() => addToCart(product)}>Añadir</button>
+                {book.quantity >= 1 ? (
+                  <button onClick={() => addToCart(book)}>Añadir</button>
                 ) : (
                   ""
                 )}
                 {isAuthenticated ? (
-                  <button onClick={() => toggleFavorite(product)}>
+                  <button onClick={() => toggleFavorite(book)}>
                     <FontAwesomeIcon
                       icon={
-                        favorites.some((fav) => fav.id === product.id)
+                        favorites.some((fav) => fav.id === book.id)
                           ? faHeartSolid
                           : faHeart
                       }

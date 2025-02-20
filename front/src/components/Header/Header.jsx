@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/core/contexts/AuthContext";
 
 export default function Header() {
-  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false); //Para saber si el menu esta abierto o cerrado
   const [isCartOpen, setIsCartOpen] = useState(false); //Para saber si el carrito esta abierto o cerrado
   const [isAccountOpen, setIsAccountOpen] = useState(false); //Para saber si el carrito esta abierto o cerrado
@@ -18,8 +17,8 @@ export default function Header() {
   // Uso el context del carrito
   const { cart, totalQuantity, handleLogout } = useCart();
   // Uso el context de auth
-  const { user } = useAuth;
-  
+  const { user } = useAuth();
+
   const buttonMenuRef = useRef(null);
   const buttonAccountRef = useRef(null);
   const buttonCartRef = useRef(null);
@@ -193,6 +192,13 @@ export default function Header() {
                             Mis favoritos
                           </Link>
                         </li>
+                        {user.rol === "admin" && (
+                          <li>
+                            <Link href="/myaccount/add-book/add-book">
+                              Añadir nuevo libro
+                            </Link>
+                          </li>
+                        )}
                       </div>
                     )}
                   </div>

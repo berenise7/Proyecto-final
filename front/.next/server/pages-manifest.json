@@ -2,6 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/books/all-books": "pages/books/all-books.js",
-  "/books/[url]/[id]": "pages/books/[url]/[id].js"
+  "/": "pages/index.js",
+  "/myaccount/add-book/add-book": "pages/myaccount/add-book/add-book.js",
+  "/user/register": "pages/user/register.js"
 }
