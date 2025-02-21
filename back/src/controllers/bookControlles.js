@@ -1,3 +1,5 @@
+import fs from 'fs'
+import cloudinary from "../config/cloudinary.js";
 import booksDB from "../mocks/booksDB.js";
 import bookModel from "../models/book.js";
 
@@ -65,7 +67,65 @@ const getIdBooks = async (req, res) => {
     }
 };
 
+// Create Book
+// Subir una imagen a Cloudinary
+const uploadImageToCloudinary = (file) => {
+    return new Promise((resolve, reject) => {
+        cloudinary.uploader.upload(file.path, (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result.secure_url)
+            }
+        })
+    })
+};
 
+const createBook = async (req, res) => {
+    try {
+        const results = await cloudinary.uploader.upload(req.file.path);
+        const urlCloudinary = cloudinary.url(results.public_id, {
+            transformation: [
+                {
+                    quality: "auto",
+                    fetch_format: "auto"
+                }
+            ]
+        })
+
+        // Elimina la imagen subida a uploads
+        fs.unlinkSync(req.file.path)
+
+        const bookData = req.body;
+
+        const newBook = new bookModel({
+            title: bookData.title,
+            author: bookData.author,
+            isbn: bookData.isbn,
+            genre: bookData.genre,
+            editorial: bookData.editorial,
+            description: bookData.description,
+            price: bookData.price,
+            quantity: bookData.quantity,
+            image: urlCloudinary,
+            isNewBook: bookData.isNewBook,
+            isPresale: bookData.isPresale,
+            bestSeller: bookData.bestSeller,
+            isRecommendation: bookData.isRecommendation,
+            url: bookData.url
+        });
+        await newBook.save();
+        res.status(200).json({
+            status: "Succeeded",
+            data: newBook,
+            error: null,
+        });
+    } catch (error) {
+        res
+            .status(500)
+            .json({ status: "failed", data: null, error: error.message });
+    }
+}
 
 // Load initial data
 const loadDataBooks = async (req, res) => {
@@ -99,5 +159,5 @@ const loadDataBooks = async (req, res) => {
 };
 
 export {
-    loadDataBooks, getBooks, getIdBooks
+    loadDataBooks, getBooks, getIdBooks, createBook
 }

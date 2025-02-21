@@ -1,21 +1,31 @@
 // Importa multer para gestionar la carga de archivos
 import multer from "multer";
-// Importa el almacenamiento de Cloudinary con Multer
-import { CloudinaryStorage } from "multer-storage-cloudinary";
-// Importa la configuración de Cloudinary
-import cloudinary from "../config/cloudinary.js";
+import path from 'path'
+// Configuración de multer para almacenar las imágenes temporalmente
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'src/uploads/'); // Asegúrate de tener esta carpeta creada
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
 
-// Configura el almacenamiento para Multer usando Cloudinary
-const storage = new CloudinaryStorage({
-  cloudinary, // Usa la configuración de Cloudinary
-  params: {
-    folder: "imagenes",  // La carpeta en Cloudinary donde se almacenarán las imágenes
-    allowed_formats: ["jpg", "png", "jpeg"], // Los formatos de imagen permitidos
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    console.log(file);
+    
+    const fileTypes = /jpeg|jpg|png|gif/;
+    const mimeType = fileTypes.test(file.mimetype);
+    const extName = fileTypes.test(path.extname(file.originalname).toLowerCase());
+
+    if (mimeType && extName) {
+      return cb(null, true);
+    } else {
+      cb(new Error("Solo se permiten imágenes"));
+    }
   },
 });
 
-// Crea el middleware de Multer que usará el almacenamiento de Cloudinary
-const upload = multer({ storage });
-
-// Exporta el middleware para usarlo en las rutas
-export default upload;
+export { upload };

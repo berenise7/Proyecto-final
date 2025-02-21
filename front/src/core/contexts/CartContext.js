@@ -92,13 +92,17 @@ export const CartProvider = ({ children }) => {
     };
     // Para cerrar sesion
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        sessionStorage.removeItem("token");
 
         localStorage.removeItem(`cart_${localStorage.getItem("token")}`);
-
+        localStorage.removeItem(`favorites_${localStorage.getItem("token")}`);
+        
         // O si usas sessionStorage:
         sessionStorage.removeItem(`cart_${sessionStorage.getItem("token")}`);
+        sessionStorage.removeItem(`favorites_${sessionStorage.getItem("token")}`);
+        localStorage.removeItem("user");
+        sessionStorage.removeItem("user");
+        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
 
         setCart([]); // Limpiar el carrito
         router.reload(); // Recargar la página si ya estamos en Home

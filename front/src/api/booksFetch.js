@@ -23,3 +23,24 @@ export const getBook = async (_id) => {
     const book = await response.json()
     return book
 };
+
+export const createBook = async (bodyParam) => {
+    try {
+        console.log(bodyParam);
+        
+        const response = await fetch('http://localhost:9000/books/create', {
+            method: 'POST',
+         
+            body: bodyParam
+        });
+        if (!response.ok) {
+            throw new Error(`Error en la petición: ${response.status} ${response.statusText}`);
+        }
+        const bookCreated = await response.json()
+        return bookCreated;
+
+    } catch (error) {
+        console.error("Error al crear el libro:", error);
+        throw error; 
+    }
+}

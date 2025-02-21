@@ -23,13 +23,11 @@ export default function book() {
 
   useEffect(() => {
     const loadBook = async () => {
-      const bookAux = await getBook(_id);      
+      const bookAux = await getBook(_id);
       setBook(bookAux.data);
     };
     loadBook();
   }, [_id]);
-
-
 
   // Verificar si un producto específico está en la lista de favoritos cuando la lista de favoritos o el producto cambian.
   useEffect(() => {
@@ -82,7 +80,7 @@ export default function book() {
     if (ratings.length === 0) return "Sin valoraciones";
     const sum = ratings.reduce((acc, rating) => acc + rating, 0);
     console.log(sum);
-    
+
     return (sum / ratings.length).toFixed(1);
   };
   const averageRating = calculateAverageRating(book.ratings);
@@ -108,16 +106,16 @@ export default function book() {
             </p>
             {/* ⭐ Sección de Valoraciones */}
             {/* Si son preventa o nuevos no se muestra las valoraciones */}
-            {book.isPresale == false && book.isNewBook == false ? (
-              <div className={styles.ratings}>
-                <StarRating rating={averageRating} />
-                <span className={styles.ratingText}>
-                  ({book.ratings.length} valoraciones)
-                </span>
-              </div>
-            ) : (
-              ""
-            )}
+            {book.isPresale == false &&
+              book.isNewBook == false &&
+              book.ratings.length > 0 && (
+                <div className={styles.ratings}>
+                  <StarRating rating={averageRating} />
+                  <span className={styles.ratingText}>
+                    ({book.ratings.length} valoraciones)
+                  </span>
+                </div>
+              )}
             {/* 📖 Descripción */}
             <div>
               <p className={styles.description}>
