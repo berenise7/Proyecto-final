@@ -12,7 +12,7 @@ import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import styles from "./checkout.module.css";
 import { useCart } from "@/core/contexts/CartContext";
 import { useFavorites } from "@/core/contexts/FavoritesContext";
-import Header from "@/components/Header/Header";
+import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 
 export default function checkout() {
   const {
@@ -56,7 +56,7 @@ export default function checkout() {
 
   return (
     <div>
-      <Header />
+      <HeaderAndSearch />
       <div className={styles.checkoutContainer}>
         <h2>Checkout</h2>
         <div className={styles.checkoutContent}>

@@ -1,11 +1,11 @@
 import React from "react";
-import Header from "@/components/Header/Header";
 import EditProfileFormik from "@/components/FormikComponents/EditProfileFormik/EditProfileFormik";
+import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 
 export default function MyData() {
   return (
     <>
-      <Header />
+      <HeaderAndSearch />
       <EditProfileFormik />
     </>
   );

@@ -1,3 +1,7 @@
+// Obtener la informacion del archivo env
+import dotenv from "dotenv"
+import path from "path"
+dotenv.config({ path: path.resolve("src", ".env") })
 // Creacion api
 // Importacion de rutas
 import bookRouter from "./routes/booksRoutes.js";
@@ -12,14 +16,13 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 
 
-
 // Creamos una instancia
 const app = express()
 // Puerto para las solicitudes
 const port = 9000
 
 // URL de conexion a MongoDB Atlas
-const url_mongo = "mongodb+srv://rodriguezcuencaberenise:JIhy9VmaEa03NR5q@maincluster.4ipv5.mongodb.net/?retryWrites=true&w=majority&appName=MainCluster"
+const url_mongo = process.env.DATABASE_URL
 
 // Conectamos Mongoose a la base de datos usando la URL proporcionada
 mongoose.connect(url_mongo)

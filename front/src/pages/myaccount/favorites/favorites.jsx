@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Header from "@/components/Header/Header";
 import { useFavorites } from "@/core/contexts/FavoritesContext";
 import { useCart } from "@/core/contexts/CartContext";
 import styles from "./favorites.module.css";
@@ -12,6 +11,7 @@ import {
   faFilePen,
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
+import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 
 export default function favorites() {
   const { addToCart } = useCart();
@@ -44,7 +44,7 @@ export default function favorites() {
   };
   return (
     <>
-      <Header />
+      <HeaderAndSearch />
       <div className={styles.container}>
         <a className="back" onClick={goBack}>
           <FontAwesomeIcon icon={faChevronLeft} /> Volver atras

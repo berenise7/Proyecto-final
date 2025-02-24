@@ -25,6 +25,21 @@ self.__BUILD_MANIFEST = {
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
+    "/books/all-books": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/books/all-books.js"
+    ],
+    "/myaccount/my-library/my-library": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/myaccount/my-library/my-library.js"
+    ],
+    "/reading-journal/[title]/[id]": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/reading-journal/[title]/[id].js"
+    ],
     "/user/login": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",

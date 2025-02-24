@@ -1,11 +1,11 @@
 import UserLoginFormik from "@/components/FormikComponents/Login/UserLoginFormik";
-import Header from "@/components/Header/Header";
+import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 import React from "react";
 
 export default function login() {
   return (
     <>
-      <Header />
+      <HeaderAndSearch />
       <UserLoginFormik />
     </>
   );

@@ -1,11 +1,11 @@
-import AddBookFormik from "@/components/FormikComponents/EditProfileFormik copy/AddBookFormik";
-import Header from "@/components/Header/Header";
+import AddBookFormik from "@/components/FormikComponents/AddBookFormik/AddBookFormik";
+import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 import React from "react";
 
 export default function addBook() {
   return (
     <div>
-      <Header />
+      <HeaderAndSearch />
       <AddBookFormik />
     </div>
   );

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import Header from "@/components/Header/Header";
 import StarRating from "@/components/StarRating/StarRating";
 import { useCart } from "@/core/contexts/CartContext";
 import { useFavorites } from "@/core/contexts/FavoritesContext";
-import styles from "@/pages/books/book.module.css";
+import styles from "./book.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { getBook } from "@/api/booksFetch";
+import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 
 export default function book() {
   const { addToCart, formatPrice } = useCart();
@@ -87,7 +87,7 @@ export default function book() {
 
   return (
     <div>
-      <Header />
+      <HeaderAndSearch />
       <div className={styles.container}>
         <a className="back" onClick={goBack}>
           <FontAwesomeIcon icon={faChevronLeft} /> Volver atras

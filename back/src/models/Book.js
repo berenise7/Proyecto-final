@@ -82,5 +82,7 @@ const bookSchema = new Schema({
     }
 })
 
+bookSchema.index({title: "text", author: "text", isbn: "text" })
+
 const bookModel = mongoose.model("Books", bookSchema, "Books");
 export default bookModel;

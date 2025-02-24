@@ -1,4 +1,3 @@
-import Header from "@/components/Header/Header";
 import { getAllBooks } from "@/api/booksFetch";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -13,6 +12,7 @@ import {
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
+import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 
 export default function allBooks() {
   const router = useRouter();
@@ -54,7 +54,7 @@ export default function allBooks() {
   };
   return (
     <>
-      <Header />
+      <HeaderAndSearch />
       <div className={styles.booksContainer}>
         <a className="back" onClick={goBack}>
           <FontAwesomeIcon icon={faChevronLeft} /> Volver atras

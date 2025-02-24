@@ -7,6 +7,7 @@ import DropDownCart from "../cart/DropDownCart";
 import { useCart } from "@/core/contexts/CartContext";
 import { useRouter } from "next/router";
 import { useAuth } from "@/core/contexts/AuthContext";
+import Search from "./Search";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false); //Para saber si el menu esta abierto o cerrado
@@ -115,11 +116,7 @@ export default function Header() {
                 <Link href="/">Literary Haven</Link>
               </h1>
             </div>
-            <input
-              type="text"
-              placeholder="Busca por autor, título, género o ISBN"
-              className={styles.searchBar}
-            />
+            <Search/>
           </div>
           {/* Barra de búsqueda para buscar libros por autor, título, etc. */}
           <div className={styles.bottomRow}>
@@ -145,7 +142,6 @@ export default function Header() {
             >
               <FontAwesomeIcon icon={faBasketShopping} />
               {cart.length === 0 ? "" : <span>{totalQuantity}</span>}
-              {/* Muestra la cantidad de productos en el carrito */}
             </div>
           </div>
         </nav>

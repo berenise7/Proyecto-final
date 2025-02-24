@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import Header from "@/components/Header/Header";
 import products from "@/api/productos";
 import reading from "@/api/reading";
 import styles from "./reading.module.css";
@@ -21,6 +20,7 @@ import {
   faFaceSurprise as faFaceSurpriseRegular,
 } from "@fortawesome/free-regular-svg-icons";
 import { PiPepperFill, PiPepper } from "react-icons/pi";
+import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 
 
 export default function readingJournal() {
@@ -127,14 +127,14 @@ export default function readingJournal() {
   if (!product) {
     return (
       <div>
-        <Header />
+        <HeaderAndSearch />
         <p>Producto no encontrado</p>
       </div>
     );
   }
   return (
     <div>
-      <Header />
+      <HeaderAndSearch />
       <div className={styles.container}>
         <a className="link" onClick={goBack}>
           <FontAwesomeIcon icon={faChevronLeft} /> Volver atras

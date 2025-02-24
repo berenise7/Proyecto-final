@@ -2,6 +2,7 @@ import fs from 'fs'
 import cloudinary from "../config/cloudinary.js";
 import booksDB from "../mocks/booksDB.js";
 import bookModel from "../models/book.js";
+import { log } from 'console';
 
 // Get all books
 const getBooks = async (req, res) => {
@@ -67,23 +68,82 @@ const getIdBooks = async (req, res) => {
     }
 };
 
-// Create Book
-// Subir una imagen a Cloudinary
-const uploadImageToCloudinary = (file) => {
-    return new Promise((resolve, reject) => {
-        cloudinary.uploader.upload(file.path, (error, result) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(result.secure_url)
-            }
-        })
-    })
+const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 };
+
+const getSearchBooks = async (req, res) => {
+    try {
+        const { query } = req.query;
+
+        if (!query) {
+            return res.status(400).json({
+                status: "Failed",
+                data: null,
+                error: "Query is required",
+            })
+        }
+        // Para eliminar las tildes y poner en minnusculas
+        const normalizedQuery = removeAccents(query)
+
+
+        const booksRegexSearch = await bookModel.find({
+            $or: [
+                { title: { $regex: normalizedQuery, $options: "i" } },
+                { author: { $regex: normalizedQuery, $options: "i" } },
+                { isbn: { $regex: normalizedQuery, $options: "i" } },
+            ],
+        });
+        // Si no hay resultados, intentar una búsqueda con $regex para coincidencias parciales
+        if (booksRegexSearch.length === 0) {
+            const booksTextSearch = await bookModel.find({
+                $text: { $search: normalizedQuery },
+            }).limit(5);
+
+            // Si aún no hay resultados, devuelve un mensaje de error
+            if (booksTextSearch.length === 0) {
+                return res.status(404).json({
+                    status: "Failed",
+                    message: "No se encontraron libros que coincidan con la búsqueda.",
+                    data: null,
+                    error: null,
+                });
+            }
+            // Si se encuentran resultados con $regex
+            return res.status(200).json({
+                status: "Succeeded",
+                data: booksTextSearch,
+                error: null,
+            });
+        }
+
+        res.status(200).json({
+            status: "Succeeded",
+            data: booksRegexSearch,
+            error: null,
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            status: "Failed",
+            data: null,
+            error: "Error searching books",
+        });
+    }
+}
+
+
+// Crear nuevo libro
+const formatTitleForURL = (title) => {
+    return title.toLowerCase().split(" ").join("-");
+};
+
 
 const createBook = async (req, res) => {
     try {
+        // Sube el file a cloudinary
         const results = await cloudinary.uploader.upload(req.file.path);
+        // Y lo convierte en un url
         const urlCloudinary = cloudinary.url(results.public_id, {
             transformation: [
                 {
@@ -92,6 +152,7 @@ const createBook = async (req, res) => {
                 }
             ]
         })
+
 
         // Elimina la imagen subida a uploads
         fs.unlinkSync(req.file.path)
@@ -112,7 +173,7 @@ const createBook = async (req, res) => {
             isPresale: bookData.isPresale,
             bestSeller: bookData.bestSeller,
             isRecommendation: bookData.isRecommendation,
-            url: bookData.url
+            url: `/books/${formatTitleForURL(bookData.title)}`
         });
         await newBook.save();
         res.status(200).json({
@@ -159,5 +220,5 @@ const loadDataBooks = async (req, res) => {
 };
 
 export {
-    loadDataBooks, getBooks, getIdBooks, createBook
+    loadDataBooks, getBooks, getIdBooks, createBook, getSearchBooks
 }
