@@ -5,14 +5,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faBasketShopping } from "@fortawesome/free-solid-svg-icons";
 import DropDownCart from "../cart/DropDownCart";
 import { useCart } from "@/core/contexts/CartContext";
-import { useRouter } from "next/router";
 import { useAuth } from "@/core/contexts/AuthContext";
 import Search from "./Search";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false); //Para saber si el menu esta abierto o cerrado
   const [isCartOpen, setIsCartOpen] = useState(false); //Para saber si el carrito esta abierto o cerrado
-  const [isAccountOpen, setIsAccountOpen] = useState(false); //Para saber si el carrito esta abierto o cerrado
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Uso el context del carrito
@@ -22,9 +22,11 @@ export default function Header() {
 
   const buttonMenuRef = useRef(null);
   const buttonAccountRef = useRef(null);
+  const buttonAdminRef = useRef(null);
   const buttonCartRef = useRef(null);
   const menuRef = useRef(null);
   const accountRef = useRef(null);
+  const adminRef = useRef(null);
   const cartRef = useRef(null);
 
   // Funcion para alternar el estado del menu
@@ -35,6 +37,10 @@ export default function Header() {
   const toggleAccount = () => {
     setIsAccountOpen((prevState) => !prevState);
   };
+  const toggleAdmin = () => {
+    setIsAdminOpen((prevState) => !prevState);
+  };
+
   // Funcion para alternar el estado del carrito
   const onCartToggle = () => {
     setIsCartOpen((prevState) => !prevState);
@@ -58,6 +64,14 @@ export default function Header() {
         !buttonAccountRef.current.contains(event.target)
       ) {
         setIsAccountOpen(false);
+      }
+      if (
+        adminRef.current &&
+        !adminRef.current.contains(event.target) &&
+        buttonAdminRef.current &&
+        !buttonAdminRef.current.contains(event.target)
+      ) {
+        setIsAdminOpen(false);
       }
       if (
         cartRef.current &&
@@ -116,7 +130,7 @@ export default function Header() {
                 <Link href="/">Literary Haven</Link>
               </h1>
             </div>
-            <Search/>
+            <Search />
           </div>
           {/* Barra de búsqueda para buscar libros por autor, título, etc. */}
           <div className={styles.bottomRow}>
@@ -188,18 +202,36 @@ export default function Header() {
                             Mis favoritos
                           </Link>
                         </li>
-                        {user.rol === "admin" && (
-                          <li>
-                            <Link href="/myaccount/add-book/add-book">
-                              Añadir nuevo libro
-                            </Link>
-                          </li>
-                        )}
                       </div>
                     )}
                   </div>
                 )}
               </li>
+              {user?.rol === "admin" ? (
+                <li
+                  onClick={toggleAdmin}
+                  className={isAdminOpen ? styles.accountActive : ""}
+                  ref={buttonAdminRef}
+                >
+                  Admin
+                  <div
+                    className={styles.accountSubmenu}
+                    ref={adminRef}
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <li>
+                      <Link href="/admin/add-book/add-book">
+                        Añadir nuevo libro
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/admin/edit-books/all-books-edits">
+                        Editar libros
+                      </Link>
+                    </li>
+                  </div>
+                </li>
+              ) : ""}
               <li>
                 <Link href="/books/all-books">Todos los libros</Link>
               </li>

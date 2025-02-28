@@ -1,8 +1,8 @@
 // Peticion para obtener toda la lista de libros
-export const getAllBooks = async () => {
+export const getAllBooks = async (sortBy = "", page = 1) => {
     try {
         // Peticion al back
-        const response = await fetch('http://localhost:9000/books')
+        const response = await fetch(`http://localhost:9000/books?sortBy=${sortBy}&page=${page}`)
         if (!response.ok) {
             throw new Error(`Error en la solicitud: ${response.statusText}`)
         }
@@ -15,8 +15,8 @@ export const getAllBooks = async () => {
     }
 };
 
-// Peticion para obtener un libro por id
 
+// Peticion para obtener un libro por id
 export const getBook = async (_id) => {
     //  Peticion al back
     const response = await fetch(`http://localhost:9000/books/${_id}`)
@@ -44,21 +44,54 @@ export const searchBooks = async (query) => {
 
 export const createBook = async (bodyParam) => {
     try {
-        console.log(bodyParam);
-
         const response = await fetch('http://localhost:9000/books/create', {
             method: 'POST',
-
             body: bodyParam
         });
         if (!response.ok) {
-            throw new Error(`Error en la petición: ${response.status} ${response.statusText}`);
+            const errorData = await response.json()
+            return { error: errorData.message || `Error en la petición: ${response.status} ${response.statusText}` };
         }
         const bookCreated = await response.json()
         return bookCreated;
 
     } catch (error) {
         console.error("Error al crear el libro:", error);
-        throw error;
+        return { error: "Ocurrió un error inesperado" };
+    }
+}
+
+export const updateBook = async (_id, bodyParam) => {
+    try {
+
+        const response = await fetch(`http://localhost:9000/books/${_id}`, {
+            method: 'PUT',
+            body: bodyParam
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json()
+            return { error: errorData.message || `Error en la petición: ${response.status} ${response.statusText}` };
+        }
+        const bookUpdated = await response.json()
+        return bookUpdated;
+    } catch (error) {
+        console.error("Error al crear el libro:", error);
+        return { error: "Ocurrió un error inesperado" };
+    }
+}
+
+export const deleteBook = async (_id) => {
+    try {
+        const response = await fetch(`http://localhost:9000/books/${_id}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) {
+            throw new Error("No se pudo eliminar el libro")
+        }
+        return await response.json()
+    } catch (error) {
+        console.error("Error al eliminar el libro:", error);
+        return { error: "Ocurrió un error inesperado" };
     }
 }

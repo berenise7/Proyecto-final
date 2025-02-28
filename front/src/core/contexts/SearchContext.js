@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useRef, useEffect } from "react";
 
 export const SearchContext = createContext();
 export const SearchProvider = ({ children }) => {
@@ -10,6 +10,7 @@ export const SearchProvider = ({ children }) => {
         setResults([])
     };
 
+   
     return (
         <SearchContext.Provider value={{ results, setResults, searchQuery, setSearchQuery, clearSearch }}>
             {children}

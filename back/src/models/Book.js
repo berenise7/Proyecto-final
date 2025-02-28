@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 const Schema = mongoose.Schema;
 
@@ -19,7 +20,7 @@ const bookSchema = new Schema({
         required: true,
         description: "Autor del libro"
     },
-    genre: {
+    genres: {
         type: [String],
         enum: ['Romance', "Drama", "Comedia", "Terror", "Fantasía", 'Thriller'],
         required: true,
@@ -79,10 +80,14 @@ const bookSchema = new Schema({
     url: {
         type: String,
         description: "Url del libro"
+    },
+    searchField: {
+        type: String,
+        description: "Campo de busqueda"
     }
-})
+}, { timestamps: true })
 
-bookSchema.index({title: "text", author: "text", isbn: "text" })
+// bookSchema.index({title: "text", author: "text", isbn: "text" })
 
 const bookModel = mongoose.model("Books", bookSchema, "Books");
 export default bookModel;

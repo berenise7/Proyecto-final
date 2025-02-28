@@ -2,9 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/myaccount/my-library/my-library": "pages/myaccount/my-library/my-library.js",
-  "/user/login": "pages/user/login.js",
-  "/reading-journal/[title]/[id]": "pages/reading-journal/[title]/[id].js",
-  "/books/all-books": "pages/books/all-books.js"
+  "/admin/edit-books/all-books-edits": "pages/admin/edit-books/all-books-edits.js",
+  "/": "pages/index.js"
 }

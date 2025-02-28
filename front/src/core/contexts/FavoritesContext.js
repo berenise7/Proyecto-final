@@ -27,13 +27,13 @@ export const FavoritesProvider = ({ children }) => {
     }, [favorites]);
 
     // Función para alternar favoritos
-    const toggleFavorite = (product) => {
+    const toggleFavorite = (book) => {
         setFavorites((prevFavorites) => {
-            const isFavorite = prevFavorites.some((fav) => fav.id === product.id);
+            const isFavorite = prevFavorites.some((fav) => fav.id === book.id);
             if (isFavorite) {
-                return prevFavorites.filter((fav) => fav.id !== product.id); // Quitar de favoritos
+                return prevFavorites.filter((fav) => fav.id !== book.id); // Quitar de favoritos
             } else {
-                return [...prevFavorites, product]; // Agregar a favoritos
+                return [...prevFavorites, book]; // Agregar a favoritos
             }
         });
     };

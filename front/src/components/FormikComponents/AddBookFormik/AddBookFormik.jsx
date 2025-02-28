@@ -15,6 +15,7 @@ export default function AddBookFormik() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [isbnError, setIsbnError] = useState("");
 
   const initialFormData = {
     title: "",
@@ -67,6 +68,7 @@ export default function AddBookFormik() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+    setIsbnError("");
   };
 
   const handleGenreChange = (e) => {
@@ -107,14 +109,16 @@ export default function AddBookFormik() {
     });
 
     if (imageFile) sendData.append("file", imageFile);
-
-    try {
-      await createBook(sendData);
-      setShowSuccessMessage(true);
-
-    } catch (error) {
-      console.log(`Hubo este error: ${error}`);
+    console.log(sendData.get(title));
+    console.log(sendData);
+    
+    const response = await createBook(sendData);
+    if (response.error) {
+      setIsbnError(response.error);
+      return;
     }
+
+    setShowSuccessMessage(true);
   };
 
   return user.rol === "admin" ? (
@@ -192,6 +196,7 @@ export default function AddBookFormik() {
               onChange={handleChange}
               value={formData.isbn}
             />
+            {isbnError && <p style={{ color: "#59485b" }}>{isbnError}</p>}
           </div>
           <div>
             <label htmlFor="price">Precio:</label>
@@ -228,7 +233,6 @@ export default function AddBookFormik() {
               value={formData.description}
             />
           </div>
-          
         </div>
         <div className={styles.formGrid2}>
           <div className={styles.genresContainer}>

@@ -1,11 +1,11 @@
-import { getAllBooks, searchBooks } from "@/api/booksFetch";
+import { searchBooks } from "@/api/booksFetch";
 import styles from "./Header.module.css";
 
 import React, { useState, useEffect } from "react";
 import { useSearch } from "@/core/contexts/SearchContext";
 
 export default function Search() {
-  const { setResults } = useSearch();
+  const { setResults,  } = useSearch();
   const [query, setQuery] = useState("");
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function Search() {
     <div>
       <input
         type="text"
-        placeholder="Busca por autor, título, género o ISBN"
+        placeholder="Busca por autor, título o ISBN"
         className={styles.searchBar}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
