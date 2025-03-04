@@ -6,7 +6,7 @@ import bookModel from "../models/Book.js";
 // GET all books
 const getBooks = async (req, res) => {
     try {
-        let { sortBy, page = 1 } = req.query;
+        let { sortBy, page = 1, genre } = req.query;
         let limit = 21;
         let skip = (page - 1) * limit;
 
@@ -38,11 +38,15 @@ const getBooks = async (req, res) => {
                 break;
         }
 
+        let filterQuery = {};
+        if (genre) {
+            filterQuery = { genres: genre };
+        }
 
         // Obtener todos los libros
-        const books = await bookModel.find().sort(sortQuery).skip(skip).limit(limit);
+        const books = await bookModel.find(filterQuery).sort(sortQuery).skip(skip).limit(limit);
 
-        const totalBooks = await bookModel.countDocuments();
+        const totalBooks = await bookModel.countDocuments(filterQuery);
 
         // Verificar si se encontraron libros
         if (books.length === 0) {
@@ -334,5 +338,5 @@ const loadDataBooks = async (req, res) => {
 };
 
 export {
-    loadDataBooks, getBooks, getBooksAndQuery, getIdBooks, createBook, getSearchBooks, updateBook, deleteBook
+    loadDataBooks, getBooks, getIdBooks, createBook, getSearchBooks, updateBook, deleteBook
 }

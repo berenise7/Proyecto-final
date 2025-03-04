@@ -32,7 +32,7 @@ export default function Search() {
 
 
   return (
-    <div>
+    <div className={styles.searchContainer}>
       <input
         type="text"
         placeholder="Busca por autor, título o ISBN"

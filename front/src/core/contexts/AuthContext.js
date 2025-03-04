@@ -1,48 +1,67 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
-import users from "@/api/users";
+import { handleLoginFetch } from "@/api/usersFetch";
 
 const AuthContext = createContext();
 
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
-
-    const router = useRouter();
-
-    const [showPassword, setShowPassword] = useState(false);
-    const [loginError, setLoginError] = useState("");
     const [user, setUser] = useState(null);
+    const [token, setToken] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
+    const [loginError, setLoginError] = useState(null);
+    const router = useRouter();
 
     // Verificar si hay sesión al cargar la página
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
+        const storedToken = localStorage.getItem("token") || sessionStorage.getItem("token");
+        if (storedToken) {
+            setToken(storedToken)
+            setUser(JSON.parse(localStorage.getItem("user")) || null);
         }
-        
+
     }, []);
 
 
     // Funcion para iniciar sesion
-    const handleLogin = (values) => {
-        const foundUser = users.find((u) => u.email === values.email && u.password === values.password)
-        if (foundUser) {
-            const fakeToken = "1234567890abcdef"; //  Token simulado
-            if (values.rememberMe) {
-                localStorage.setItem("token", fakeToken); // Guardar en localStorage (sesión persistente)
-                localStorage.setItem("user", JSON.stringify(foundUser)); // Guardar usuario en localStorage
-            } else {
-                sessionStorage.setItem("token", fakeToken); // Guardar en sessionStorage (se borra al cerrar navegador)
-                sessionStorage.setItem("user", JSON.stringify(foundUser)); // Guardar en sessionStorage
-            }
+    const handleLogin = async (values, { setSubmitting }) => {
+        setSubmitting(true);
+        setLoginError(null)
 
-            setUser(foundUser); // Actualizar estado del usuario
-            router.push("/");
+        const data = await handleLoginFetch(values.email, values.password)
+        if (data.status === "Succeeded") {
+            setUser(data.data);
+            setToken(data.token)
+            if (values.rememberMe) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("user", JSON.stringify(data.data));
+            } else {
+                sessionStorage.setItem("token", data.token);
+                sessionStorage.setItem("user", JSON.stringify(data.data));
+            }
+            router.push('/')
         } else {
-            setLoginError("Correo o contraseña incorrectos");
+            setLoginError(data.message)
         }
+        setSubmitting(false);
     };
+
+    const handleLogout = () => {
+        setUser(null);
+        setToken(null)
+        localStorage.removeItem(`cart_${localStorage.getItem("token")}`);
+        localStorage.removeItem(`favorites_${localStorage.getItem("token")}`);
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+
+        sessionStorage.removeItem(`cart_${sessionStorage.getItem("token")}`);
+        sessionStorage.removeItem(`favorites_${sessionStorage.getItem("token")}`);
+        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("token");
+        router.reload();
+    }
+
 
     // Función para actualizar los datos del usuario
     const updateUser = (updatedData) => {
@@ -52,7 +71,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loginError, showPassword, setShowPassword, handleLogin, updateUser }}>
+        <AuthContext.Provider value={{ user, loginError, showPassword, setShowPassword, handleLogin, updateUser, handleLogout}}>
             {children}
         </AuthContext.Provider>
     );

@@ -9,8 +9,12 @@ const usersDB = [
         password: "Prueba123!",
         birthday: "1995-11-14",
         rol: "admin",
-        favoriteGenre: ["Romance", "Fantasía", "Thriller", "Comedia"],
+        favoritesGenres: ["Romance", "Fantasía", "Thriller"],
         photo: "",
+        favorites: [
+            { book_id: "67c1916cb2bf5c9692bab485" },
+            { book_id: "67b47d5e2c8ca82d61a0a04f" },
+        ],
     },
     {
         id: "2",
@@ -20,10 +24,13 @@ const usersDB = [
         address: "malaga",
         email: "castrolopezrafael@gmail.com",
         password: "Prueba123!",
-        birthday: "27/11/1997",
+        birthday: "1997-11-27",
         rol: "user",
-        favoriteGenre: ["Fantasía", "Thriller", "Comedia"],
+        favoritesGenres: ["Fantasía", "Thriller"],
         photo: "",
+        favorites: [
+            { book_id: "67c1916cb2bf5c9692bab485" }
+        ],
     },
 ]
 

@@ -5,6 +5,7 @@ dotenv.config({ path: path.resolve("src", ".env") })
 // Creacion api
 // Importacion de rutas
 import bookRouter from "./routes/booksRoutes.js";
+import userRouter from "./routes/usersRoutes.js";
 
 // Importamos el framework Express para crear y gestionar el servicio web
 import express from 'express'
@@ -53,6 +54,7 @@ app.use(cors())
 
 // Rutas
 app.use("/books", bookRouter)
+app.use("/users", userRouter)
 
 // Iniciaos el servidor en el puerto especificado
 app.listen(port, () => {

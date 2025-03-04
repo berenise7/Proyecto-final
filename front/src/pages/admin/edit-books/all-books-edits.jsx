@@ -115,7 +115,10 @@ export default function allBooksEdits() {
             <span>
               Página {currentPage} de {totalPages}
             </span>
-            <button onClick={goToNextPage} disabled={currentPage === totalPages}>
+            <button
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages}
+            >
               Siguiente
             </button>
           </div>

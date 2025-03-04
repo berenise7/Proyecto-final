@@ -29,9 +29,9 @@ export const FavoritesProvider = ({ children }) => {
     // Función para alternar favoritos
     const toggleFavorite = (book) => {
         setFavorites((prevFavorites) => {
-            const isFavorite = prevFavorites.some((fav) => fav.id === book.id);
+            const isFavorite = prevFavorites.some((fav) => fav.id === book._id);
             if (isFavorite) {
-                return prevFavorites.filter((fav) => fav.id !== book.id); // Quitar de favoritos
+                return prevFavorites.filter((fav) => fav.id !== book._id); // Quitar de favoritos
             } else {
                 return [...prevFavorites, book]; // Agregar a favoritos
             }

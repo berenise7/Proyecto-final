@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { type } from "os";
 
 const Schema = mongoose.Schema;
 
@@ -22,7 +21,7 @@ const bookSchema = new Schema({
     },
     genres: {
         type: [String],
-        enum: ['Romance', "Drama", "Comedia", "Terror", "Fantasía", 'Thriller'],
+        enum: ['Romance', "Drama",  "Terror", "Fantasía", 'Thriller'],
         required: true,
         description: "Generos del libro"
     },

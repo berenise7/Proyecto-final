@@ -16,9 +16,9 @@ export default function Header() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Uso el context del carrito
-  const { cart, totalQuantity, handleLogout } = useCart();
+  const { cart, totalQuantity} = useCart();
   // Uso el context de auth
-  const { user } = useAuth();
+  const { user, handleLogout } = useAuth();
 
   const buttonMenuRef = useRef(null);
   const buttonAccountRef = useRef(null);
@@ -172,7 +172,7 @@ export default function Header() {
                 Mi cuenta
                 {isAccountOpen && (
                   <div
-                    className={styles.accountSubmenu}
+                    className={styles.submenu}
                     ref={accountRef}
                     onClick={(event) => event.stopPropagation()}
                   >
@@ -215,7 +215,7 @@ export default function Header() {
                 >
                   Admin
                   <div
-                    className={styles.accountSubmenu}
+                    className={styles.submenu}
                     ref={adminRef}
                     onClick={(event) => event.stopPropagation()}
                   >
@@ -235,12 +235,11 @@ export default function Header() {
               <li>
                 <Link href="/books/all-books">Todos los libros</Link>
               </li>
-              <li>Ficción</li>
-              <li>No Ficción</li>
-              <li>Juvenil</li>
-              <li>Fantasía</li>
-              <li>Thriller</li>
-              <li>Romance</li>
+              <li><Link href="/books/fantasy-books">Fantasías</Link></li>
+              <li><Link href="/books/romance-books">Romances</Link></li>
+              <li><Link href="/books/drama-books">Dramas</Link></li>
+              <li><Link href="/books/thriller-books">Thrillers</Link></li>
+              <li><Link href="/books/terror-books">Terror</Link></li>
             </ul>
           </div>
         )}

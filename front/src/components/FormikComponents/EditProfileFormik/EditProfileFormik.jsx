@@ -43,7 +43,6 @@ export default function EditProfileFormik() {
     "Romance",
     "Fantasía",
     "Thriller",
-    "Comedia",
     "Drama",
     "Terror",
   ];

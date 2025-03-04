@@ -36,7 +36,7 @@ export default function book() {
     if (token) {
       // Verificar si el producto ya está en los favoritos
       const isAlreadyFavorite = book
-        ? favorites.some((fav) => fav.id === book.id)
+        ? favorites.some((fav) => fav.id === book._id)
         : false;
       setIsFavorite(isAlreadyFavorite);
     }

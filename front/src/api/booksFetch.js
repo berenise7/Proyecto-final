@@ -1,8 +1,9 @@
 // Peticion para obtener toda la lista de libros
-export const getAllBooks = async (sortBy = "", page = 1) => {
+export const getAllBooks = async (sortBy = "", page = 1, genre= "") => {
     try {
         // Peticion al back
-        const response = await fetch(`http://localhost:9000/books?sortBy=${sortBy}&page=${page}`)
+        const genreQuery = genre ? `&genre=${genre}` : "";
+        const response = await fetch(`http://localhost:9000/books?sortBy=${sortBy}&page=${page}${genreQuery}`)
         if (!response.ok) {
             throw new Error(`Error en la solicitud: ${response.statusText}`)
         }
