@@ -17,6 +17,8 @@ export default function addBook() {
   const [imageFile, setImageFile] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [isbnError, setIsbnError] = useState("");
+  const [error, setError] = useState(false);
+  const [errorsFields, setErrorsFields] = useState({});
 
   const initialFormData = {
     title: "",
@@ -26,7 +28,6 @@ export default function addBook() {
     price: "",
     quantity: "",
     description: "",
-    url: "",
     genres: [],
     isNewBook: false,
     isPresale: false,
@@ -35,6 +36,25 @@ export default function addBook() {
   };
 
   const [formData, setFormData] = useState(initialFormData);
+
+  // Validacion de los campos
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.title.trim()) newErrors.title = "El título es obligatorio";
+    if (!formData.author.trim()) newErrors.author = "El autor es obligatorio";
+    if (!formData.editorial.trim())
+      newErrors.editorial = "La editorial es obligatoria";
+    if (!formData.isbn.trim()) newErrors.isbn = "El isbn es obligatorio";
+    if (!formData.price) newErrors.price = "El precio es obligatorio";
+    if (!formData.quantity) newErrors.quantity = "La cantidad es obligatoria";
+    if (!formData.description)
+      newErrors.description = "La descripción es obligatoria";
+    if (formData.genres.length === 0)
+      newErrors.genres = "Es obligatorio marcar algún género";
+
+    setErrorsFields(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   useEffect(() => {
     const token =
@@ -99,27 +119,32 @@ export default function addBook() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (validateForm()) {
+      const sendData = new FormData();
+      Object.keys(formData).forEach((key) => {
+        if (Array.isArray(formData[key])) {
+          formData[key].forEach((value) => sendData.append(key, value));
+        } else {
+          sendData.append(key, formData[key]);
+        }
+      });
 
-    const sendData = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (Array.isArray(formData[key])) {
-        formData[key].forEach((value) => sendData.append(key, value));
-      } else {
-        sendData.append(key, formData[key]);
+      if (imageFile) sendData.append("file", imageFile);
+      console.log(sendData.get(title));
+      console.log(sendData);
+
+      const response = await createBook(sendData);
+
+      if (response.error?.includes("ISBN")) {
+        setIsbnError(response.error);
+        return;
+      } else if (response.error) {
+        setError(true);
+        return;
       }
-    });
 
-    if (imageFile) sendData.append("file", imageFile);
-    console.log(sendData.get(title));
-    console.log(sendData);
-
-    const response = await createBook(sendData);
-    if (response.error) {
-      setIsbnError(response.error);
-      return;
+      setShowSuccessMessage(true);
     }
-
-    setShowSuccessMessage(true);
   };
   return (
     <div>
@@ -156,12 +181,13 @@ export default function addBook() {
               <div>
                 <label htmlFor="title">Título:</label>
                 <input
-                  type="textarea"
+                  type="text"
                   name="title"
                   id="title"
                   onChange={handleChange}
                   className={styles.input}
                   value={formData.title}
+                  placeholder={errorsFields.title}
                 />
               </div>
               <div>
@@ -173,6 +199,7 @@ export default function addBook() {
                   className={styles.input}
                   onChange={handleChange}
                   value={formData.author}
+                  placeholder={errorsFields.author}
                 />
               </div>
               <div>
@@ -184,6 +211,7 @@ export default function addBook() {
                   className={styles.input}
                   value={formData.editorial}
                   onChange={handleChange}
+                  placeholder={errorsFields.editorial}
                 />
               </div>
             </div>
@@ -198,6 +226,7 @@ export default function addBook() {
                   className={styles.input}
                   onChange={handleChange}
                   value={formData.isbn}
+                  placeholder={errorsFields.isbn}
                 />
                 {isbnError && <p style={{ color: "#59485b" }}>{isbnError}</p>}
               </div>
@@ -210,6 +239,7 @@ export default function addBook() {
                   className={styles.input}
                   onChange={handleChange}
                   value={formData.price}
+                  placeholder={errorsFields.price}
                 />
               </div>
               <div>
@@ -221,6 +251,7 @@ export default function addBook() {
                   className={styles.input}
                   onChange={handleChange}
                   value={formData.quantity}
+                  placeholder={errorsFields.quantity}
                 />
               </div>
             </div>
@@ -234,6 +265,7 @@ export default function addBook() {
                   className={styles.input}
                   onChange={handleChange}
                   value={formData.description}
+                  placeholder={errorsFields.description}
                 />
               </div>
             </div>
@@ -270,6 +302,9 @@ export default function addBook() {
                       ))}
                     </div>
                   </div>
+                )}
+                {errorsFields.genres && (
+                  <p style={{ color: "#59485b" }}>{errorsFields.genres}</p>
                 )}
               </div>
 
@@ -323,6 +358,14 @@ export default function addBook() {
               <div className={styles.successContent}>
                 <p>📚 ¡El libro se ha agregado correctamente!</p>
                 <button onClick={resetForm}>Aceptar</button>
+              </div>
+            </div>
+          )}
+          {error && (
+            <div className={styles.successModal}>
+              <div className={styles.successContent}>
+                <p>📚 ¡No se pudo guardar el libro!</p>
+                <button onClick={() => setError(false)}>Aceptar</button>
               </div>
             </div>
           )}

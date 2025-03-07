@@ -93,7 +93,6 @@ export default function Header() {
   useEffect(() => {
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
-    console.log("🔎 Token encontrado:", token);
     setIsAuthenticated(!!token);
   }, []);
 

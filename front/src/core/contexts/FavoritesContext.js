@@ -9,22 +9,17 @@ export const FavoritesProvider = ({ children }) => {
 
     // Cargar los favoritos desde localStorage cuando el usuario inicia sesión
     useEffect(() => {
-        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        if (token) {
-            const savedFavorites = localStorage.getItem(`favorites_${token}`);
-            if (savedFavorites) {
-                setFavorites(JSON.parse(savedFavorites));  // Cargar los favoritos guardados
-            }
-        }
+        const user = localStorage.getItem("user") || sessionStorage.getItem("user");
+       setFavorites(user?.favorites)
     }, []);
 
     // Guardar los favoritos en localStorage cada vez que cambien
-    useEffect(() => {
-        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        if (token && favorites.length > 0) {
-            localStorage.setItem(`favorites_${token}`, JSON.stringify(favorites));  // Guardar los favoritos cada vez que cambian
-        }
-    }, [favorites]);
+    // useEffect(() => {
+    //     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    //     if (token && favorites.length > 0) {
+    //         localStorage.setItem(`favorites_${token}`, JSON.stringify(favorites));  // Guardar los favoritos cada vez que cambian
+    //     }
+    // }, [favorites]);
 
     // Función para alternar favoritos
     const toggleFavorite = (book) => {

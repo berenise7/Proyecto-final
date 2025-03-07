@@ -1,10 +1,10 @@
 import fs from 'fs'
 import cloudinary from "../config/cloudinary.js";
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import usersDB from '../mocks/usersDB.js';
 import userModel from '../models/user.js';
 import { generateToken } from '../core/utils/utils.js';
+
 
 
 const login = async (req, res) => {
@@ -58,6 +58,140 @@ const login = async (req, res) => {
     }
 }
 
+
+const registerUser = async (req, res) => {
+    try {
+        const { name, lastname, phone, address, email, confirmEmail, password, confirmPassword, birthday, favoritesGenres } = req.body;
+
+        // Comprobacion si los email y las passwords coinciden
+        if (email !== confirmEmail) {
+            return res.status(400).json({ message: "Los correos electrónicos no coinciden." });
+        }
+        if (password !== confirmPassword) {
+            return res.status(400).json({ message: "Las contraseñas no coinciden." });
+        }
+
+        // Comprobar si existe ya una cuenta con ese email
+        const existingUser = await userModel.findOne({ email: email })
+        if (existingUser) {
+            return res.status(400).json({ message: "Ya existe una cuenta con ese email." });
+        }
+
+        // Subir imagen a Cloudinary (si hay una imagen)
+        let urlCloudinary = "";
+        if (req.file) {
+            try {
+                const results = await cloudinary.uploader.upload(req.file.path);
+                urlCloudinary = cloudinary.url(results.public_id, {
+                    transformation: [{ quality: "auto", fetch_format: "auto" }]
+                });
+
+                // Eliminar la imagen subida localmente de forma asíncrona
+                fs.unlink(req.file.path, (err) => {
+                    if (err) console.error("Error al eliminar el archivo:", err);
+                });
+            } catch (error) {
+                return res.status(500).json({ message: "Error subiendo la imagen." });
+            }
+        }
+
+        // Crear nuevo usuario
+        const newUser = new userModel({
+            name: name,
+            lastname: lastname,
+            phone: phone,
+            address: address,
+            email: email,
+            password: await bcrypt.hash(password, 10),
+            birthday: birthday,
+            favoritesGenres: favoritesGenres,
+            photo: urlCloudinary,
+        })
+
+
+        await newUser.save()
+
+        // Generar token
+        const token = generateToken(newUser.toObject(), false);
+        const token_refresh = generateToken(newUser.toObject(), true);
+
+        res.status(200).json({
+            status: "Succeeded",
+            data: newUser,
+            token: token,
+            token_refresh: token_refresh,
+            error: null,
+        });
+    } catch (error) {
+        res
+            .status(500)
+            .json({ status: "failed", data: null, error: error.message });
+    }
+}
+
+const editProfile = async (req, res) => {
+    try {
+
+        const userId = req.user.userId;
+
+        const user = await userModel.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: `No se encontró el usuario` });
+        }
+
+
+        let urlCloudinary = user.photo
+        if (req.file) {
+            try {
+                const results = await cloudinary.uploader.upload(req.file.path);
+                urlCloudinary = cloudinary.url(results.public_id, {
+                    transformation: [{ quality: "auto", fetch_format: "auto" }]
+                });
+
+                // Eliminar la imagen subida localmente de forma asíncrona
+                fs.unlink(req.file.path, (err) => {
+                    if (err) console.error("Error al eliminar el archivo:", err);
+                });
+            } catch (error) {
+                return res.status(500).json({ message: "Error subiendo la imagen." });
+            }
+        }
+
+        const userData = req.body;
+
+        const updatedUser = await userModel.findByIdAndUpdate(
+            userId,
+            {
+                name: userData.name,
+                lastname: userData.lastname,
+                phone: userData.phone,
+                address: userData.address,
+                email: userData.email,
+                birthday: userData.birthday,
+                rol: userData.rol,
+                favoritesGenres: userData.favoritesGenres,
+                photo: urlCloudinary,
+            },
+            { new: true }
+        )
+        const token = generateToken(updatedUser.toObject(), false);
+        const token_refresh = generateToken(updatedUser.toObject(), true);
+
+
+        res.status(200).json({
+            status: "Succeeded",
+            data: updatedUser,
+            token: token,
+            token_refresh: token_refresh,
+            error: null,
+        });
+    } catch (error) {
+        res.status(500).json({ status: "failed", data: null, error: error.message });
+    }
+
+}
+
 const loadDataUsers = async (req, res) => {
     try {
         const usersToSave = await Promise.all(
@@ -90,5 +224,5 @@ const loadDataUsers = async (req, res) => {
 
 
 export {
-    loadDataUsers, login
+    loadDataUsers, login, editProfile, registerUser
 }

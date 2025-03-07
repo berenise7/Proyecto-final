@@ -90,27 +90,10 @@ export const CartProvider = ({ children }) => {
             .format(price)
             .replace(".", ",");
     };
-    // Para cerrar sesion
-    const handleLogout = () => {
-
-        localStorage.removeItem(`cart_${localStorage.getItem("token")}`);
-        localStorage.removeItem(`favorites_${localStorage.getItem("token")}`);
-        
-        // O si usas sessionStorage:
-        sessionStorage.removeItem(`cart_${sessionStorage.getItem("token")}`);
-        sessionStorage.removeItem(`favorites_${sessionStorage.getItem("token")}`);
-        localStorage.removeItem("user");
-        sessionStorage.removeItem("user");
-        localStorage.removeItem("token");
-        sessionStorage.removeItem("token");
-
-        setCart([]); // Limpiar el carrito
-        router.reload(); // Recargar la página si ya estamos en Home
-    };
-
+    
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, incrementQuantity, decrementQuantity, calculateTotal, totalQuantity, formatPrice, handleLogout, }}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, incrementQuantity, decrementQuantity, calculateTotal, totalQuantity, formatPrice, }}>
             {children}
         </CartContext.Provider>
     );

@@ -14,6 +14,8 @@ export default function bookEdit() {
   const [imageFile, setImageFile] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [showGenres, setShowGenres] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const loadBook = async () => {
@@ -90,33 +92,18 @@ export default function bookEdit() {
         formDataToSend.append(key, formData[key]);
       }
     });
-    
+
     // Si el usuario ha cambiado la imagen, la agregamos a FormData
     if (imageFile) {
       formDataToSend.append("file", imageFile);
     }
-    console.log(formDataToSend);
-    
-    try {
-      const response = await updateBook(_id, formDataToSend); // Asegúrate de que updateBook pueda manejar FormData
 
-      if (!response.error) {
-        return (
-          <div className={styles.successModal}>
-            <div className={styles.successContent}>
-              <p>📚 ¡El libro se ha editado correctamente!</p>
-              <button
-                onClick={router.push("/admin/edit-books/all-books-edits")}
-              >
-                Aceptar
-              </button>
-            </div>
-          </div>
-        );
-      }
-    } catch (error) {
-      console.error("Error al actualizar el libro:", error);
+    const response = await updateBook(_id, formDataToSend);
+    if (response.error) {
+      setError(response.error);
+      return;
     }
+    setShowSuccessMessage(true);
   };
 
   return (
@@ -244,24 +231,19 @@ export default function bookEdit() {
               {showGenres && (
                 <div className={styles.checkboxGroup}>
                   <div className={styles.checkboxColumn}>
-                    {[
-                      "Romance",
-                      "Comedia",
-                      "Drama",
-                      "Terror",
-                      "Fantasía",
-                      "Thriller",
-                    ].map((genre) => (
-                      <label key={genre}>
-                        <input
-                          type="checkbox"
-                          value={genre}
-                          onChange={handleGenreChange}
-                          checked={formData.genres?.includes(genre) || false}
-                        />
-                        {genre}
-                      </label>
-                    ))}
+                    {["Romance", "Drama", "Terror", "Fantasía", "Thriller"].map(
+                      (genre) => (
+                        <label key={genre}>
+                          <input
+                            type="checkbox"
+                            value={genre}
+                            onChange={handleGenreChange}
+                            checked={formData.genres?.includes(genre) || false}
+                          />
+                          {genre}
+                        </label>
+                      )
+                    )}
                   </div>
                 </div>
               )}
@@ -306,10 +288,23 @@ export default function bookEdit() {
             </div>
           </div>
           <button type="submit" className={styles.submitButton}>
-            Añadir Libro
+            Guardar Libro
           </button>
         </form>
       </div>
+
+      {showSuccessMessage && (
+        <div className={styles.successModal}>
+          <div className={styles.successContent}>
+            <p>📚 ¡El libro se ha editado correctamente!</p>
+            <button
+              onClick={() => router.push("/admin/edit-books/all-books-edits")}
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

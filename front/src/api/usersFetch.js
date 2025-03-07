@@ -15,3 +15,58 @@ export const handleLoginFetch = async (email, password) => {
         return { status: "Error", message: "Error en el servidor. Inténtalo de nuevo." };
     }
 }
+
+export const registerUser = async (formData) => {
+    try {
+        const response = await fetch(`http://localhost:9000/users/register`, {
+            method: "POST",
+            body: formData,
+        })
+        if (!response.ok) {
+            let errorMessage = `Error en la petición: ${response.status} ${response.statusText}`;
+
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.message || errorMessage;
+            } catch {
+                const errorText = await response.text();
+                errorMessage = errorText || errorMessage;
+            }
+
+            return { error: errorMessage };
+        }
+        const userCreated = await response.json();
+        return userCreated;
+    } catch (error) {
+        console.error("Error al crear el libro:", error);
+        return { error: "Ocurrió un error inesperado" };
+    }
+}
+
+export const updateProfileFetch = async (formDataToSend) => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    if (!token) {
+        console.error("No hay token de autenticación.");
+        return { status: "Error", message: "No hay token disponible" };
+    }
+
+    try {
+        const response = await fetch(`http://localhost:9000/users/profile`, {
+            method: "PUT",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formDataToSend
+        });
+
+        const data = await response.json()
+        if (response.ok) {
+            return { status: "Succeeded", data };
+        } else {
+            return { status: "Error", message: data.message };
+        }
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+        return { status: "Error", message: error.message };
+    }
+}

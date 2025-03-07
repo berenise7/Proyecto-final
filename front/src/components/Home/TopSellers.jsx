@@ -39,7 +39,6 @@ export default function topSellers() {
   useEffect(() => {
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
-    console.log("🔎 Token encontrado:", token);
     setIsAuthenticated(!!token);
   }, []);
 
@@ -114,13 +113,13 @@ export default function topSellers() {
                 )}
                 {isAuthenticated ? (
                   <button onClick={() => toggleFavorite(book)}>
-                    <FontAwesomeIcon
+                    {/* <FontAwesomeIcon
                       icon={
                         favorites.some((fav) => fav.id === book.id)
                           ? faHeartSolid
                           : faHeart
                       }
-                    />
+                    /> */}
                   </button>
                 ) : (
                   ""

@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
-import { handleLoginFetch } from "@/api/usersFetch";
+import { handleLoginFetch, registerUser, updateProfile } from "@/api/usersFetch";
 
 const AuthContext = createContext();
 
@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }) => {
         setSubmitting(false);
     };
 
+
     const handleLogout = () => {
         setUser(null);
         setToken(null)
@@ -63,15 +64,10 @@ export const AuthProvider = ({ children }) => {
     }
 
 
-    // Función para actualizar los datos del usuario
-    const updateUser = (updatedData) => {
-        setUser(updatedData);
-        localStorage.setItem("user", JSON.stringify(updatedData)); // Guardar los cambios en localStorage
-        router.back();
-    };
+
 
     return (
-        <AuthContext.Provider value={{ user, loginError, showPassword, setShowPassword, handleLogin, updateUser, handleLogout}}>
+        <AuthContext.Provider value={{ user, setUser, setToken, loginError, showPassword, setShowPassword, handleLogin, handleLogout }}>
             {children}
         </AuthContext.Provider>
     );

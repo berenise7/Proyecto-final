@@ -41,25 +41,21 @@ const UserSchema = new Schema({
   },
   birthday: {
     type: Date,
-    required: true,
     description: "Fecha de nacimiento del usuario"
   },
   rol: {
     type: String,
     enum: ["admin", "user"], // Roles válidos
     default: "user",
-    required: true,
     description: "Rol del usuario en el sistema"
   },
   favoritesGenres: {
     type: [String],
     enum: ['Romance', "Drama", "Terror", "Fantasía", 'Thriller'], // Géneros favoritos permitidos
-    required: true,
     description: "Género favorito del usuario"
   },
   photo: {
     type: String,
-    required: false,
     description: "URL de la foto del usuario"
   },
   favorites: [{

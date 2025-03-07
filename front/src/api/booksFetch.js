@@ -1,5 +1,5 @@
 // Peticion para obtener toda la lista de libros
-export const getAllBooks = async (sortBy = "", page = 1, genre= "") => {
+export const getAllBooks = async (sortBy = "", page = 1, genre = "") => {
     try {
         // Peticion al back
         const genreQuery = genre ? `&genre=${genre}` : "";
@@ -24,6 +24,27 @@ export const getBook = async (_id) => {
     const book = await response.json()
     return book
 };
+
+export const getFavorites = async (favorites) => {
+    try {
+        const response = await fetch('http://localhost:9000/books/getFavorites', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ bookIds: favorites }),
+        });
+        if (!response.ok) {
+            throw new Error("Error al obtener los libros favoritos.");
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error al obtener libros favoritos:", error);
+        throw error;
+    }
+}
 
 
 export const searchBooks = async (query) => {

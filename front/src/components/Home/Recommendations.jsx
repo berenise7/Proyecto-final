@@ -39,7 +39,6 @@ export default function Recommendations() {
   useEffect(() => {
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
-    console.log("🔎 Token encontrado:", token);
     setIsAuthenticated(!!token);
   }, []);
   // Detectar el tamaño de la pantalla y ajustar itemsPerPage
@@ -116,13 +115,13 @@ export default function Recommendations() {
                 )}
                 {isAuthenticated ? (
                   <button onClick={() => toggleFavorite(book)}>
-                    <FontAwesomeIcon
+                    {/* <FontAwesomeIcon
                       icon={
                         favorites.some((fav) => fav.id === book.id)
                           ? faHeartSolid
                           : faHeart
                       }
-                    />
+                    /> */}
                   </button>
                 ) : (
                   ""

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { getFavorites } from "@/api/booksFetch";
+import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useFavorites } from "@/core/contexts/FavoritesContext";
@@ -16,17 +18,35 @@ import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 export default function favorites() {
   const { addToCart } = useCart();
 
-  const { favorites, toggleFavorite } = useFavorites();
   const [isAuth, setIsAuth] = useState(false);
+  const [books, setBooks] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
-    if (!token) {
-      router.push("/user/login"); // Redirige al login si no está autenticado
-    } else {
+    if (token) {
       setIsAuth(true);
+      const decoded = jwtDecode(token);
+      const favorites = decoded.favorites?.map((fav) => fav.book_id) || [];
+      console.log(favorites);
+
+      if (favorites.length > 0) {
+        getFavorites(favorites)
+          .then((data) => {
+            if (data && Array.isArray(data.data)) {
+              setBooks(data.data); // Solo actualiza `books` si es un arreglo
+            } else {
+              console.error("La respuesta de la API no es un arreglo");
+            }
+          })
+          .catch((error) =>
+            console.error("Error al obtener libros favoritos:", error)
+          );
+        console.log(books);
+      } else {
+        setIsAuth(false);
+      }
     }
   }, [router]);
 
@@ -50,11 +70,11 @@ export default function favorites() {
           <FontAwesomeIcon icon={faChevronLeft} /> Volver atras
         </a>
         <h2>Mis favoritos</h2>
-        {favorites.length === 0 ? (
+        {books.length === 0 ? (
           <p>No tienes favoritos aún.</p>
         ) : (
           <div className={styles.favoritesGrid}>
-            {favorites.map((book) => (
+            {books.map((book) => (
               <div className={styles.card} key={book.id}>
                 <button
                   className={styles.topRightButton}
@@ -81,7 +101,7 @@ export default function favorites() {
                   ) : (
                     ""
                   )}
-                  <button
+                  {/* <button
                     onClick={() => toggleFavorite(book)}
                     className={styles.favoriteButton}
                   >
@@ -92,7 +112,7 @@ export default function favorites() {
                           : faHeart
                       }
                     />
-                  </button>
+                  </button> */}
                 </div>
               </div>
             ))}

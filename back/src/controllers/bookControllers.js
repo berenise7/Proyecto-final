@@ -111,6 +111,25 @@ const getIdBooks = async (req, res) => {
     }
 };
 
+
+const getAllBooksByIds = async (req, res) => {
+    try {
+        const { bookIds } = req.body;
+        if (!bookIds || bookIds.length === 0) {
+            return res.status(400).json({ message: "No hay libros favoritos" });
+        }
+
+        const favoriteBooks = await bookModel.find({ _id: { $in: bookIds } })
+        res.status(200).json({
+            status: "Succeeded",
+            data: favoriteBooks,
+            error: null,
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener los libros favoritos", error });
+    }
+}
+
 // Elimina los acentos y lo combierte en minusculas
 const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -163,21 +182,23 @@ const formatTitleForURL = (title) => {
 const createBook = async (req, res) => {
 
     try {
-        // Sube el file a cloudinary
-        const results = await cloudinary.uploader.upload(req.file.path);
-        // Y lo convierte en un url
-        const urlCloudinary = cloudinary.url(results.public_id, {
-            transformation: [
-                {
-                    quality: "auto",
-                    fetch_format: "auto"
-                }
-            ]
-        })
+        // Subir imagen a Cloudinary (si hay una imagen)
+        let urlCloudinary = "";
+        if (req.file) {
+            try {
+                const results = await cloudinary.uploader.upload(req.file.path);
+                urlCloudinary = cloudinary.url(results.public_id, {
+                    transformation: [{ quality: "auto", fetch_format: "auto" }]
+                });
 
-
-        // Elimina la imagen subida a uploads
-        fs.unlinkSync(req.file.path)
+                // Eliminar la imagen subida localmente de forma asíncrona
+                fs.unlink(req.file.path, (err) => {
+                    if (err) console.error("Error al eliminar el archivo:", err);
+                });
+            } catch (error) {
+                return res.status(500).json({ message: "Error subiendo la imagen." });
+            }
+        }
 
         const bookData = req.body;
 
@@ -202,10 +223,11 @@ const createBook = async (req, res) => {
 
         const book = await bookModel.findOne({ isbn: bookData.isbn })
         if (book) {
-            return res.status(400).json({ message: `Ya existe un libro con este isbn: ${bookData.isbn}` })
+            return res.status(400).json({ message: `Ya existe un libro con este ISBN: ${bookData.isbn}` })
         }
 
         await newBook.save();
+
         res.status(200).json({
             status: "Succeeded",
             data: newBook,
@@ -255,21 +277,20 @@ const updateBook = async (req, res) => {
         }
 
         let urlCloudinary = book.image
-
         if (req.file) {
-            // Sube el file a cloudinary
-            const results = await cloudinary.uploader.upload(req.file.path);
-            // Y lo convierte en un url
-            urlCloudinary = cloudinary.url(results.public_id, {
-                transformation: [
-                    {
-                        quality: "auto",
-                        fetch_format: "auto"
-                    }
-                ]
-            })
-            // Elimina la imagen subida a uploads
-            fs.unlinkSync(req.file.path)
+            try {
+                const results = await cloudinary.uploader.upload(req.file.path);
+                urlCloudinary = cloudinary.url(results.public_id, {
+                    transformation: [{ quality: "auto", fetch_format: "auto" }]
+                });
+
+                // Eliminar la imagen subida localmente de forma asíncrona
+                fs.unlink(req.file.path, (err) => {
+                    if (err) console.error("Error al eliminar el archivo:", err);
+                });
+            } catch (error) {
+                return res.status(500).json({ message: "Error subiendo la imagen." });
+            }
         }
 
 
@@ -338,5 +359,5 @@ const loadDataBooks = async (req, res) => {
 };
 
 export {
-    loadDataBooks, getBooks, getIdBooks, createBook, getSearchBooks, updateBook, deleteBook
+    loadDataBooks, getBooks, getIdBooks, createBook, getSearchBooks, updateBook, deleteBook, getAllBooksByIds
 }
