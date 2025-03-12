@@ -2,32 +2,40 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Header.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faBasketShopping } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faBasketShopping,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import DropDownCart from "../cart/DropDownCart";
 import { useCart } from "@/core/contexts/CartContext";
 import { useAuth } from "@/core/contexts/AuthContext";
 import Search from "./Search";
+import AccountDropdown from "./AccountDropdown";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false); //Para saber si el menu esta abierto o cerrado
   const [isCartOpen, setIsCartOpen] = useState(false); //Para saber si el carrito esta abierto o cerrado
+  const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Uso el context del carrito
-  const { cart, totalQuantity} = useCart();
+  const { cart, totalQuantity } = useCart();
   // Uso el context de auth
   const { user, handleLogout } = useAuth();
 
   const buttonMenuRef = useRef(null);
   const buttonAccountRef = useRef(null);
   const buttonAdminRef = useRef(null);
+  const buttonAccountDropdownRef = useRef(null);
   const buttonCartRef = useRef(null);
   const menuRef = useRef(null);
   const accountRef = useRef(null);
   const adminRef = useRef(null);
   const cartRef = useRef(null);
+  const accountDropDownRef = useRef(null);
 
   // Funcion para alternar el estado del menu
   const toggleMenu = (event) => {
@@ -39,6 +47,10 @@ export default function Header() {
   };
   const toggleAdmin = () => {
     setIsAdminOpen((prevState) => !prevState);
+  };
+
+  const toggleAccountDropdown = () => {
+    setIsAccountDropdownOpen((prevState) => !prevState);
   };
 
   // Funcion para alternar el estado del carrito
@@ -80,6 +92,14 @@ export default function Header() {
         !buttonCartRef.current.contains(event.target)
       ) {
         setIsCartOpen(false);
+      }
+      if (
+        cartRef.current &&
+        !cartRef.current.contains(event.target) &&
+        buttonAccountDropdownRef.current &&
+        !buttonAccountDropdownRef.current.contains(event.target)
+      ) {
+        setIsAccountDropdownOpen(false);
       }
     };
 
@@ -135,10 +155,15 @@ export default function Header() {
           <div className={styles.bottomRow}>
             {/* Enlaces de navegación a las páginas de registro y login */}
             {isAuthenticated ? (
-              <div className={styles.navLinks}>
-                <Link href="/user/account">Mi cuenta</Link>
-                <p>/</p>
-                <a onClick={handleLogout}>Cerrar sesión</a>
+              <div
+                className={styles.navLinks}
+                onClick={toggleAccountDropdown}
+                ref={buttonAccountDropdownRef}
+              >
+                <div className={styles.myaccountDropdown}>
+                  <FontAwesomeIcon icon={faUser} />
+                  <p>Mi cuenta</p>
+                </div>
               </div>
             ) : (
               <div className={styles.navLinks}>
@@ -159,6 +184,8 @@ export default function Header() {
           </div>
         </nav>
 
+        {isAccountDropdownOpen && <AccountDropdown accountDropDownRef={accountDropDownRef}/>}
+
         {/* Menu superpuesto */}
         {isMenuOpen && (
           <div className={styles.overlayMenu} ref={menuRef}>
@@ -177,30 +204,30 @@ export default function Header() {
                   >
                     {!isAuthenticated ? (
                       <div>
-                        <li>
+                        <p>
                           <Link href="/user/register">Registrarse</Link>
-                        </li>{" "}
-                        <li>
+                        </p>{" "}
+                        <p>
                           <Link href="/user/login">Iniciar sesión</Link>
-                        </li>
+                        </p>
                       </div>
                     ) : (
                       <div>
-                        <li>
+                        <p>
                           <Link href="/myaccount/my-data/my-data">
                             Mis datos
                           </Link>
-                        </li>
-                        <li>
+                        </p>
+                        <p>
                           <Link href="/myaccount/my-library/my-library">
                             Mis lecturas terminadas
                           </Link>
-                        </li>
-                        <li>
+                        </p>
+                        <p>
                           <Link href="/myaccount/favorites/favorites">
                             Mis favoritos
                           </Link>
-                        </li>
+                        </p>
                       </div>
                     )}
                   </div>
@@ -218,27 +245,39 @@ export default function Header() {
                     ref={adminRef}
                     onClick={(event) => event.stopPropagation()}
                   >
-                    <li>
+                    <p>
                       <Link href="/admin/add-book/add-book">
                         Añadir nuevo libro
                       </Link>
-                    </li>
-                    <li>
+                    </p>
+                    <p>
                       <Link href="/admin/edit-books/all-books-edits">
                         Editar libros
                       </Link>
-                    </li>
+                    </p>
                   </div>
                 </li>
-              ) : ""}
+              ) : (
+                ""
+              )}
               <li>
                 <Link href="/books/all-books">Todos los libros</Link>
               </li>
-              <li><Link href="/books/fantasy-books">Fantasías</Link></li>
-              <li><Link href="/books/romance-books">Romances</Link></li>
-              <li><Link href="/books/drama-books">Dramas</Link></li>
-              <li><Link href="/books/thriller-books">Thrillers</Link></li>
-              <li><Link href="/books/terror-books">Terror</Link></li>
+              <li>
+                <Link href="/books/fantasy-books">Fantasías</Link>
+              </li>
+              <li>
+                <Link href="/books/romance-books">Romances</Link>
+              </li>
+              <li>
+                <Link href="/books/drama-books">Dramas</Link>
+              </li>
+              <li>
+                <Link href="/books/thriller-books">Thrillers</Link>
+              </li>
+              <li>
+                <Link href="/books/terror-books">Terror</Link>
+              </li>
             </ul>
           </div>
         )}

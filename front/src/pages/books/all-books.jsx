@@ -112,7 +112,7 @@ export default function allBooks() {
         <div className={styles.grid}>
           {Array.isArray(books) && books.length > 0 ? (
             books.map((book) => (
-              <div className={styles.productCard} key={book.id}>
+              <div className={styles.productCard} key={book._id}>
                 {isAuthenticated ? (
                   <button
                     className={styles.topRightButton}
@@ -148,7 +148,7 @@ export default function allBooks() {
                     <button onClick={() => toggleFavorite(book)}>
                       <FontAwesomeIcon
                         icon={
-                          favorites.some((fav) => fav.id === book._id)
+                          favorites?.some((fav) => fav.book_id === book._id)
                             ? faHeartSolid
                             : faHeart
                         }

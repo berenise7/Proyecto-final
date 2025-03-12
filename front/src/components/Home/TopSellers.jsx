@@ -23,7 +23,6 @@ export default function topSellers() {
   useEffect(() => {
     const fetchBooks = async () => {
       const booksData = await getAllBooks();
-      console.log(booksData);
       if (booksData) {
         // Actualiza el estado con los libros obtenidos
         setBooks(booksData.data);
@@ -113,13 +112,13 @@ export default function topSellers() {
                 )}
                 {isAuthenticated ? (
                   <button onClick={() => toggleFavorite(book)}>
-                    {/* <FontAwesomeIcon
+                    <FontAwesomeIcon
                       icon={
-                        favorites.some((fav) => fav.id === book.id)
+                        favorites?.some((fav) => fav.book_id === book._id)
                           ? faHeartSolid
                           : faHeart
                       }
-                    /> */}
+                    />
                   </button>
                 ) : (
                   ""

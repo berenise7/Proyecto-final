@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import products from "@/api/productos";
 import reading from "@/api/reading";
 import styles from "./mylibrary.module.css";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";

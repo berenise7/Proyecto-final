@@ -38,7 +38,6 @@ export default function romanceBooks() {
     fetchBooks();
   }, [sortBy, currentPage]);
 
-
   // Verificar si existe el token
   useEffect(() => {
     const token =
@@ -148,7 +147,7 @@ export default function romanceBooks() {
                     <button onClick={() => toggleFavorite(book)}>
                       <FontAwesomeIcon
                         icon={
-                          favorites.some((fav) => fav.id === book._id)
+                          favorites?.some((fav) => fav.book_id === book._id)
                             ? faHeartSolid
                             : faHeart
                         }

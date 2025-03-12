@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import styles from "./UserLogin.module.css";
 import * as Yup from "yup";
@@ -8,8 +8,8 @@ import Link from "next/link";
 import { useAuth } from "@/core/contexts/AuthContext";
 
 export default function UserLoginFormik() {
-  const { loginError, showPassword, setShowPassword, handleLogin } = useAuth();
-
+  const { loginError, handleLogin } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
   const validationSchema = Yup.object({
     email: Yup.string().email("Correo inválido").required("Correo requerido"),
     password: Yup.string()

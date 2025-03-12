@@ -17,7 +17,7 @@ const login = async (req, res) => {
             // Creamos token
             if (validPassword) {
                 const payload = {
-                    userId: user._id,
+                    _id: user._id,
                     name: user.name,
                     lastname: user.lastname,
                     phone: user.phone,
@@ -131,16 +131,16 @@ const registerUser = async (req, res) => {
 
 const editProfile = async (req, res) => {
     try {
-
-        const userId = req.user.userId;
-
+        const userId = req.user._id;
         const user = await userModel.findById(userId);
 
+        // Verifica si existe un usuario
         if (!user) {
             return res.status(404).json({ message: `No se encontró el usuario` });
         }
 
 
+        // Subida de la imagen en cloudinary
         let urlCloudinary = user.photo
         if (req.file) {
             try {
@@ -158,7 +158,19 @@ const editProfile = async (req, res) => {
             }
         }
 
+
         const userData = req.body;
+
+        if (userData.currentPassword && userData.newPassword) {
+
+            const isMatch = await bcrypt.compare(userData.currentPassword, user.password);
+
+            if (!isMatch) {
+                return res.status(400).json({ message: "La contraseña actual es incorrecta" });
+            }
+
+            userData.password = await bcrypt.hash(userData.newPassword, 10);
+        }
 
         const updatedUser = await userModel.findByIdAndUpdate(
             userId,
@@ -172,6 +184,7 @@ const editProfile = async (req, res) => {
                 rol: userData.rol,
                 favoritesGenres: userData.favoritesGenres,
                 photo: urlCloudinary,
+                ...(userData.password && { password: userData.password })
             },
             { new: true }
         )
@@ -182,6 +195,82 @@ const editProfile = async (req, res) => {
         res.status(200).json({
             status: "Succeeded",
             data: updatedUser,
+            token: token,
+            token_refresh: token_refresh,
+            error: null,
+        });
+    } catch (error) {
+        res.status(500).json({ status: "failed", data: null, error: error.message });
+    }
+
+}
+
+const addFavoriteBook = async (req, res) => {
+    try {
+        console.log(req);
+
+        console.log(req.body);
+
+        const { userId, bookId } = req.body;
+
+        // Verifica si esxiste el usuario
+        const user = await userModel.findById(userId)
+        if (!user) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+
+        // Verifica si el libro esta en favoritos
+        const isAlreadyFavorite = user.favorites.some(fav => fav.book_id.equals(bookId));
+        if (isAlreadyFavorite) {
+            return res.status(400).json({ message: "El libro ya está en favoritos" });
+        }
+        // Agrega el libro
+        user.favorites.push({ book_id: bookId });
+        await user.save();
+
+        // Generar token
+        const token = generateToken(user.toObject(), false);
+        const token_refresh = generateToken(user.toObject(), true);
+
+        res.status(200).json({
+            status: "Succeeded",
+            data: user,
+            token: token,
+            token_refresh: token_refresh,
+            error: null,
+        });
+    } catch (error) {
+        res.status(500).json({ status: "failed", data: null, error: error.message });
+    }
+}
+
+const removeFavoriteBook = async (req, res) => {
+    try {
+        const { userId, bookId } = req.body;
+
+        // Verifica si esxiste el usuario
+        const user = await userModel.findById(userId)
+        if (!user) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+
+        // Filtra y elimina el libro
+        const updatedFavorites = user.favorites.filter(fav => !fav.book_id.equals(bookId))
+
+        if (updatedFavorites.length === user.favorites.length) {
+            return res.status(400).json({ message: "El libro no estaba en favoritos" });
+        }
+
+        user.favorites = updatedFavorites;
+        await user.save();
+
+        // Generar token
+        const token = generateToken(user.toObject(), false);
+        const token_refresh = generateToken(user.toObject(), true);
+
+        res.status(200).json({
+            status: "Succeeded",
+            data: user,
             token: token,
             token_refresh: token_refresh,
             error: null,
@@ -224,5 +313,5 @@ const loadDataUsers = async (req, res) => {
 
 
 export {
-    loadDataUsers, login, editProfile, registerUser
+    loadDataUsers, login, editProfile, registerUser, addFavoriteBook, removeFavoriteBook
 }

@@ -127,6 +127,54 @@
     color: #5c3e56;
 }
 
+.myaccountDropdown {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.myaccountDropdown:hover {
+    color: #5c3e56;
+}
+
+.overlayMenuAccount ul {
+    font-family: "Poppins", serif;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 100%;
+    /* Se coloca justo debajo del botón */
+    right: 0;
+    /* Centra el menú respecto al botón */
+    /* Ajuste para centrar el menú */
+    width: 18%;
+    /* O el ancho que desees */
+    background-color: white;
+    box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.1);
+    border-bottom-left-radius: 10px;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    /* Asegura que esté encima de otros elementos */
+}
+
+.overlayMenuAccount li {
+    margin: 10px 0;
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.overlayMenuAccount li:hover {
+    background-color: #f2eadf;
+}
+.overlayMenuAccount li p:hover {
+    background-color: #f2eadf;
+}
+
 .cartIcon {
     position: relative;
     display: inline-block;
@@ -161,6 +209,8 @@
     color: #5c3e56;
 }
 
+
+
 .overlayMenu ul {
     font-family: "Poppins", serif;
     display: flex;
@@ -179,6 +229,7 @@
     transition: transform 0.3s ease;
 }
 
+
 .overlayMenu li {
     margin: 10px 0;
     padding: 10px;
@@ -190,6 +241,12 @@
     background-color: #f2eadf;
 }
 
+.overlayMenu li p:hover {
+    background-color: #f2eadf;
+}
+
+
+
 .submenu {
     background-color: white;
     list-style: none;
@@ -200,13 +257,14 @@
     display: none;
 }
 
-.submenu li {
+.submenu p {
     padding: 5px 10px;
     cursor: pointer;
     font-size: 0.9rem;
 }
 
-.submenu li:hover {
+
+.submenu p:hover {
     background-color: #f2eadf;
     border: 2px solid #59485b;
 }
@@ -230,7 +288,7 @@
         justify-content: center;
     }
 
-    
+
 
     .menuIcon {
         font-size: 1.8em;

@@ -17,6 +17,7 @@ import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 
 export default function favorites() {
   const { addToCart } = useCart();
+  const { favorites, toggleFavorite } = useFavorites();
 
   const [isAuth, setIsAuth] = useState(false);
   const [books, setBooks] = useState([]);
@@ -43,12 +44,11 @@ export default function favorites() {
           .catch((error) =>
             console.error("Error al obtener libros favoritos:", error)
           );
-        console.log(books);
       } else {
         setIsAuth(false);
       }
     }
-  }, [router]);
+  }, [router, books]);
 
   if (!isAuth) {
     return <p>Cargando...</p>; // Muestra un mensaje mientras se verifica el login
@@ -81,7 +81,7 @@ export default function favorites() {
                   onClick={() =>
                     router.push(
                       `/reading-journal/${formatTitleForURL(book.title)}/${
-                        book.id
+                        book._id
                       }`
                     )
                   }
@@ -89,7 +89,7 @@ export default function favorites() {
                   {" "}
                   <FontAwesomeIcon icon={faFilePen} />
                 </button>
-                <Link href={`${book.url}/${book.id}`} className={styles.link}>
+                <Link href={`${book.url}/${book._id}`} className={styles.link}>
                   <div>
                     <img src={book.image} alt={book.title} />
                     <h3>{book.title}</h3>
@@ -101,18 +101,18 @@ export default function favorites() {
                   ) : (
                     ""
                   )}
-                  {/* <button
+                  <button
                     onClick={() => toggleFavorite(book)}
                     className={styles.favoriteButton}
                   >
                     <FontAwesomeIcon
                       icon={
-                        favorites.some((fav) => fav.id === book.id)
+                        favorites?.some((fav) => fav.book_id === book._id)
                           ? faHeartSolid
                           : faHeart
                       }
                     />
-                  </button> */}
+                  </button>
                 </div>
               </div>
             ))}

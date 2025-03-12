@@ -1,15 +1,16 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import { handleLoginFetch, registerUser, updateProfile } from "@/api/usersFetch";
+import { useFavorites } from "./FavoritesContext";
 
 const AuthContext = createContext();
 
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
+    const { setFavorites } = useFavorites()
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
-    const [showPassword, setShowPassword] = useState(false);
     const [loginError, setLoginError] = useState(null);
     const router = useRouter();
 
@@ -18,7 +19,7 @@ export const AuthProvider = ({ children }) => {
         const storedToken = localStorage.getItem("token") || sessionStorage.getItem("token");
         if (storedToken) {
             setToken(storedToken)
-            setUser(JSON.parse(localStorage.getItem("user")) || null);
+            setUser(JSON.parse(localStorage.getItem("user")) || JSON.parse(sessionStorage.getItem("user")) || null);
         }
 
     }, []);
@@ -33,6 +34,8 @@ export const AuthProvider = ({ children }) => {
         if (data.status === "Succeeded") {
             setUser(data.data);
             setToken(data.token)
+            setFavorites(data.data.favorites)
+
             if (values.rememberMe) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.data));
@@ -40,7 +43,12 @@ export const AuthProvider = ({ children }) => {
                 sessionStorage.setItem("token", data.token);
                 sessionStorage.setItem("user", JSON.stringify(data.data));
             }
-            router.push('/')
+            router.push('/').then(() => {
+                // Esto es para asegurarte de que los datos estén disponibles después de la redirección
+                const userFromStorage = JSON.parse(localStorage.getItem("user") || sessionStorage.getItem("user"));
+                const tokenFromStorage = localStorage.getItem("token") || sessionStorage.getItem("token");
+                console.log(userFromStorage, tokenFromStorage);  // Verifica si los datos están disponibles
+            });
         } else {
             setLoginError(data.message)
         }
@@ -67,7 +75,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ user, setUser, setToken, loginError, showPassword, setShowPassword, handleLogin, handleLogout }}>
+        <AuthContext.Provider value={{ user, setUser, token, setToken, loginError, handleLogin, handleLogout }}>
             {children}
         </AuthContext.Provider>
     );

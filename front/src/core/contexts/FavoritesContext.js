@@ -1,3 +1,4 @@
+import { addFavoriteBook, removeFavoriteBook } from "@/api/usersFetch";
 import { createContext, useContext, useState, useEffect } from "react";
 
 const FavoritesContext = createContext();
@@ -9,28 +10,62 @@ export const FavoritesProvider = ({ children }) => {
 
     // Cargar los favoritos desde localStorage cuando el usuario inicia sesión
     useEffect(() => {
-        const user = localStorage.getItem("user") || sessionStorage.getItem("user");
-       setFavorites(user?.favorites)
+        const storedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
+        console.log(storedUser);
+
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser)
+
+            setFavorites(parsedUser?.favorites)
+        }
     }, []);
-
-    // Guardar los favoritos en localStorage cada vez que cambien
-    // useEffect(() => {
-    //     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    //     if (token && favorites.length > 0) {
-    //         localStorage.setItem(`favorites_${token}`, JSON.stringify(favorites));  // Guardar los favoritos cada vez que cambian
-    //     }
-    // }, [favorites]);
-
     // Función para alternar favoritos
-    const toggleFavorite = (book) => {
-        setFavorites((prevFavorites) => {
-            const isFavorite = prevFavorites.some((fav) => fav.id === book._id);
+    const toggleFavorite = async (book) => {
+        const storedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
+        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        if (!storedUser || !token) {
+            console.error("Usuario no autenticado o token no encontrado")
+            return;
+        }
+
+        const user = JSON.parse(storedUser);
+        const isFavorite = favorites.some(fav => fav.book_id.toString() === book._id.toString())
+
+        try {
+            let updatedFavorites;
+            let result;
+
             if (isFavorite) {
-                return prevFavorites.filter((fav) => fav.id !== book._id); // Quitar de favoritos
+                result = await removeFavoriteBook(user._id, book._id, token);
+
             } else {
-                return [...prevFavorites, book]; // Agregar a favoritos
+                result = await addFavoriteBook(user._id, book._id, token);
             }
-        });
+
+            if (!result || !result.data) return;
+
+            updatedFavorites = result.data.favorites;
+            setFavorites(updatedFavorites);
+
+
+            const updatedUser = { ...user, favorites: updatedFavorites };
+            localStorage.setItem("user", JSON.stringify(updatedUser));
+            sessionStorage.setItem("user", JSON.stringify(updatedUser));
+
+
+            if (result && result.token) {
+                token = result.token;
+                localStorage.setItem("token", token);
+                sessionStorage.setItem("token", token);
+            }
+
+
+     
+
+        } catch (error) {
+            console.error("Error en la solicitud:", error);
+        }
+
     };
     return (
         <FavoritesContext.Provider value={{ favorites, setFavorites, toggleFavorite }}>

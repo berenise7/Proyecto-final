@@ -23,7 +23,6 @@ export default function HomeLiterary() {
   useEffect(() => {
     const fetchBooks = async () => {
       const booksData = await getAllBooks();
-      console.log(booksData);
       if (booksData) {
         // Actualiza el estado con los libros obtenidos
         setBooks(booksData.data);
@@ -66,9 +65,7 @@ export default function HomeLiterary() {
     };
   }, []);
   // Muestra solo los best sellers
-  const filteredProducts = books.filter(
-    (book) => book.isNewBook
-  );
+  const filteredProducts = books.filter((book) => book.isNewBook);
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const displayedProducts = filteredProducts.slice(
@@ -82,7 +79,7 @@ export default function HomeLiterary() {
         <div className={styles.productList}>
           {displayedProducts.map((book, index) => (
             <div className={styles.productCard} key={index}>
-              <Link href={`${book.url}/${book.id}`}>
+              <Link href={`${book.url}/${book._id}`}>
                 <img src={book.image} alt={book.title} />
                 <div className={styles.productInfo}>
                   {book.quantity >= 1 ? (
@@ -114,13 +111,13 @@ export default function HomeLiterary() {
                 )}
                 {isAuthenticated ? (
                   <button onClick={() => toggleFavorite(book)}>
-                    {/* <FontAwesomeIcon
+                    <FontAwesomeIcon
                       icon={
-                        favorites.some((fav) => fav.id === book.id)
+                        favorites?.some((fav) => fav.book_id === book._id)
                           ? faHeartSolid
                           : faHeart
                       }
-                    /> */}
+                    />
                   </button>
                 ) : (
                   ""
