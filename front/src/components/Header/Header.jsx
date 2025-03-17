@@ -20,17 +20,18 @@ export default function Header() {
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
 
   // Uso el context del carrito
   const { cart, totalQuantity } = useCart();
   // Uso el context de auth
-  const { user, handleLogout } = useAuth();
+  const { user } = useAuth();
 
   const buttonMenuRef = useRef(null);
   const buttonAccountRef = useRef(null);
   const buttonAdminRef = useRef(null);
-  const buttonAccountDropdownRef = useRef(null);
   const buttonCartRef = useRef(null);
+  const buttonAccountDropdownRef = useRef(null);
   const menuRef = useRef(null);
   const accountRef = useRef(null);
   const adminRef = useRef(null);
@@ -50,6 +51,13 @@ export default function Header() {
   };
 
   const toggleAccountDropdown = () => {
+    if (!isAccountDropdownOpen && buttonAccountDropdownRef.current) {
+      const rect = buttonAccountDropdownRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + window.scrollY, // Justo debajo del botón
+        left: rect.left + window.scrollX, // Alineado con "Mi cuenta"
+      });
+    }
     setIsAccountDropdownOpen((prevState) => !prevState);
   };
 
@@ -155,13 +163,16 @@ export default function Header() {
           <div className={styles.bottomRow}>
             {/* Enlaces de navegación a las páginas de registro y login */}
             {isAuthenticated ? (
-              <div
-                className={styles.navLinks}
-                onClick={toggleAccountDropdown}
-                ref={buttonAccountDropdownRef}
-              >
-                <div className={styles.myaccountDropdown}>
-                  <FontAwesomeIcon icon={faUser} />
+              <div className={styles.navLinks} onClick={toggleAccountDropdown}>
+                <div
+                  className={styles.myaccountDropdown}
+                  ref={buttonAccountDropdownRef}
+                >
+                  {user?.photo ? (
+                    <img src={user?.photo} className={styles.userPhoto} />
+                  ) : (
+                    <FontAwesomeIcon icon={faUser} />
+                  )}
                   <p>Mi cuenta</p>
                 </div>
               </div>
@@ -172,6 +183,16 @@ export default function Header() {
                 <Link href="/user/login">Iniciar Sesión</Link>
               </div>
             )}
+
+            {isAccountDropdownOpen && (
+              <AccountDropdown
+                accountDropDownRef={accountDropDownRef}
+                buttonRef={buttonAccountDropdownRef}
+                isOpen={isAccountDropdownOpen}
+                dropdownPosition={dropdownPosition}
+              />
+            )}
+
             {/* Ícono del carrito, que activa o desactiva el estado isCartOpen */}
             <div
               className={styles.cartIcon}
@@ -183,8 +204,6 @@ export default function Header() {
             </div>
           </div>
         </nav>
-
-        {isAccountDropdownOpen && <AccountDropdown accountDropDownRef={accountDropDownRef}/>}
 
         {/* Menu superpuesto */}
         {isMenuOpen && (

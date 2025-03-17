@@ -2,7 +2,7 @@ import fs from 'fs'
 import cloudinary from "../config/cloudinary.js";
 import bcrypt from 'bcrypt';
 import usersDB from '../mocks/usersDB.js';
-import userModel from '../models/user.js';
+import userModel from '../models/User.js';
 import { generateToken } from '../core/utils/utils.js';
 
 
@@ -10,6 +10,7 @@ import { generateToken } from '../core/utils/utils.js';
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
+        
         // Buscar si esxites el email en la base de datos
         const user = await userModel.findOne({ email: email })
         if (user) {
@@ -207,10 +208,7 @@ const editProfile = async (req, res) => {
 
 const addFavoriteBook = async (req, res) => {
     try {
-        console.log(req);
-
-        console.log(req.body);
-
+      
         const { userId, bookId } = req.body;
 
         // Verifica si esxiste el usuario

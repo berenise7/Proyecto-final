@@ -142,7 +142,7 @@
 
     .imageContainer {
         max-width: 50%;
-        align-items: center;
+        align-items: center !important;
 
     }
 
@@ -150,6 +150,7 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
+        gap: 0;
     }
 
     .details1,
@@ -157,6 +158,9 @@
         width: 100%;
     }
 
+    .ratings{
+        justify-content: center;
+    }
     .price {
         font-size: 2em;
     }
@@ -171,6 +175,7 @@
 
     .imageContainer {
         max-width: 80%;
+        margin-top: 50px;
     }
 
     .details {

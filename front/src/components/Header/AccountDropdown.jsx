@@ -1,16 +1,24 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./Header.module.css";
 import { useAuth } from "@/core/contexts/AuthContext";
 
-export default function AccountDropdown({ accountDropDownRef }) {
+export default function AccountDropdown({
+  accountDropDownRef,
+  isOpen,
+  dropdownPosition,
+}) {
   const { user, handleLogout } = useAuth();
 
-  const toggleAdmin = () => {
-    setIsAdminOpen((prevState) => !prevState);
-  };
   return (
-    <div className={styles.overlayMenuAccount} ref={accountDropDownRef}>
+    <div
+      className={`${styles.overlayMenuAccount} ${isOpen ? styles.open : ""}`}
+      ref={accountDropDownRef}
+      style={{
+        top: `${dropdownPosition.top}px`,
+        left: `${dropdownPosition.left}px`,
+      }}
+    >
       <ul>
         <li>
           <Link href="/myaccount/my-data/my-data">Mis datos</Link>
@@ -38,6 +46,7 @@ export default function AccountDropdown({ accountDropDownRef }) {
         ) : (
           ""
         )}
+        <hr/>
         <li>
           <a onClick={handleLogout}>Cerrar sesión</a>
         </li>

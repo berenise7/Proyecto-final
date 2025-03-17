@@ -12,7 +12,7 @@ export const handleLoginFetch = async (email, password) => {
         const data = await response.json();
         return data;
     } catch (error) {
-        return { status: "Error", message: "Error en el servidor. Inténtalo de nuevo." };
+        return { error: "Ocurrió un error inesperado" };
     }
 }
 
@@ -38,7 +38,6 @@ export const registerUser = async (formData) => {
         const userCreated = await response.json();
         return userCreated;
     } catch (error) {
-        console.error("Error al crear el libro:", error);
         return { error: "Ocurrió un error inesperado" };
     }
 }
@@ -63,7 +62,6 @@ export const addFavoriteBook = async (userId, bookId, token) => {
             return null;
         }
     } catch (error) {
-        console.error("Error en la solicitud:", error);
         return { error: "Ocurrió un error inesperado" };
     }
 }
@@ -88,7 +86,6 @@ export const removeFavoriteBook = async (userId, bookId, token) => {
             return null;
         }
     } catch (error) {
-        console.error("Error en la solicitud:", error);
         return { error: "Ocurrió un error inesperado" };
     }
 }
@@ -132,7 +129,6 @@ export const updateProfileFetch = async (formDataToSend) => {
             return { status: "Error", message: data.message };
         }
     } catch (error) {
-        console.error('Error en la solicitud:', error);
         return { status: "Error", message: error.message };
     }
 }

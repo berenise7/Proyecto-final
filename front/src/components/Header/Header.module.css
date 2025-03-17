@@ -127,6 +127,15 @@
     color: #5c3e56;
 }
 
+.userPhoto {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 50px;
+    border: 1px solid rgb(89, 72, 91); 
+
+}
+
 .myaccountDropdown {
     display: flex;
     align-items: center;
@@ -138,27 +147,33 @@
     color: #5c3e56;
 }
 
-.overlayMenuAccount ul {
+.overlayMenuAccount {
     font-family: "Poppins", serif;
-    display: flex;
-    flex-direction: column;
-    list-style: none;
-    padding: 0;
-    margin: 0;
     position: absolute;
-    top: 100%;
-    /* Se coloca justo debajo del botón */
-    right: 0;
-    /* Centra el menú respecto al botón */
-    /* Ajuste para centrar el menú */
-    width: 18%;
-    /* O el ancho que desees */
+    width: 15%;
+    max-height: 0;
     background-color: white;
     box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgb(89, 72, 91); 
     border-bottom-left-radius: 10px;
-    transition: transform 0.3s ease;
+    border-bottom-right-radius:  10px;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(50px);
+    transition: opacity 0.5s ease, transform 0.5s ease, max-height 0.5s ease;
     z-index: 1000;
-    /* Asegura que esté encima de otros elementos */
+}
+
+.overlayMenuAccount.open {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 400px;
+    overflow: visible;
+}
+
+.overlayMenuAccount ul {
+    list-style: none;
+    padding: 0;
 }
 
 .overlayMenuAccount li {
@@ -171,6 +186,7 @@
 .overlayMenuAccount li:hover {
     background-color: #f2eadf;
 }
+
 .overlayMenuAccount li p:hover {
     background-color: #f2eadf;
 }
@@ -327,6 +343,9 @@
         font-size: 0.9rem;
         margin: 0 0.625em !important;
     }
+    .overlayMenuAccount{
+        width: 25%;
+    }
 }
 
 @media (max-width: 768px) {
@@ -359,6 +378,7 @@
 
     .bottomRow {
         width: 100% !important;
+        padding-bottom: 10px;
     }
 
     .navLinks {
@@ -366,7 +386,13 @@
         margin-left: 3em;
         justify-content: flex-start;
     }
-
+    .userPhoto {
+        width: 50px;
+        height: 50px;
+    }
+    .overlayMenuAccount{
+        width: 30%;
+    }
 
     .cartIcon {
         font-size: 1.7em;
@@ -414,7 +440,9 @@
         font-size: 0.8rem;
         margin: 5px 0;
     }
-
+    .overlayMenuAccount{
+        width: 60%;
+    }
     .menuIcon,
     .cartIcon {
         font-size: 1.5em;

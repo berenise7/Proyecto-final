@@ -62,12 +62,12 @@ const UserSchema = new Schema({
     _id: false,
     book_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Books',  // Referencia al modelo Book
+      ref: 'Books',  // Referencia al modelo Books
       required: false
     },
   }]
 
-});
+}, { timestamps: true });
 
 const userModel = mongoose.model('Users', UserSchema, 'Users');
 

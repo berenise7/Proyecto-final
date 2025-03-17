@@ -3,7 +3,7 @@ import express from 'express'
 import authMiddleware from "../middlewares/authMiddleware.js";
 import { upload } from "../middlewares/multer.js";
 
-const userRouter = express.Router()
+const userRouter = express.Router();
 
 
 userRouter.post("/login", login);

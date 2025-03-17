@@ -1,5 +1,7 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
+import { addBookToCart, getCart } from "@/api/cartFetch";
+import { updateBook } from "@/api/booksFetch";
 
 const CartContext = createContext()
 
@@ -8,47 +10,72 @@ export default CartContext
 // Proveedor del contexto
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
+    const [subtotal, setSubtotal] = useState("")
     const router = useRouter();
 
-    // Cargar el carrito desde localStorage al inicio
+    // Cargar el carrito desde localStorage al inicio o de user
     useEffect(() => {
-        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        if (token) {
-            const savedCart = localStorage.getItem(`cart_${token}`);
-            if (savedCart) {
-                setCart(JSON.parse(savedCart));  // Cargar el carrito guardado
+        const user = JSON.parse(localStorage.getItem("user")) || JSON.parse(sessionStorage.getItem("user"));
+        if (user) {
+            const fetchCart = async () => {
+                const cartData = await getCart(user._id)
+                setCart(cartData.data.books)
+                setSubtotal(cartData.data.subtotal)
             }
-
+            fetchCart()
         }
-    }, []);
+
+
+    }, [cart]);
 
     // Guardar el carrito en localStorage cada vez que cambie
     useEffect(() => {
-        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        if (token && cart.length > 0) {
-            localStorage.setItem(`cart_${token}`, JSON.stringify(cart));  // Guardar el carrito cada vez que cambia
+
+        if (cart.length > 0) {
+            localStorage.setItem(`cart`, JSON.stringify(cart));  // Guardar el carrito cada vez que cambia
         }
 
     }, [cart]);
 
     // Función para agregar un libro al carrito
-    const addToCart = (product) => {
-        setCart((prevCart) => {
-            // Verificar si el producto ya está en el carrito
-            if (prevCart.some((item) => item.id === product.id)) {
-                return prevCart.map((item) =>
-                    item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-                );
+    const addToCart = async (book) => {
+        const user = JSON.parse(localStorage.getItem("user")) || JSON.parse(sessionStorage.getItem("user"));
+        if (user) {
+            const userId = user?._id
+            const result = await addBookToCart(userId, book._id, 1);
+            console.log(result);
+
+            if (result.status === "Succeeded") {
+
+                const updatedCart = await getCart(userId)
+
+                setCart(updatedCart.data.books || []); // Actualizar carrito con el del backend
+                console.log("se guarda libro", cart);
+
+            } else {
+                // console.error("Error al agregar al carrito:", error);
+                console.log("Error al guardar el libro:", result?.error);
             }
-            return [...prevCart, { ...product, quantity: 1 }];
-        });
+        } else {
+            setCart((prevCart) => {
+                // Verificar si el producto ya está en el carrito
+                if (prevCart.some((item) => item._id === book._id)) {
+                    return prevCart.map((item) =>
+                        item._id === book._id ? { ...item, quantity: item.quantity + 1 } : item
+                    );
+                }
+                return [...prevCart, { ...book, quantity: 1 }];
+            });
+
+        }
+
     };
 
     // Función para incrementar la cantidad del producto
-    const incrementQuantity = (id) => {
+    const incrementQuantity = (_id) => {
         setCart((prevItems) =>
             prevItems.map((item) =>
-                item.id === id && item.quantity > 0
+                item._id === _id && item.quantity > 0
                     ? { ...item, quantity: item.quantity + 1 }
                     : item
             )
@@ -59,7 +86,7 @@ export const CartProvider = ({ children }) => {
     const decrementQuantity = (id) => {
         setCart((prevItems) =>
             prevItems.map((item) =>
-                item.id === id && item.quantity > 1
+                item._id === id && item.quantity > 1
                     ? { ...item, quantity: item.quantity - 1 }
                     : item
             )
@@ -67,18 +94,26 @@ export const CartProvider = ({ children }) => {
     };
     // Función para eliminar un libro del carrito
     const removeFromCart = (id) => {
-        setCart((prevItems) => prevItems.filter((item) => item.id !== id));
+        setCart((prevItems) => prevItems.filter((item) => item._id !== id));
     };
 
     // Calcular todo el total
     const calculateTotal = () => {
-        return cart
-            .reduce((acc, item) => acc + item.price * item.quantity, 0)
-            .toFixed(2);
+        if (!user) {
+
+            return cart
+                .reduce((acc, item) => acc + item.price * item.quantity, 0)
+                .toFixed(2);
+        }
     };
 
+
     // Total de productos añadidos
-    const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+
+    const totalQuantity = cart?.reduce((total, item) => total + item.quantity, 0) || cart?.reduce((total, item) => total + item.book_id.quantity, 0);
+
+
+
 
     // Función para formatear el precio
     const formatPrice = (price) => {
@@ -90,10 +125,10 @@ export const CartProvider = ({ children }) => {
             .format(price)
             .replace(".", ",");
     };
-    
+
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, incrementQuantity, decrementQuantity, calculateTotal, totalQuantity, formatPrice, }}>
+        <CartContext.Provider value={{ cart, subtotal, addToCart, removeFromCart, incrementQuantity, decrementQuantity, calculateTotal, totalQuantity, formatPrice, }}>
             {children}
         </CartContext.Provider>
     );
