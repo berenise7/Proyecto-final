@@ -1,7 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { useRouter } from "next/router";
-import { addBookToCart, getCart } from "@/api/cartFetch";
-import { updateBook } from "@/api/booksFetch";
+import { addBookToCart, getCart, removeBookFromCart, updateCartItem } from "@/api/cartFetch";
 
 const CartContext = createContext()
 
@@ -11,7 +9,6 @@ export default CartContext
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
     const [subtotal, setSubtotal] = useState("")
-    const router = useRouter();
 
     // Cargar el carrito desde localStorage al inicio o de user
     useEffect(() => {
@@ -43,17 +40,14 @@ export const CartProvider = ({ children }) => {
         if (user) {
             const userId = user?._id
             const result = await addBookToCart(userId, book._id, 1);
-            console.log(result);
 
             if (result.status === "Succeeded") {
 
                 const updatedCart = await getCart(userId)
 
                 setCart(updatedCart.data.books || []); // Actualizar carrito con el del backend
-                console.log("se guarda libro", cart);
 
             } else {
-                // console.error("Error al agregar al carrito:", error);
                 console.log("Error al guardar el libro:", result?.error);
             }
         } else {
@@ -72,33 +66,90 @@ export const CartProvider = ({ children }) => {
     };
 
     // Función para incrementar la cantidad del producto
-    const incrementQuantity = (_id) => {
-        setCart((prevItems) =>
-            prevItems.map((item) =>
-                item._id === _id && item.quantity > 0
-                    ? { ...item, quantity: item.quantity + 1 }
-                    : item
-            )
-        );
+    const incrementQuantity = async (book) => {
+        const user = JSON.parse(localStorage.getItem("user")) || JSON.parse(sessionStorage.getItem("user"));
+        if (user) {
+            const userId = user._id
+            const bookId = book.bookId._id;
+            const quantity = book.quantity
+
+            const result = await updateCartItem(userId, bookId, quantity + 1);
+
+            if (result.status === "Succeeded") {
+
+                const updatedCart = await getCart(userId)
+
+                setCart(updatedCart.data.books || []); // Actualizar carrito con el del backend
+
+            } else {
+                console.log("Error al guardar el libro:", result?.error);
+            }
+        } else {
+
+            setCart((prevItems) =>
+                prevItems.map((item) =>
+                    item._id === book && item.quantity > 0
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
+                )
+            );
+        }
     };
 
     // Función para disminuir la cantidad de un producto
-    const decrementQuantity = (id) => {
-        setCart((prevItems) =>
-            prevItems.map((item) =>
-                item._id === id && item.quantity > 1
-                    ? { ...item, quantity: item.quantity - 1 }
-                    : item
-            )
-        );
+    const decrementQuantity = async (book) => {
+        const user = JSON.parse(localStorage.getItem("user")) || JSON.parse(sessionStorage.getItem("user"));
+        if (user) {
+            const userId = user._id
+            const bookId = book.bookId._id;
+            const quantity = book.quantity
+
+            const result = await updateCartItem(userId, bookId, quantity - 1);
+
+            if (result.status === "Succeeded") {
+
+                const updatedCart = await getCart(userId)
+
+                setCart(updatedCart.data.books || []); // Actualizar carrito con el del backend
+
+            } else {
+                console.log("Error al guardar el libro:", result?.error);
+            }
+        } else {
+            setCart((prevItems) =>
+                prevItems.map((item) =>
+                    item._id === book && item.quantity > 1
+                        ? { ...item, quantity: item.quantity - 1 }
+                        : item
+                )
+            );
+        }
     };
+
+
     // Función para eliminar un libro del carrito
-    const removeFromCart = (id) => {
-        setCart((prevItems) => prevItems.filter((item) => item._id !== id));
+    const removeFromCart = async (book) => {
+        const user = JSON.parse(localStorage.getItem("user")) || JSON.parse(sessionStorage.getItem("user"));
+        if (!user) {
+            setCart((prevItems) => prevItems.filter((item) => item._id !== book));
+        } else {
+            const userId = user._id
+
+            const removeResult = await removeBookFromCart(userId, book._id)
+
+            if (removeResult.status === "Succeeded") {
+                const updatedCart = await getCart(userId)
+                setCart(updatedCart.data.books || []);
+            } else {
+                console.log("Error al guardar el libro:", removeResult?.error);
+            }
+        }
     };
 
     // Calcular todo el total
     const calculateTotal = () => {
+        if (typeof window === "undefined") return null;
+        const user = JSON.parse(localStorage.getItem("user") ) || JSON.parse(sessionStorage.getItem("user")) ;
         if (!user) {
 
             return cart
@@ -128,7 +179,7 @@ export const CartProvider = ({ children }) => {
 
 
     return (
-        <CartContext.Provider value={{ cart, subtotal, addToCart, removeFromCart, incrementQuantity, decrementQuantity, calculateTotal, totalQuantity, formatPrice, }}>
+        <CartContext.Provider value={{ cart, setCart, subtotal, addToCart, removeFromCart, incrementQuantity, decrementQuantity, calculateTotal, totalQuantity, formatPrice, }}>
             {children}
         </CartContext.Provider>
     );

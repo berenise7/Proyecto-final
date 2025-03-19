@@ -12,20 +12,25 @@ import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import styles from "./checkout.module.css";
 import { useCart } from "@/core/contexts/CartContext";
 import { useFavorites } from "@/core/contexts/FavoritesContext";
+import { useAuth } from "@/core/contexts/AuthContext";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 
 export default function checkout() {
   const {
     cart,
+    subtotal,
     removeFromCart,
     incrementQuantity,
     decrementQuantity,
     calculateTotal,
     formatPrice,
   } = useCart();
-  const { favorites, setFavorites } = useFavorites();
+  const { favorites, toggleFavorite } = useFavorites();
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
+    phone: "",
     address: "",
     city: "",
     zip: "",
@@ -43,17 +48,6 @@ export default function checkout() {
     alert("Compra realizada con éxito!");
   };
 
-  const toggleFavorite = (product) => {
-    setFavorites((prevFavorites) => {
-      const isFavorite = prevFavorites.some((fav) => fav.id === product.id);
-      if (isFavorite) {
-        return prevFavorites.filter((fav) => fav.id !== product.id); // Quitar de favoritos
-      } else {
-        return [...prevFavorites, product]; // Agregar a favoritos
-      }
-    });
-  };
-
   return (
     <div>
       <HeaderAndSearch />
@@ -66,15 +60,31 @@ export default function checkout() {
               type="text"
               name="name"
               placeholder="Nombre completo"
-              value={formData.name}
+              value={user ? `${user.name} ${user.lastname}` : formData.name}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={user ? user.email : formData.email}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Número de teléfono"
+              value={user ? user.phone : formData.phone}
               onChange={handleChange}
               required
             />
             <input
               type="text"
-              name="address"
-              placeholder="Dirección"
-              value={formData.address}
+              name="country"
+              placeholder="País"
+              value={formData.country}
               onChange={handleChange}
               required
             />
@@ -88,17 +98,18 @@ export default function checkout() {
             />
             <input
               type="text"
-              name="zip"
-              placeholder="Código postal"
-              value={formData.zip}
+              name="address"
+              placeholder="Dirección"
+              value={user ? user.address : formData.address}
               onChange={handleChange}
               required
             />
+
             <input
               type="text"
-              name="country"
-              placeholder="País"
-              value={formData.country}
+              name="zip"
+              placeholder="Código postal"
+              value={formData.zip}
               onChange={handleChange}
               required
             />
@@ -123,23 +134,35 @@ export default function checkout() {
             <h3>Resumen del pedido</h3>
             <ul className={styles.cartList}>
               {cart.map((product) => (
-                <li key={product.id} className={styles.orderItem}>
+                <li
+                  key={!user ? product.id : product.book_id._id}
+                  className={styles.orderItem}
+                >
                   <img
-                    src={product.image}
-                    alt={product.title}
+                    src={product.image || product.book_id.image}
+                    alt={product.title || product.book_id.title}
                     className={styles.cartImage}
                   />
                   <div>
                     <div className={styles.cartInfo}>
-                      <h4>{product.title}</h4>
-                      <p>{product.author}</p>
+                      <h4>{product.title || product.book_id.title}</h4>
+                      <p>{product.author || product.book_id.author}</p>
                       <p className={styles.price}>
                         {formatPrice(product.price * product.quantity)}€
                       </p>
                       <div className={styles.quantityControls}>
                         <button
                           className={styles.quantityBtn}
-                          onClick={() => decrementQuantity(product.id)}
+                          onClick={() =>
+                            decrementQuantity(
+                              user
+                                ? {
+                                    bookId: product.book_id,
+                                    quantity: product.quantity,
+                                  }
+                                : product._id
+                            )
+                          }
                         >
                           <FontAwesomeIcon icon={faMinus} size="lg" />
                         </button>
@@ -148,7 +171,16 @@ export default function checkout() {
                         </span>
                         <button
                           className={styles.quantityBtn}
-                          onClick={() => incrementQuantity(product.id)}
+                          onClick={() =>
+                            incrementQuantity(
+                              user
+                                ? {
+                                    bookId: product.book_id,
+                                    quantity: product.quantity,
+                                  }
+                                : product._id
+                            )
+                          }
                         >
                           <FontAwesomeIcon icon={faPlus} size="lg" />
                         </button>
@@ -158,31 +190,36 @@ export default function checkout() {
                   <div className={styles.cartActions}>
                     <button
                       className={styles.removeBtn}
-                      onClick={() => removeFromCart(product.id)}
+                      onClick={() =>
+                        removeFromCart(user ? product.book_id : product._id)
+                      }
                     >
                       <FontAwesomeIcon icon={faTrashCan} size="lg" />
                     </button>
-                    <button
-                      onClick={() => toggleFavorite(product)}
-                      className={styles.favButton}
-                    >
-                      <FontAwesomeIcon
-                        icon={
-                          favorites.some((fav) => fav.id === product.id)
-                            ? faHeartSolid
-                            : faHeart
-                        }
-                      />
-                    </button>
+                    {user && (
+                      <button
+                        onClick={() => toggleFavorite(product.book_id)}
+                        className={styles.favButton}
+                      >
+                        <FontAwesomeIcon
+                          icon={
+                            favorites.some((fav) => fav.book_id === product.book_id._id)
+                              ? faHeartSolid
+                              : faHeart
+                          }
+                        />
+                      </button>
+                    )}
                   </div>
                 </li>
               ))}
             </ul>
-            <h4>Total: {formatPrice(calculateTotal())}€</h4>
+            <h4>
+              Total:{" "}
+              {user ? formatPrice(subtotal) : formatPrice(calculateTotal())}€
+            </h4>
             <Link href="/">
-              <button className={styles.backToCartBtn}>
-                Seguir comprando
-              </button>
+              <button className={styles.backToCartBtn}>Seguir comprando</button>
             </Link>
           </div>
         </div>

@@ -1,14 +1,18 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
-import { handleLoginFetch, registerUser, updateProfile } from "@/api/usersFetch";
+import { handleLoginFetch } from "@/api/usersFetch";
 import { useFavorites } from "./FavoritesContext";
+
+import { mergeCart, getCart } from "@/api/cartFetch";
+import { useCart } from "./CartContext";
 
 const AuthContext = createContext();
 
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
-    const { setFavorites } = useFavorites()
+    const { setFavorites } = useFavorites();
+    const { setCart, cart } = useCart()
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const [loginError, setLoginError] = useState(null);
@@ -24,6 +28,20 @@ export const AuthProvider = ({ children }) => {
 
     }, []);
 
+    const mergeCartFuntion = async (user) => {
+        const userId = user._id;
+        const cart = JSON.parse(localStorage.getItem("cart") || sessionStorage.getItem("cart") || "[]");
+
+        const merge = await mergeCart(userId, cart)
+        if (merge?.status === "Succeeded") {
+
+            const updatedCart = await getCart(userId)
+
+            setCart(updatedCart.data.books || []);
+        } else {
+            console.log("Error al guardar el libro:", merge?.error);
+        }
+    }
 
     // Funcion para iniciar sesion
     const handleLogin = async (values, { setSubmitting }) => {
@@ -35,6 +53,10 @@ export const AuthProvider = ({ children }) => {
             setUser(data.data);
             setToken(data.token)
             setFavorites(data.data.favorites)
+            mergeCartFuntion(data.data);
+            const updatedCart = await getCart(data.data._id)
+
+            setCart(updatedCart.data.books || []);
 
             if (values.rememberMe) {
                 localStorage.setItem("token", data.token);
@@ -59,12 +81,12 @@ export const AuthProvider = ({ children }) => {
     const handleLogout = () => {
         setUser(null);
         setToken(null)
-        localStorage.removeItem(`cart_${localStorage.getItem("token")}`);
+        localStorage.removeItem(`cart`);
         localStorage.removeItem(`favorites_${localStorage.getItem("token")}`);
         localStorage.removeItem("user");
         localStorage.removeItem("token");
 
-        sessionStorage.removeItem(`cart_${sessionStorage.getItem("token")}`);
+        sessionStorage.removeItem(`cart`);
         sessionStorage.removeItem(`favorites_${sessionStorage.getItem("token")}`);
         sessionStorage.removeItem("user");
         sessionStorage.removeItem("token");

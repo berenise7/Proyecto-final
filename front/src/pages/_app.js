@@ -6,12 +6,12 @@ import { SearchProvider } from "@/core/contexts/SearchContext";
 
 export default function App({ Component, pageProps }) {
   return <FavoritesProvider>
-    <AuthProvider>
-      <CartProvider>
+    <CartProvider>
+      <AuthProvider>
         <SearchProvider>
           <Component {...pageProps} />
         </SearchProvider>
-      </CartProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </CartProvider>
   </FavoritesProvider>
 }

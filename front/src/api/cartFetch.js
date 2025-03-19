@@ -10,7 +10,6 @@ export const addBookToCart = async (userId, bookId, quantity) => {
 
         const data = await response.json();
         if (response.ok) {
-            console.log("Libro agregado al carrito:", data);
             return data;
         } else {
             console.error("Error al agregar al carrito:", data.message);
@@ -27,6 +26,71 @@ export const getCart = async (userId) => {
         const data = await response.json();
         return data;
     } catch (error) {
-          console.error("Error en la solicitud:", error);
+        console.error("Error en la solicitud:", error);
         return { error: "Ocurrió un error inesperado" };
-}}
+    }
+}
+
+export const removeBookFromCart = async (userId, bookId) => {
+    try {
+        const response = await fetch(`http://localhost:9000/cart/remove`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId, bookId }),
+        })
+
+        const data = await response.json();
+        if (response.ok) {
+            return data;
+        } else {
+            console.error("Error al eliminar el libro del carrito:", data.message);
+        }
+    } catch (error) {
+        return { error: "Ocurrió un error inesperado" };
+    }
+}
+
+export const updateCartItem = async (userId, bookId, quantity) => {
+    try {
+        const response = await fetch(`http://localhost:9000/cart/update`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId, bookId, quantity }),
+        })
+
+        const data = await response.json();
+        if (response.ok) {
+            return data;
+        } else {
+            console.error("Error al actualizar el carrito:", data.message);
+        }
+    } catch (error) {
+        return { error: "Ocurrió un error inesperado" };
+    }
+}
+
+
+export const mergeCart = async (userId, localCart) => {
+    try {
+        const response = await fetch(`http://localhost:9000/cart/merge`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId, localCart }),
+        })
+
+        const data = await response.json();
+        if (response.ok) {
+            return data;
+        } else {
+            console.error("Error al mergear el carrito:", data.message);
+        }
+    } catch (error) {
+        return { error: "Ocurrió un error inesperado" };
+    }
+}

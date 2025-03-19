@@ -11,7 +11,6 @@ export const FavoritesProvider = ({ children }) => {
     // Cargar los favoritos desde localStorage cuando el usuario inicia sesión
     useEffect(() => {
         const storedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
-        console.log(storedUser);
 
         if (storedUser) {
             const parsedUser = JSON.parse(storedUser)

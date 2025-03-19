@@ -20,21 +20,8 @@ export default function DropDownCart({ cartRef }) {
     calculateTotal,
     formatPrice,
   } = useCart();
-  const { favorites, setFavorites } = useFavorites();
+  const { favorites, toggleFavorite } = useFavorites();
   const { user } = useAuth();
-
-  // Función para alternar favoritos
-  const toggleFavorite = (product) => {
-    setFavorites((prevFavorites) => {
-      const isFavorite = prevFavorites.some((fav) => fav._id === product._id);
-      if (isFavorite) {
-        return prevFavorites.filter((fav) => fav._id !== product._id); // Quitar de favoritos
-      } else {
-        return [...prevFavorites, product]; // Agregar a favoritos
-      }
-    });
-  };
-  console.log(cart);
 
   return (
     <div className={cart.length ? styles.cart : styles.emptyCart} ref={cartRef}>
@@ -52,9 +39,9 @@ export default function DropDownCart({ cartRef }) {
               >
                 <Link
                   href={
-                    !user
-                      ? `${product.url}/${product._id}`
-                      : `${product.book_id.url}/${product.book_id._id}`
+                    user
+                      ? `${product.book_id?.url}/${product.book_id?._id}`
+                      : `${product.url}/${product._id}`
                   }
                 >
                   <img
@@ -67,8 +54,8 @@ export default function DropDownCart({ cartRef }) {
                   <Link
                     href={
                       !user
-                      ? `${product.url}/${product._id}`
-                      : `${product.book_id.url}/${product.book_id._id}`
+                        ? `${product.url}/${product._id}`
+                        : `${product.book_id?.url}/${product.book_id?._id}`
                     }
                   >
                     <h3>{product.title || product.book_id.title}</h3>
@@ -78,14 +65,32 @@ export default function DropDownCart({ cartRef }) {
                   <div className={styles.quantityControls}>
                     <button
                       className={styles.quantityBtn}
-                      onClick={() => decrementQuantity(product.book_id._id)}
+                      onClick={() =>
+                        decrementQuantity(
+                          user
+                            ? {
+                                bookId: product.book_id,
+                                quantity: product.quantity,
+                              }
+                            : product._id
+                        )
+                      }
                     >
                       <FontAwesomeIcon icon={faMinus} size="lg" />
                     </button>
                     <span className={styles.quantity}>{product.quantity}</span>
                     <button
                       className={styles.quantityBtn}
-                      onClick={() => incrementQuantity(product.book_id._id)}
+                      onClick={() =>
+                        incrementQuantity(
+                          user
+                            ? {
+                                bookId: product.book_id,
+                                quantity: product.quantity,
+                              }
+                            : product._id
+                        )
+                      }
                     >
                       <FontAwesomeIcon icon={faPlus} size="lg" />
                     </button>
@@ -94,18 +99,20 @@ export default function DropDownCart({ cartRef }) {
                 <div className={styles.cartActions}>
                   <button
                     className={styles.removeBtn}
-                    onClick={() => removeFromCart(product.book_id._id)}
+                    onClick={() =>
+                      removeFromCart(user ? product.book_id : product._id)
+                    }
                   >
                     <FontAwesomeIcon icon={faTrashCan} size="lg" />
                   </button>
                   {user && (
                     <button
-                      onClick={() => toggleFavorite(product)}
+                      onClick={() => toggleFavorite(product.book_id)}
                       className={styles.favButton}
                     >
                       <FontAwesomeIcon
                         icon={
-                          favorites.some((fav) => fav._id === product._id)
+                          favorites.some((fav) => fav.book_id === product.book_id._id)
                             ? faHeartSolid
                             : faHeart
                         }
@@ -117,7 +124,7 @@ export default function DropDownCart({ cartRef }) {
             ))}
           </ul>
           <div className={styles.total}>
-            Total: {user ? subtotal : formatPrice(calculateTotal())}€
+            Total: {user ? formatPrice(subtotal) : formatPrice(calculateTotal())}€
           </div>
           <button className={styles.checkoutBtn}>
             <Link href="/cart/checkout">Ir a pagar</Link>

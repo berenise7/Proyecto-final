@@ -103,38 +103,35 @@ const mergeCart = async (req, res) => {
 
         let cart = await cartModel.findOne({ user_id: userId })
         if (!cart) {
+
             // Si el usuario no tiene carrito, se guarda el del localStorage
             cart = new cartModel({
                 user_id: userId,
                 books: localCart.map(item => ({
-                    book_id: item.bookId,
+                    book_id: item._id,
                     quantity: item.quantity,
                     price: item.price,
                     total_price: item.price * item.quantity
                 })),
-                subtotal: localCart.reduce((acc, item) => acc + (item.price * item.quantity), 0),
+                subtotal: localCart.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2),
             });
         } else {
+
             localCart.forEach(localItem => {
 
-                // Verifica que bookId es un ObjectId válido
-                if (!mongoose.Types.ObjectId.isValid(localItem.bookId)) {
-                    return res.status(400).json({ message: `ID inválido: ${localItem.bookId}` });
-                }
+                const existingBook = cart.books.find(dbItem => dbItem.book_id.equals(localItem._id))
 
-                const existingBook = cart.books.find(dbItem => dbItem.book_id.equals(localItem.bookId))
                 if (!existingBook) {
                     cart.books.push({
-                        book_id: localItem.bookId,
+                        book_id: localItem._id,
                         quantity: localItem.quantity,
                         price: localItem.price,
                         total_price: localItem.price * localItem.quantity
                     })
-
                 }
 
             });
-            cart.subtotal = cart.books.reduce((acc, item) => acc + item.total_price, 0);
+            cart.subtotal = cart.books.reduce((acc, item) => acc + item.total_price, 0).toFixed(2);
         }
 
         await cart.save();
@@ -153,6 +150,7 @@ const updateCartItem = async (req, res) => {
     try {
         const { userId, bookId, quantity } = req.body;
 
+
         const cart = await cartModel.findOne({ user_id: userId })
         if (!cart) {
             return res.status(404).json({ message: "Carrito no encontrado" });
@@ -164,12 +162,12 @@ const updateCartItem = async (req, res) => {
         }
 
         if (quantity < 1) {
-            return res.status(400).json({ message: "La cantidad debe ser al menos 1" });
+            cart.books = cart.books.filter(item => !item.book_id.equals(bookId));
         }
         bookInCart.quantity = quantity;
         bookInCart.total_price = bookInCart.quantity * bookInCart.price;
 
-        cart.subtotal = cart.books.reduce((acc, item) => acc + item.total_price, 0);
+        cart.subtotal = cart.books.reduce((acc, item) => acc + item.total_price, 0).toFixed(2);
 
         await cart.save();
         res.status(200).json({
@@ -199,7 +197,7 @@ const removeBookFromCart = async (req, res) => {
             return res.status(404).json({ message: "Libro no encontrado en el carrito" });
         }
 
-        // Filtro para eliminar 
+        // Filtro para eliminar un libro
         cart.books = cart.books.filter(item => !item.book_id.equals(bookId));
 
         // Si el carrito esta vacio se elimina de cart

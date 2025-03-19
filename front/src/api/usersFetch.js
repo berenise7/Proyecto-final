@@ -55,7 +55,6 @@ export const addFavoriteBook = async (userId, bookId, token) => {
 
         const data = await response.json();
         if (response.ok) {
-            console.log("Libro agregado a favoritos", data);
             return data;
         } else {
             console.error("Error al agregar a favoritos", data.message);
@@ -79,7 +78,6 @@ export const removeFavoriteBook = async (userId, bookId, token) => {
 
         const data = await response.json();
         if (response.ok) {
-            console.log("Libro eliminado de favoritos", data);
             return data;
         } else {
             console.error("Error al eliminar en favoritos", data.message);
