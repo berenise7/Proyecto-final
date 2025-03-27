@@ -29,6 +29,11 @@ self.__BUILD_MANIFEST = {
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/cart/checkout.js"
+    ],
+    "/user/login": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/user/login.js"
     ]
   },
   "ampFirstPages": []

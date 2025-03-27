@@ -6,7 +6,7 @@ const CartSchema = new Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users', // Referencia al modelo de user
-        required: true
+        required: false
     },
     books: [
         {
@@ -40,7 +40,7 @@ const CartSchema = new Schema({
     },
     state: {
         type: String,
-        enum: ['abierto', 'cerrado', 'pagado'], // Estados del carrito
+        enum: ['abierto', 'cerrado'], // Estados del carrito
         default: 'abierto'
     },
     creation_date: {

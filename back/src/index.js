@@ -7,6 +7,8 @@ dotenv.config({ path: path.resolve("src", ".env") })
 import bookRouter from "./routes/booksRoutes.js";
 import userRouter from "./routes/usersRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
+import orderRouter from "./routes/orderRoutes.js";
+
 
 // Importamos el framework Express para crear y gestionar el servicio web
 import express from 'express'
@@ -57,6 +59,7 @@ app.use(cors())
 app.use("/books", bookRouter)
 app.use("/users", userRouter)
 app.use("/cart", cartRouter)
+app.use("/order", orderRouter)
 
 // Iniciaos el servidor en el puerto especificado
 app.listen(port, () => {

@@ -30,7 +30,13 @@ export const AuthProvider = ({ children }) => {
 
     const mergeCartFuntion = async (user) => {
         const userId = user._id;
-        const cart = JSON.parse(localStorage.getItem("cart") || sessionStorage.getItem("cart") || "[]");
+        const getCartFromStorage = (storage, key) => {
+            const data = storage.getItem(key);
+            return data ? JSON.parse(data) : null;
+        };
+
+        const cart = getCartFromStorage(localStorage, "cart") || getCartFromStorage(sessionStorage, "cart") || [];
+
 
         const merge = await mergeCart(userId, cart)
         if (merge?.status === "Succeeded") {
@@ -39,7 +45,7 @@ export const AuthProvider = ({ children }) => {
 
             setCart(updatedCart.data.books || []);
         } else {
-            console.log("Error al guardar el libro:", merge?.error);
+            console.log("Error al guardar el libro:", merge.error);
         }
     }
 
@@ -53,10 +59,10 @@ export const AuthProvider = ({ children }) => {
             setUser(data.data);
             setToken(data.token)
             setFavorites(data.data.favorites)
-            mergeCartFuntion(data.data);
-            const updatedCart = await getCart(data.data._id)
+            mergeCartFuntion(data?.data);
+            const updatedCart = await getCart(data?.data._id)
 
-            setCart(updatedCart.data.books || []);
+            setCart(updatedCart.data?.books || []);
 
             if (values.rememberMe) {
                 localStorage.setItem("token", data.token);
@@ -69,7 +75,6 @@ export const AuthProvider = ({ children }) => {
                 // Esto es para asegurarte de que los datos estén disponibles después de la redirección
                 const userFromStorage = JSON.parse(localStorage.getItem("user") || sessionStorage.getItem("user"));
                 const tokenFromStorage = localStorage.getItem("token") || sessionStorage.getItem("token");
-                console.log(userFromStorage, tokenFromStorage);  // Verifica si los datos están disponibles
             });
         } else {
             setLoginError(data.message)

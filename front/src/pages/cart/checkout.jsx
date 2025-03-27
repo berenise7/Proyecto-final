@@ -14,10 +14,12 @@ import { useCart } from "@/core/contexts/CartContext";
 import { useFavorites } from "@/core/contexts/FavoritesContext";
 import { useAuth } from "@/core/contexts/AuthContext";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
+import { newOrderAndPayment } from "@/api/orderFetch";
 
-export default function checkout() {
+export default function Checkout() {
   const {
     cart,
+    setCart,
     subtotal,
     removeFromCart,
     incrementQuantity,
@@ -27,25 +29,68 @@ export default function checkout() {
   } = useCart();
   const { favorites, toggleFavorite } = useFavorites();
   const { user } = useAuth();
+  const [cartEmpty, setCartEmpty] = useState(false);
+  const [purchaseMade, setPurchaseMade] = useState(false);
+  const [problemPurchase, setProblemPurchase] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
+    name: user ? `${user.name} ${user.lastname}` : "",
+    email: user ? user.email : "",
+    phone: user ? user.phone : "",
+    address: user ? user.address : "",
     city: "",
     zip: "",
     country: "",
+  });
+
+  const [paymentData, setPaymentData] = useState({
     paymentMethod: "credit_card",
   });
 
+  const safeSubtotal = isNaN(subtotal) ? 0 : subtotal;
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setPaymentData({ ...paymentData, [e.target.name]: e.target.value });
+  };
+  const handleCheckout = async () => {
+    if (cart?.length === 0 || !cart) {
+      setCartEmpty(true);
+    }
+
+    const orderData = {
+      full_name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      country: formData.country,
+      city: formData.city,
+      address: formData.address,
+      zip_code: formData.zip,
+    };
+
+    const paymentInfo = {
+      method: paymentData.paymentMethod,
+    };
+
+    const result = await newOrderAndPayment(
+      cart,
+      orderData,
+      paymentInfo,
+      user?._id || null
+    );
+    if (result && result.status === "Succeeded") {
+      setPurchaseMade(true);
+      setCart([])
+      localStorage.removeItem(`cart`);
+      sessionStorage.removeItem(`cart`);
+    } else {
+      setProblemPurchase(true);
+      console.error("Error al procesar el pago", result);
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Formulario enviado", formData);
-    alert("Compra realizada con éxito!");
+    await handleCheckout();
   };
 
   return (
@@ -60,7 +105,7 @@ export default function checkout() {
               type="text"
               name="name"
               placeholder="Nombre completo"
-              value={user ? `${user.name} ${user.lastname}` : formData.name}
+              value={formData.name}
               onChange={handleChange}
               required
             />
@@ -68,7 +113,7 @@ export default function checkout() {
               type="email"
               name="email"
               placeholder="Email"
-              value={user ? user.email : formData.email}
+              value={formData.email}
               onChange={handleChange}
               required
             />
@@ -76,7 +121,7 @@ export default function checkout() {
               type="tel"
               name="phone"
               placeholder="Número de teléfono"
-              value={user ? user.phone : formData.phone}
+              value={formData.phone}
               onChange={handleChange}
               required
             />
@@ -100,7 +145,7 @@ export default function checkout() {
               type="text"
               name="address"
               placeholder="Dirección"
-              value={user ? user.address : formData.address}
+              value={formData.address}
               onChange={handleChange}
               required
             />
@@ -117,7 +162,7 @@ export default function checkout() {
             <h3>Método de pago</h3>
             <select
               name="paymentMethod"
-              value={formData.paymentMethod}
+              value={paymentData.paymentMethod}
               onChange={handleChange}
             >
               <option value="credit_card">Tarjeta de crédito</option>
@@ -133,7 +178,7 @@ export default function checkout() {
           <div className={styles.orderSummary}>
             <h3>Resumen del pedido</h3>
             <ul className={styles.cartList}>
-              {cart.map((product) => (
+              {cart?.map((product) => (
                 <li
                   key={!user ? product.id : product.book_id._id}
                   className={styles.orderItem}
@@ -203,7 +248,9 @@ export default function checkout() {
                       >
                         <FontAwesomeIcon
                           icon={
-                            favorites.some((fav) => fav.book_id === product.book_id._id)
+                            favorites.some(
+                              (fav) => fav.book_id === product.book_id._id
+                            )
                               ? faHeartSolid
                               : faHeart
                           }
@@ -216,11 +263,13 @@ export default function checkout() {
             </ul>
             <h4>
               Total:{" "}
-              {user ? formatPrice(subtotal) : formatPrice(calculateTotal())}€
+              {user ? formatPrice(safeSubtotal) : formatPrice(calculateTotal())}
+              €
             </h4>
             <Link href="/">
               <button className={styles.backToCartBtn}>Seguir comprando</button>
             </Link>
+            {cartEmpty && <p>El carrito no debe estar vacío</p>}
           </div>
         </div>
       </div>

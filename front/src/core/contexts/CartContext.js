@@ -16,8 +16,8 @@ export const CartProvider = ({ children }) => {
         if (user) {
             const fetchCart = async () => {
                 const cartData = await getCart(user._id)
-                setCart(cartData.data.books)
-                setSubtotal(cartData.data.subtotal)
+                setCart(cartData.data?.books)
+                setSubtotal(cartData.data?.subtotal)
             }
             fetchCart()
         }
@@ -28,7 +28,7 @@ export const CartProvider = ({ children }) => {
     // Guardar el carrito en localStorage cada vez que cambie
     useEffect(() => {
 
-        if (cart.length > 0) {
+        if (cart?.length > 0) {
             localStorage.setItem(`cart`, JSON.stringify(cart));  // Guardar el carrito cada vez que cambia
         }
 
@@ -139,7 +139,7 @@ export const CartProvider = ({ children }) => {
 
             if (removeResult.status === "Succeeded") {
                 const updatedCart = await getCart(userId)
-                setCart(updatedCart.data.books || []);
+                setCart(updatedCart.data?.books || []);
             } else {
                 console.log("Error al guardar el libro:", removeResult?.error);
             }
@@ -168,6 +168,7 @@ export const CartProvider = ({ children }) => {
 
     // Función para formatear el precio
     const formatPrice = (price) => {
+        if (isNaN(price) || price == null) return "0,00";
         return new Intl.NumberFormat("es-ES", {
             style: "decimal",
             minimumFractionDigits: 2,

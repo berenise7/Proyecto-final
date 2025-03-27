@@ -68,9 +68,6 @@ const getCart = async (req, res) => {
         // Busca el carrito del usuario
         const cart = await cartModel.findOne({ user_id: userId }).populate("books.book_id")
 
-        if (!cart) {
-            return res.status(404).json({ message: "Carrito vacío" });
-        }
 
         res.status(200).json({
             status: "Succeeded",
@@ -102,8 +99,8 @@ const mergeCart = async (req, res) => {
         }
 
         let cart = await cartModel.findOne({ user_id: userId })
-        if (!cart) {
 
+        if (!cart && localCart.length > 0) {
             // Si el usuario no tiene carrito, se guarda el del localStorage
             cart = new cartModel({
                 user_id: userId,
@@ -115,7 +112,7 @@ const mergeCart = async (req, res) => {
                 })),
                 subtotal: localCart.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2),
             });
-        } else {
+        } else if (cart && localCart.length > 0) {
 
             localCart.forEach(localItem => {
 

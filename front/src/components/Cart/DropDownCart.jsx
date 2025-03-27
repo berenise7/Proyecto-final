@@ -24,15 +24,15 @@ export default function DropDownCart({ cartRef }) {
   const { user } = useAuth();
 
   return (
-    <div className={cart.length ? styles.cart : styles.emptyCart} ref={cartRef}>
+    <div className={cart?.length ? styles.cart : styles.emptyCart} ref={cartRef}>
       <h2>Tu cesta</h2>
 
-      {cart.length === 0 ? (
+      {cart?.length === 0 || !cart ? (
         <p>Tu cesta está vacía.</p>
       ) : (
         <>
           <ul className={styles.cartList}>
-            {cart.map((product) => (
+            {cart?.map((product) => (
               <li
                 key={product._id || product.book_id._id}
                 className={styles.cartItem}

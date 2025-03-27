@@ -200,7 +200,7 @@ export default function Header() {
               ref={buttonCartRef}
             >
               <FontAwesomeIcon icon={faBasketShopping} />
-              {cart.length === 0 ? "" : <span>{totalQuantity}</span>}
+              {cart?.length === 0 ? "" : <span>{totalQuantity}</span>}
             </div>
           </div>
         </nav>
