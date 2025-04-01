@@ -35,17 +35,19 @@ export const AuthProvider = ({ children }) => {
             return data ? JSON.parse(data) : null;
         };
 
-        const cart = getCartFromStorage(localStorage, "cart") || getCartFromStorage(sessionStorage, "cart") || [];
+        const cart = getCartFromStorage(localStorage, "cart") || getCartFromStorage(sessionStorage, "cart") || null;
 
+        if (cart) {
 
-        const merge = await mergeCart(userId, cart)
-        if (merge?.status === "Succeeded") {
+            const merge = await mergeCart(userId, cart)
+            if (merge?.status === "Succeeded") {
 
-            const updatedCart = await getCart(userId)
+                const updatedCart = await getCart(userId)
 
-            setCart(updatedCart.data.books || []);
-        } else {
-            console.log("Error al guardar el libro:", merge.error);
+                setCart(updatedCart.data.books || []);
+            } else {
+                console.log("Error al guardar el libro:", merge?.error);
+            }
         }
     }
 

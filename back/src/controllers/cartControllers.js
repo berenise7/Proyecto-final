@@ -77,7 +77,7 @@ const getCart = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             status: "failed",
-            message: "Hubo un problema al obtener los libros.",
+            message: "Hubo un problema al obtener lel carrito.",
             error: error.message,
         });
     }

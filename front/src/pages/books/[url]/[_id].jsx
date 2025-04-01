@@ -45,15 +45,25 @@ export default function book() {
   // Número de caracteres visibles antes de "Ver más"
   const MAX_LENGTH = 300;
 
-  // Si no se encuentra el producto
-  if (!book) {
-    return <p>Producto no encontrado</p>;
-  }
-
   // Para volver a la página anterior
   const goBack = () => {
     router.back();
   };
+  
+  // Si no se encuentra el producto
+  if (!book) {
+    return (
+      <>
+        <HeaderAndSearch />
+        <div className={styles.orderContainer}>
+          <a className="back" onClick={goBack}>
+            <FontAwesomeIcon icon={faChevronLeft} /> Volver atras
+          </a>
+          <h2>Libro no encontrado</h2>
+        </div>
+      </>
+    );
+  }
 
   // Funcion para agregar a favoritos
   const handleAddToFavorites = () => {

@@ -71,6 +71,10 @@ const OrderSchema = new Schema({
         enum: ['pendiente', 'completado', 'fallido'],
         default: 'pendiente'
     },
+    created_at: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const orderModel = mongoose.model("Orders", OrderSchema, "Orders");

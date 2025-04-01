@@ -31,6 +31,9 @@ export default function AccountDropdown({
         <li>
           <Link href="/myaccount/favorites/favorites">Mis favoritos</Link>
         </li>
+        <li>
+          <Link href="/myaccount/my-orders/orders">Mis pedidos</Link>
+        </li>
 
         {user?.rol === "admin" ? (
           <li>

@@ -5,6 +5,70 @@ import { sendEmail } from "../services/emailServices.js";
 import { orderConfirmationTemplate } from "../services/templates/orderConfirmation.js";
 
 
+const getOrderAndPayment = async (req, res) => {
+    try {
+        // Se buscan por email por si antes de crear una cuenta hizo pedidos
+        const { email } = req.body;
+
+
+        const { page = 1 } = req.query;
+        const limit = 10;
+        let skip = (page - 1) * limit;
+
+        if (!email) {
+            return res.status(400).json({ message: 'Email es requerido' });
+        }
+
+        const orders = await orderModel.find({ email }).sort({ _id: -1 }).skip(skip).limit(limit)
+        const totalOrders = await orderModel.countDocuments({ email })
+
+        if (orders.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron órdenes para este email' });
+        }
+
+        res.status(200).json({
+            status: "Succeeded",
+            data: orders,
+            totalPages: Math.ceil(totalOrders / limit),
+            currentPage: Number(page),
+            error: null,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: "failed",
+            message: "Hubo un problema al obtener los pedidos.",
+            error: error.message,
+        });
+    }
+}
+const getIdOrders = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const order = await orderModel.findById(id).populate("books.book_id")
+
+        if (!order) {
+            return res.status(404).json({
+                status: "failed",
+                message: "Pedido no encontrado.",
+            });
+        }
+        // Envia el pedido por su id como respuesta
+        res.status(200).json({
+            status: "Succeeded",
+            data: order,
+            error: null,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: "failed",
+            message: "Hubo un problema al obtener los libros.",
+            error: error.message,
+        });
+    }
+}
+
 const newOrderAndPayment = async (req, res) => {
     try {
         const { orderData, paymentData, cartData, userId } = req.body;
@@ -64,6 +128,7 @@ const newOrderAndPayment = async (req, res) => {
             payment: newPayment
         });
     } catch (error) {
+        console.error(error);
         res
             .status(500)
             .json({ status: "failed", data: null, error: error.message });
@@ -71,4 +136,4 @@ const newOrderAndPayment = async (req, res) => {
 }
 
 
-export { newOrderAndPayment }
+export { newOrderAndPayment, getIdOrders, getOrderAndPayment }

@@ -30,7 +30,6 @@ export default function favorites() {
       setIsAuth(true);
       const decoded = jwtDecode(token);
       const favorites = decoded.favorites?.map((fav) => fav.book_id) || [];
-      console.log(favorites);
 
       if (favorites.length > 0) {
         getFavorites(favorites)

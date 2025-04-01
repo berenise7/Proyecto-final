@@ -247,6 +247,11 @@ export default function Header() {
                             Mis favoritos
                           </Link>
                         </p>
+                        <p>
+                          <Link href="/myaccount/my-orders/orders">
+                            Mis pedidos
+                          </Link>
+                        </p>
                       </div>
                     )}
                   </div>

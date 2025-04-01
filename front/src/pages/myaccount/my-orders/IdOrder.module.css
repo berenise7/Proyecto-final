@@ -1,0 +1,49 @@
+.orderContainer {
+    font-family: "Poppins", serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    max-width: 80%;
+    margin: 1em auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    position: relative;
+}
+
+
+.title {
+    color: #694a6d;
+    text-transform: uppercase;
+}
+
+.orderContainer p {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    text-align: center;
+}
+
+.orderContainer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.orderContainer li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f5f5f5;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.bookImage {
+    width: 60px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }

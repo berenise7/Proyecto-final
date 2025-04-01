@@ -2,7 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/user/login": "pages/user/login.js",
+  "/myaccount/my-orders/[_id]": "pages/myaccount/my-orders/[_id].js",
   "/": "pages/index.js",
-  "/cart/checkout": "pages/cart/checkout.js"
+  "/myaccount/my-orders/orders": "pages/myaccount/my-orders/orders.js"
 }
