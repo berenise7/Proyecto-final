@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
         const data = await handleLoginFetch(values.email, values.password)
         if (data.status === "Succeeded") {
             setUser(data.data);
-            setToken(data.token)
+            
             setFavorites(data.data.favorites)
             mergeCartFuntion(data?.data);
             const updatedCart = await getCart(data?.data._id)
@@ -67,9 +67,11 @@ export const AuthProvider = ({ children }) => {
             setCart(updatedCart.data?.books || []);
 
             if (values.rememberMe) {
-                localStorage.setItem("token", data.token);
+                setToken(data.token_refresh)
+                localStorage.setItem("token", data.token_refresh);
                 localStorage.setItem("user", JSON.stringify(data.data));
             } else {
+                setToken(data.token)
                 sessionStorage.setItem("token", data.token);
                 sessionStorage.setItem("user", JSON.stringify(data.data));
             }

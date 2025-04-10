@@ -21,7 +21,7 @@ const bookSchema = new Schema({
     },
     genres: {
         type: [String],
-        enum: ['Romance', "Drama",  "Terror", "Fantasía", 'Thriller'],
+        enum: ['Romance', "Drama", "Terror", "Fantasía", 'Thriller'],
         required: true,
         description: "Generos del libro"
     },
@@ -71,11 +71,6 @@ const bookSchema = new Schema({
         type: Boolean,
         description: "Es uno de los libros recomendados"
     },
-    ratings: {
-        type: [Number],
-        enum: [1, 2, 3, 4, 5]
-    },
-
     url: {
         type: String,
         description: "Url del libro"

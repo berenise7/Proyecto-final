@@ -49,7 +49,7 @@ export default function book() {
   const goBack = () => {
     router.back();
   };
-  
+
   // Si no se encuentra el producto
   if (!book) {
     return (
@@ -85,15 +85,7 @@ export default function book() {
     setIsFavorite(!isFavorite); // Cambiar el estado del favorito
   };
 
-  // Para calcular la valoracion total
-  const calculateAverageRating = (ratings) => {
-    if (ratings.length === 0) return "Sin valoraciones";
-    const sum = ratings.reduce((acc, rating) => acc + rating, 0);
-    console.log(sum);
 
-    return (sum / ratings.length).toFixed(1);
-  };
-  const averageRating = calculateAverageRating(book.ratings);
 
   return (
     <div>
@@ -114,18 +106,6 @@ export default function book() {
             <p className={styles.isbn}>
               {book.editorial} - {book.isbn}
             </p>
-            {/* ⭐ Sección de Valoraciones */}
-            {/* Si son preventa o nuevos no se muestra las valoraciones */}
-            {book.isPresale == false &&
-              book.isNewBook == false &&
-              book.ratings.length > 0 && (
-                <div className={styles.ratings}>
-                  <StarRating rating={averageRating} />
-                  <span className={styles.ratingText}>
-                    ({book.ratings.length} valoraciones)
-                  </span>
-                </div>
-              )}
             {/* 📖 Descripción */}
             <div>
               <p className={styles.description}>

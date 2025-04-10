@@ -88,7 +88,7 @@ export default function UserLoginFormik() {
             <div className={styles.link}>
               <p>
                 ¿Olvidaste tu contraseña?{" "}
-                <Link href="/user/register">Recordar contraseña</Link>
+                <Link href="/user/forgot-password">Recordar contraseña</Link>
               </p>
               <p>
                 ¿No tienes una cuenta?{" "}

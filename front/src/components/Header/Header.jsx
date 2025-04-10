@@ -54,12 +54,14 @@ export default function Header() {
     if (!isAccountDropdownOpen && buttonAccountDropdownRef.current) {
       const rect = buttonAccountDropdownRef.current.getBoundingClientRect();
       setDropdownPosition({
-        top: rect.bottom + window.scrollY, // Justo debajo del botón
-        left: rect.left + window.scrollX, // Alineado con "Mi cuenta"
+        top: rect.bottom , // Justo debajo del botón
+        left: rect.left, // Alineado con "Mi cuenta"
       });
     }
     setIsAccountDropdownOpen((prevState) => !prevState);
   };
+
+
 
   // Funcion para alternar el estado del carrito
   const onCartToggle = () => {
@@ -102,8 +104,8 @@ export default function Header() {
         setIsCartOpen(false);
       }
       if (
-        cartRef.current &&
-        !cartRef.current.contains(event.target) &&
+        accountDropDownRef.current &&
+        !accountDropDownRef.current.contains(event.target) &&
         buttonAccountDropdownRef.current &&
         !buttonAccountDropdownRef.current.contains(event.target)
       ) {
@@ -278,6 +280,9 @@ export default function Header() {
                       <Link href="/admin/edit-books/all-books-edits">
                         Editar libros
                       </Link>
+                    </p>
+                    <p>
+                      <Link href="/admin/users/users">Editar usuarios</Link>
                     </p>
                   </div>
                 </li>

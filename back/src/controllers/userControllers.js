@@ -1,16 +1,18 @@
 import fs from 'fs'
 import cloudinary from "../config/cloudinary.js";
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import usersDB from '../mocks/usersDB.js';
 import userModel from '../models/User.js';
 import { generateToken } from '../core/utils/utils.js';
+import { sendEmail } from "../services/emailServices.js";
 
 
 
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        
+
         // Buscar si esxites el email en la base de datos
         const user = await userModel.findOne({ email: email })
         if (user) {
@@ -59,6 +61,89 @@ const login = async (req, res) => {
     }
 }
 
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const user = await userModel.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: `No se encontró el usuario` });
+        }
+
+        // Token para la restauracion
+        const resetToken = generateToken({ _id: user._id }, false)
+
+        const resetLink = `http://localhost:3000/user/reset-password?token=${resetToken}`
+
+        const emailContent = `
+        <h3>Recuperación de contraseña</h3>
+        <p>Hola ${user.name},</p>
+        <p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
+        <a href="${resetLink}">${resetLink}</a>
+        <p>Este enlace expirará en 15 minutos.</p>
+        `;
+
+        await sendEmail(user.email, 'Restablece tu contraseña en Literary Haven', emailContent);
+
+        res.status(200).json({ message: 'Se ha enviado un correo para restaurar la contraseña' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al enviar el correo', error: error.message });
+    }
+}
+
+const resetPassword = async (req, res) => {
+    try {
+        const { resetToken, newPassword, confirmPassword } = req.body;
+
+
+        if (!resetToken) {
+            return res.status(400).json({ message: 'Token no proporcionado' });
+        }
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ message: 'Las contraseñas no coinciden' });
+        }
+
+        // Verificamos el resetRoken
+        const decoded = jwt.verify(resetToken, process.env.TOKEN_SECRET);
+
+        const userId = decoded._id;
+
+        const user = await userModel.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        user.password = hashedPassword;
+        await user.save()
+
+        const payload = {
+            _id: user._id,
+            name: user.name,
+            lastname: user.lastname,
+            phone: user.phone,
+            address: user.address,
+            email: user.email,
+            birthday: user.birthday,
+            rol: user.rol,
+            favoritesGenres: user.favoritesGenres,
+            photo: user.photo,
+            favorites: user.favorites,
+        }
+        const token = generateToken(payload, false);
+
+        res.status(200).json({
+            status: "Succeeded",
+            data: user,
+            token: token,
+            error: null,
+        });
+    } catch (error) {
+        return res.status(400).json({ message: 'Token inválido o expirado', error: error.message });
+    }
+}
 
 const registerUser = async (req, res) => {
     try {
@@ -206,9 +291,136 @@ const editProfile = async (req, res) => {
 
 }
 
+const getUsers = async (req, res) => {
+    try {
+        if (!req.user || req.user.rol !== "admin") {
+            return res.status(403).json({ status: "Error", message: "Acceso denegado. No eres administrador." });
+        }
+
+        let { page = 1 } = req.query;
+        const limit = 10;
+        let skip = (page - 1) * limit;
+
+        const users = await userModel.find({}, '-password').skip(skip).limit(limit)
+        const totalUsers = await userModel.countDocuments({})
+        res.status(200).json({
+            status: "Succeeded",
+            data: users,
+            totalPages: Math.ceil(totalUsers / limit), //total de las paginas
+            currentPage: Number(page),
+            error: null,
+        });
+    } catch (error) {
+        res.status(500).json({ status: "failed", data: null, error: error.message });
+    }
+}
+
+const updateUserRole = async (req, res) => {
+    try {
+        // Si no hay usuario o no es admin lanza error
+        if (!req.user || req.user.rol !== "admin") {
+            return res.status(403).json({ status: "Error", message: "Acceso denegado. No eres administrador." });
+        }
+
+        const { userId, newRole } = req.body;
+
+        // Verifica si esxite el usuario
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+
+        // Verifica si el rol es valido
+        const validRoles = ["admin", "user"]
+        if (!validRoles.includes(newRole)) {
+            return res.status(400).json({ message: "Rol no válido" });
+        }
+
+        // Actualizamos el rol y lo guardamos
+        user.rol = newRole;
+        await user.save()
+
+        // 
+        res.status(200).json({
+            status: "Succeeded",
+            data: user,
+            error: null,
+        });
+    } catch (error) {
+        res.status(500).json({ status: "failed", data: null, error: error.message });
+    }
+}
+
+const deleteUser = async (req, res) => {
+    try {
+        if (!req.user || req.user.rol !== "admin") {
+            return res.status(403).json({ status: "Error", message: "Acceso denegado. No eres administrador." });
+        }
+        const { userId } = req.body
+
+        // Verifica si esxite el usuario
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+
+        await userModel.findByIdAndDelete(userId)
+        res.status(200).json({
+            status: "Succeeded",
+            data: null,
+            error: null
+        })
+    } catch (error) {
+        res
+            .status(500)
+            .json({ status: "failed", data: null, error: error.message });
+    }
+}
+
+const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+};
+
+const getSearchUser = async (req, res) => {
+    try {
+        if (!req.user || req.user.rol !== "admin") {
+            return res.status(403).json({ status: "Error", message: "Acceso denegado. No eres administrador." });
+        }
+
+        const { query } = req.query;
+
+        if (!query) {
+            return res.status(400).json({
+                status: "Failed",
+                data: null,
+                error: "Query is required",
+            })
+        }
+
+        // Para eliminar las tildes y poner en minnusculas
+        const normalizedQuery = removeAccents(query);
+
+        const usersRegexSearch = await userModel.find({
+            $or: [
+                { name: { $regex: normalizedQuery, $options: "i" } },
+                { email: { $regex: normalizedQuery, $options: "i" } },
+                { lastname: { $regex: normalizedQuery, $options: "i" } }
+            ]
+        })
+
+        res.status(200).json({
+            status: "Succeeded",
+            data: usersRegexSearch,
+            error: null,
+        });
+    } catch (error) {
+        res.status(500).json({ status: "failed", data: null, error: error.message });
+    }
+}
+
 const addFavoriteBook = async (req, res) => {
     try {
-      
+
         const { userId, bookId } = req.body;
 
         // Verifica si esxiste el usuario
@@ -241,6 +453,7 @@ const addFavoriteBook = async (req, res) => {
         res.status(500).json({ status: "failed", data: null, error: error.message });
     }
 }
+
 
 const removeFavoriteBook = async (req, res) => {
     try {
@@ -311,5 +524,5 @@ const loadDataUsers = async (req, res) => {
 
 
 export {
-    loadDataUsers, login, editProfile, registerUser, addFavoriteBook, removeFavoriteBook
+    loadDataUsers, login, editProfile, registerUser, addFavoriteBook, removeFavoriteBook, getUsers, getSearchUser, updateUserRole, deleteUser, forgotPassword, resetPassword
 }

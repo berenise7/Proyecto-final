@@ -7,7 +7,12 @@ const authMiddleware = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+        let decoded;
+        try {
+            decoded = jwt.verify(token, process.env.TOKEN_SECRET); // Primero intenta con TOKEN_SECRET
+        } catch (error) {
+            decoded = jwt.verify(token, process.env.TOKEN_SECRET_REFRESH); // Si falla, prueba con el refresh
+        }
         req.user = decoded;
         next();
     } catch (error) {

@@ -167,7 +167,7 @@ const getSearchBooks = async (req, res) => {
         res.status(500).json({
             status: "Failed",
             data: null,
-            error: "Error searching books",
+            error: error.message,
         });
     }
 }
@@ -345,7 +345,6 @@ const loadDataBooks = async (req, res) => {
                 isPresale: book.isPresale,
                 bestSeller: book.bestSeller,
                 isRecommendation: book.isRecommendation,
-                ratings: Array.isArray(book.ratings) && book.ratings.length > 0 ? book.ratings : [1], // Validación aquí
                 url: book.url
             });
             await newBook.save()

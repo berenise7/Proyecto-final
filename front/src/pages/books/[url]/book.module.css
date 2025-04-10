@@ -85,24 +85,6 @@
     white-space: pre-line;
 }
 
-.ratings {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.stars {
-    color: #f5c518;
-    /* Color dorado tipo estrella */
-    font-size: 20px;
-}
-
-.ratingText {
-    font-size: 18px;
-    font-weight: bold;
-}
-
 .button {
     padding: 15px 50px;
     background-color: #694a6d;
@@ -158,9 +140,7 @@
         width: 100%;
     }
 
-    .ratings{
-        justify-content: center;
-    }
+   
     .price {
         font-size: 2em;
     }

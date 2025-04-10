@@ -149,7 +149,7 @@
 
 .overlayMenuAccount {
     font-family: "Poppins", serif;
-    position: absolute;
+    position: fixed;
     width: 15%;
     max-height: 0;
     background-color: white;
@@ -167,7 +167,7 @@
 .overlayMenuAccount.open {
     opacity: 1;
     transform: translateY(0);
-    max-height: 400px;
+    max-height: 500px;
     overflow: visible;
 }
 

@@ -9,21 +9,20 @@ const getOrderAndPayment = async (req, res) => {
     try {
         // Se buscan por email por si antes de crear una cuenta hizo pedidos
         const { email } = req.body;
-
+        if (!email) {
+            return res.status(400).json({ message: 'Email es requerido' });
+        }
 
         const { page = 1 } = req.query;
         const limit = 10;
         let skip = (page - 1) * limit;
 
-        if (!email) {
-            return res.status(400).json({ message: 'Email es requerido' });
-        }
 
         const orders = await orderModel.find({ email }).sort({ _id: -1 }).skip(skip).limit(limit)
         const totalOrders = await orderModel.countDocuments({ email })
 
         if (orders.length === 0) {
-            return res.status(404).json({ message: 'No se encontraron órdenes para este email' });
+            return res.status(404).json({ message: 'No se encontraron pedidos para este email' });
         }
 
         res.status(200).json({

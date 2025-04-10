@@ -36,20 +36,22 @@ export default function AccountDropdown({
         </li>
 
         {user?.rol === "admin" ? (
+          <>
           <li>
             <Link href="/admin/add-book/add-book">Añadir nuevo libro</Link>
           </li>
-        ) : (
-          ""
-        )}
-        {user?.rol === "admin" ? (
           <li>
             <Link href="/admin/edit-books/all-books-edits">Editar libros</Link>
           </li>
+          <li>
+          <Link href="/admin/users/users">Editar usuarios</Link>
+          </li>
+          </>
         ) : (
           ""
         )}
-        <hr/>
+      
+        <hr />
         <li>
           <a onClick={handleLogout}>Cerrar sesión</a>
         </li>

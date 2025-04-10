@@ -1,0 +1,249 @@
+.usersContainer {
+    font-family: "Poppins", serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    max-width: 80%;
+    margin: 1em auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    position: relative;
+}
+
+.searchContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.searchInput {
+    width: 40rem;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.searchInput:active {
+    border: 1px solid #694a6d;
+}
+
+.searchIcon {
+    margin-left: -30px;
+    color: #694a6d;
+    cursor: pointer;
+}
+
+
+.userTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.userTable th,
+.userTable td {
+
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.userTable td a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.userTable th {
+    background-color: #694a6d;
+    color: white;
+    text-transform: uppercase;
+}
+
+.userTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.userTable tr:hover {
+    background-color: #f2eadf;
+}
+
+.roleSelect {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.roleSelect:focus {
+    border-color: #694a6d;
+    box-shadow: 0 0 0 2px rgba(105, 74, 109, 0.2);
+    outline: none;
+}
+
+.removeBtn {
+    background: #694a6d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.removeBtn:hover {
+    background: #5c3e56;
+}
+
+.noUsers {
+    text-align: center;
+    font-size: 1rem;
+    color: #694a6d;
+    padding: 20px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.paginationButton {
+    background-color: #694a6d;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.paginationButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.paginationButton:hover:not(:disabled) {
+    background-color: #5c3e56;
+}
+
+.pageInfo {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #694a6d;
+}
+
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+}
+
+.userId {
+    color: #888;
+    font-size: 0.9rem;
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.userName {
+    font-weight: bold;
+    color: #694a6d;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #694a6d;
+}
+
+.closeButton:hover {
+    color: #5c3e56;
+}
+
+.modalActions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.confirmButton {
+    background-color: #694a6d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease-in-out;
+}
+
+.confirmButton:hover {
+    background: #5c3e56;
+}
+
+.successModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.successContent {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.successContent button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #694a6d;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}

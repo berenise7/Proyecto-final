@@ -49,9 +49,7 @@ export default function favorites() {
     }
   }, [router, books]);
 
-  if (!isAuth) {
-    return <p>Cargando...</p>; // Muestra un mensaje mientras se verifica el login
-  }
+ 
 
   // Para remplazar los espacios por -
   const formatTitleForURL = (title) => {

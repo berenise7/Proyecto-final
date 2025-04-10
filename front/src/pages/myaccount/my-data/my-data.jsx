@@ -139,7 +139,6 @@ export default function MyData() {
       );
       return;
     } else if (showPasswordFields && passwordState.newPassword) {
-      
       // Si newPassword no cumple los requisitos da error
       if (
         !/(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}/.test(
@@ -169,11 +168,12 @@ export default function MyData() {
 
     if (response.status === "Succeeded") {
       setUser(response.data.data);
-      setToken(response.data.token);
       if (localStorage.getItem("token")) {
-        localStorage.setItem("token", response.data.token);
+        setToken(response.data.token_refresh);
+        localStorage.setItem("token", response.data.token_refresh);
         localStorage.setItem("user", JSON.stringify(response.data.data));
       } else {
+        setToken(response.data.token);
         sessionStorage.setItem("token", response.data.token);
         sessionStorage.setItem("user", JSON.stringify(response.data.data));
       }

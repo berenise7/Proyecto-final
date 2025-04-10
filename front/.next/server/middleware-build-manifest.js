@@ -10,6 +10,11 @@ self.__BUILD_MANIFEST = {
   "rootMainFiles": [],
   "rootMainFilesTree": {},
   "pages": {
+    "/": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/index.js"
+    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -20,15 +25,20 @@ self.__BUILD_MANIFEST = {
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/myaccount/my-orders/[_id]": [
+    "/user/forgot-password": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/myaccount/my-orders/[_id].js"
+      "static/chunks/pages/user/forgot-password.js"
     ],
-    "/myaccount/my-orders/orders": [
+    "/user/login": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/myaccount/my-orders/orders.js"
+      "static/chunks/pages/user/login.js"
+    ],
+    "/user/reset-password": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/user/reset-password.js"
     ]
   },
   "ampFirstPages": []
