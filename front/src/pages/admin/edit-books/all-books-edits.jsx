@@ -44,6 +44,7 @@ export default function allBooksEdits() {
     fetchBooks();
   }, [user, router, sortBy, currentPage, searchQuery]);
 
+  // Función para volver a la página anterior
   const goBack = () => {
     router.back();
   };

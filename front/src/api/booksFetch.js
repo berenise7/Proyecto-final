@@ -25,9 +25,9 @@ export const getBook = async (_id) => {
     return book
 };
 
-export const getFavorites = async (favorites) => {
+export const getFavorites = async (favorites, page = 1) => {
     try {
-        const response = await fetch('http://localhost:9000/books/getFavorites', {
+        const response = await fetch(`http://localhost:9000/books/getFavorites?page=${page}`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",

@@ -21,6 +21,9 @@ export default function favorites() {
 
   const [isAuth, setIsAuth] = useState(false);
   const [books, setBooks] = useState([]);
+  const [sortBy, setSortBy] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
 
   useEffect(() => {
@@ -32,10 +35,11 @@ export default function favorites() {
       const favorites = decoded.favorites?.map((fav) => fav.book_id) || [];
 
       if (favorites.length > 0) {
-        getFavorites(favorites)
+        getFavorites(favorites, currentPage)
           .then((data) => {
             if (data && Array.isArray(data.data)) {
               setBooks(data.data); // Solo actualiza `books` si es un arreglo
+              setTotalPages(data.totalPages);
             } else {
               console.error("La respuesta de la API no es un arreglo");
             }
@@ -49,8 +53,6 @@ export default function favorites() {
     }
   }, [router, books]);
 
- 
-
   // Para remplazar los espacios por -
   const formatTitleForURL = (title) => {
     return title.toLowerCase().split(" ").join("-");
@@ -58,6 +60,23 @@ export default function favorites() {
 
   const goBack = () => {
     router.back();
+  };
+
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const goToPrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
   };
   return (
     <>
@@ -67,6 +86,19 @@ export default function favorites() {
           <FontAwesomeIcon icon={faChevronLeft} /> Volver atras
         </a>
         <h2>Mis favoritos</h2>
+
+        <div className={styles.pagination}>
+          <button onClick={goToPrevPage} disabled={currentPage === 1}>
+            Anterior
+          </button>
+          <span>
+            Página {currentPage} de {totalPages}
+          </span>
+          <button onClick={goToNextPage} disabled={currentPage === totalPages}>
+            Siguiente
+          </button>
+        </div>
+
         {books.length === 0 ? (
           <p>No tienes favoritos aún.</p>
         ) : (
@@ -115,6 +147,17 @@ export default function favorites() {
             ))}
           </div>
         )}
+        <div className={styles.pagination}>
+          <button onClick={goToPrevPage} disabled={currentPage === 1}>
+            Anterior
+          </button>
+          <span>
+            Página {currentPage} de {totalPages}
+          </span>
+          <button onClick={goToNextPage} disabled={currentPage === totalPages}>
+            Siguiente
+          </button>
+        </div>
       </div>
     </>
   );

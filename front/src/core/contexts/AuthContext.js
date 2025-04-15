@@ -12,7 +12,7 @@ export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
     const { setFavorites } = useFavorites();
-    const { setCart, cart } = useCart()
+    const { setCart} = useCart()
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const [loginError, setLoginError] = useState(null);
@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
 
     }, []);
 
+    // Funcion  para juntar el carro de localStorage con el de la base de datos
     const mergeCartFuntion = async (user) => {
         const userId = user._id;
         const getCartFromStorage = (storage, key) => {
@@ -59,7 +60,7 @@ export const AuthProvider = ({ children }) => {
         const data = await handleLoginFetch(values.email, values.password)
         if (data.status === "Succeeded") {
             setUser(data.data);
-            
+
             setFavorites(data.data.favorites)
             mergeCartFuntion(data?.data);
             const updatedCart = await getCart(data?.data._id)
@@ -86,7 +87,7 @@ export const AuthProvider = ({ children }) => {
         setSubmitting(false);
     };
 
-
+    // Funcion para cerrar sesion
     const handleLogout = () => {
         setUser(null);
         setToken(null)

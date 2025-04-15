@@ -114,15 +114,24 @@ const getIdBooks = async (req, res) => {
 
 const getAllBooksByIds = async (req, res) => {
     try {
+        const { page = 1 } = req.query;
+        const limit = 21;
+        let skip = (page - 1) * limit;
+
         const { bookIds } = req.body;
         if (!bookIds || bookIds.length === 0) {
             return res.status(400).json({ message: "No hay libros favoritos" });
         }
 
-        const favoriteBooks = await bookModel.find({ _id: { $in: bookIds } })
+        const favoriteBooks = await bookModel.find({ _id: { $in: bookIds } }).skip(skip).limit(limit);
+
+        const totalFavorites = await bookModel.countDocuments({ _id: { $in: bookIds } })
+
         res.status(200).json({
             status: "Succeeded",
             data: favoriteBooks,
+            totalPages: Math.ceil(totalFavorites / limit),
+            currentPage: Number(page),
             error: null,
         });
     } catch (error) {
