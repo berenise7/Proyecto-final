@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "@/components/Home/CardsMenu.module.css";
-import { getAllBooks } from "@/api/booksFetch";
+import { getBooksFilter } from "@/api/booksFetch";
 import { useCart } from "@/core/contexts/CartContext";
 import { useFavorites } from "@/core/contexts/FavoritesContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,13 +22,16 @@ export default function Recommendations() {
 
   useEffect(() => {
     const fetchBooks = async () => {
-      const booksData = await getAllBooks();
+      const filters = {
+        isRecommendation: true,
+      };
+      const booksData = await getBooksFilter(filters);
+      console.log('isRecommendation', booksData);
       if (booksData) {
         // Actualiza el estado con los libros obtenidos
         setBooks(booksData.data);
       } else {
         console.error("La respuesta no es un array", booksData);
-        setError("No se pudieron cargar los libros. Intenta más tarde.");
       }
     };
     fetchBooks();
@@ -65,11 +68,9 @@ export default function Recommendations() {
     };
   }, []);
 
-  // Muestra solo los best sellers
-  const filteredProducts = books.filter((book) => book.isRecommendation);
-
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-  const displayedProducts = filteredProducts.slice(
+  // Muestra solo los recomendados
+  const totalPages = Math.ceil(books.length / itemsPerPage);
+  const displayedProducts = books.slice(
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );

@@ -2,6 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/myaccount/favorites/favorites": "pages/myaccount/favorites/favorites.js",
-  "/books/all-books": "pages/books/all-books.js"
+  "/": "pages/index.js"
 }

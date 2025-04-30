@@ -75,7 +75,36 @@ const getBooks = async (req, res) => {
     }
 };
 
+const getBooksFilter = async (req, res) => {
+    try {
+        const { bestSeller, isNewBook, isRecommendation } = req.query;
 
+        const filter = {};
+        if (bestSeller !== undefined) {
+            filter.bestSeller = bestSeller === "true"
+        }
+        if (isNewBook !== undefined) {
+            filter.isNewBook = isNewBook === "true"
+        }
+        if (isRecommendation !== undefined) {
+            filter.isRecommendation = isRecommendation === "true"
+        }
+
+
+        const books = await bookModel.find(filter)
+        res.status(200).json({
+            status: "Succeeded",
+            data: books,
+            error: null,
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: "failed",
+            message: "Hubo un problema al obtener los libros.",
+            error: error.message,
+        });
+    }
+}
 
 
 // GET book por id
@@ -367,5 +396,5 @@ const loadDataBooks = async (req, res) => {
 };
 
 export {
-    loadDataBooks, getBooks, getIdBooks, createBook, getSearchBooks, updateBook, deleteBook, getAllBooksByIds
+    loadDataBooks, getBooks, getBooksFilter, getIdBooks, createBook, getSearchBooks, updateBook, deleteBook, getAllBooksByIds
 }

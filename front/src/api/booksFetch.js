@@ -16,6 +16,22 @@ export const getAllBooks = async (sortBy = "", page = 1, genre = "") => {
     }
 };
 
+// Peticion para obtener los libros segun el filtro(bestSeller, isPresale o isRecommendation)
+export const getBooksFilter = async (filter) => {
+    try {
+        const query = new URLSearchParams(filter).toString();
+        const response = await fetch(`http://localhost:9000/books/filter?${query}`)
+
+        const data = await response.json();
+        if (response.ok) {
+            return data;
+        } else {
+            console.error("mensaje de error:", data.message);
+        }
+    } catch (error) {
+        return { error: "Ocurrió un error inesperado" };
+    }
+}
 
 // Peticion para obtener un libro por id
 export const getBook = async (_id) => {
