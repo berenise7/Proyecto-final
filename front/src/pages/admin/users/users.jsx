@@ -15,6 +15,7 @@ import {
   updateNewRole,
 } from "@/api/usersFetch";
 import styles from "./users.module.css";
+import Footer from "@/components/Footer/Footer";
 
 export default function Users() {
   const router = useRouter();
@@ -207,7 +208,7 @@ export default function Users() {
           </button>
         </div>
       </div>
-
+      <Footer />
       {isModalOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>

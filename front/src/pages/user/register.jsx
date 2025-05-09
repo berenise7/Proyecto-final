@@ -11,6 +11,7 @@ import {
 import styles from "./register.module.css";
 import { registerUser } from "@/api/usersFetch";
 import { useAuth } from "@/core/contexts/AuthContext";
+import Footer from "@/components/Footer/Footer";
 
 export default function register() {
   const router = useRouter();
@@ -388,6 +389,7 @@ export default function register() {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

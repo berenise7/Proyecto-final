@@ -10,6 +10,7 @@ import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { getBook } from "@/api/booksFetch";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
+import Footer from "@/components/Footer/Footer";
 
 export default function book() {
   const { addToCart, formatPrice } = useCart();
@@ -85,8 +86,6 @@ export default function book() {
     setIsFavorite(!isFavorite); // Cambiar el estado del favorito
   };
 
-
-
   return (
     <div>
       <HeaderAndSearch />
@@ -137,6 +136,7 @@ export default function book() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

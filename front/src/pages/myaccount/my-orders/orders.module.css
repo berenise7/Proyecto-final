@@ -43,6 +43,7 @@
 
 .orderTable tr:hover {
     background-color: #f2eadf;
+    cursor: pointer;
 }
 
 .noOrders {

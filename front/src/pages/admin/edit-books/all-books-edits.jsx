@@ -12,6 +12,7 @@ import {
 import { useRouter } from "next/router";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 import { useAuth } from "@/core/contexts/AuthContext";
+import Footer from "@/components/Footer/Footer";
 
 export default function allBooksEdits() {
   const { user } = useAuth();
@@ -194,6 +195,7 @@ export default function allBooksEdits() {
           </button>
         </div>
       </div>
+      <Footer/>
 
       {isModalOpen && (
         <div className={styles.modalOverlay}>

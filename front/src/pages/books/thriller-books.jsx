@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
+import Footer from "@/components/Footer/Footer";
 
 export default function thrillerBooks() {
   const router = useRouter();
@@ -175,6 +176,7 @@ export default function thrillerBooks() {
           </button>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

@@ -1,0 +1,62 @@
+.footer {
+    background-color: #f2eadf;
+    color: #59485b;
+    font-family: "Poppins", serif;
+    padding: 1em 3em 1em;
+    margin-top: 4em;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.footerTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logoSection {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.logoSection img {
+    height: 100px;
+}
+
+.logoSection h2 {
+    font-size: 1.5em;
+    font-weight: 700;
+    margin: 0;
+    color: #59485b;
+}
+
+.linksSection {
+    display: flex;
+    gap: 3em;
+    flex-wrap: wrap;
+}
+
+.linksSection h4 {
+    font-size: 1em;
+    margin-bottom: 0.5em;
+}
+
+.linksSection a {
+    display: block;
+    color: #59485b;
+    text-decoration: none;
+    margin-bottom: 0.3em;
+    transition: color 0.3s ease;
+    font-size: 0.95em;
+}
+
+.linksSection a:hover {
+    color: #5c3e56;
+}
+
+.footerBottom {
+    text-align: center;
+    margin-top: 1.5em;
+    font-size: 0.85em;
+}

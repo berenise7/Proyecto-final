@@ -14,6 +14,7 @@ import {
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
+import Footer from "@/components/Footer/Footer";
 
 export default function favorites() {
   const { addToCart } = useCart();
@@ -159,6 +160,7 @@ export default function favorites() {
           </button>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

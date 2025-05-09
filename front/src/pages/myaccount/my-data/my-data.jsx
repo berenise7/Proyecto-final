@@ -10,6 +10,7 @@ import { useAuth } from "@/core/contexts/AuthContext";
 import styles from "./myData.module.css";
 import { updateProfileFetch } from "@/api/usersFetch";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
+import Footer from "@/components/Footer/Footer";
 
 export default function MyData() {
   const { user, setUser, setToken } = useAuth();
@@ -448,6 +449,7 @@ export default function MyData() {
       ) : (
         <p>Cargando...</p>
       )}
+      <Footer />
     </>
   );
 }

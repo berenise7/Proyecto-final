@@ -5,6 +5,7 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import styles from "./IdOrder.module.css";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 import { getOrder } from "@/api/orderFetch";
+import Footer from "@/components/Footer/Footer";
 
 export default function IdOrder() {
   const router = useRouter();
@@ -64,10 +65,18 @@ export default function IdOrder() {
         <ul>
           {order.books.map((book) => (
             <li key={book.book_id._id}>
-             <img src={book.book_id.image} alt={book.book_id.title} className={styles.bookImage} />
+              <img
+                src={book.book_id.image}
+                alt={book.book_id.title}
+                className={styles.bookImage}
+              />
               <div>
-                <p><strong>{book.book_id.title}</strong></p>
-                <p>{book.price.toFixed(2)} € x {book.quantity}</p>
+                <p>
+                  <strong>{book.book_id.title}</strong>
+                </p>
+                <p>
+                  {book.price.toFixed(2)} € x {book.quantity}
+                </p>
               </div>
             </li>
           ))}
@@ -82,6 +91,7 @@ export default function IdOrder() {
           <strong>Teléfono:</strong> {order.phone}
         </p>
       </div>
+      <Footer />
     </>
   );
 }

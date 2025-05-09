@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { getBook } from "@/api/booksFetch";
-import reading from "@/api/reading";
 import styles from "./reading.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -21,7 +20,8 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import { PiPepperFill, PiPepper } from "react-icons/pi";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
-import { createJournal, getJournal } from "@/api/journalFetch";
+import { createJournal, getJournal, updateJournal } from "@/api/journalFetch";
+import Footer from "@/components/Footer/Footer";
 
 export default function readingJournal() {
   const router = useRouter();
@@ -58,31 +58,32 @@ export default function readingJournal() {
     (localStorage.getItem("user") || sessionStorage.getItem("user"));
   const user = storedUser ? JSON.parse(storedUser) : null;
 
-  // Buscar el producto por su id
   useEffect(() => {
-    if (!_id || !user) return;
     if (!user) {
       router.push("/user/login");
     }
+  }, []);
+  // Buscar el producto por su id
+  useEffect(() => {
+    if (!_id || !user) return;
+
     const loadBook = async () => {
       const bookAux = await getBook(_id);
       setBook(bookAux.data);
 
       const journalAux = await getJournal(user._id, _id);
-      console.log(journalAux);
 
       if (journalAux) {
-        setReadingEntry(journalAux);
-        console.log(readingEntry);
+        setReadingEntry(journalAux.data);
 
-        setFormData(journalAux);
+        setFormData(journalAux.data);
         setRatings({
-          rating: journalAux.rating || 0,
-          romantic: journalAux.romantic || 0,
-          happy: journalAux.happy || 0,
-          sad: journalAux.sad || 0,
-          spicy: journalAux.spicy || 0,
-          plot: journalAux.plot || 0,
+          rating: journalAux?.data?.rating || 0,
+          romantic: journalAux?.data?.romantic || 0,
+          happy: journalAux?.data?.happy || 0,
+          sad: journalAux?.data?.sad || 0,
+          spicy: journalAux?.data?.spicy || 0,
+          plot: journalAux?.data?.plot || 0,
         });
       }
     };
@@ -132,28 +133,45 @@ export default function readingJournal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formDataToSend = new FormData();
-    formDataToSend.append("bookId", _id);
-    formDataToSend.append("userId", user._id);
 
-    // Añadimos el formData
-    Object.keys(formData).forEach((key) => {
-      if (Array.isArray(formData[key])) {
-        formData[key].forEach((value) => {
-          formDataToSend.append(key, value);
-        });
-      } else {
-        formDataToSend.append(key, formData[key]);
-      }
-    });
+    const baseData = {
+      bookId: _id,
+      userId: user._id,
+      ...formData,
+    };
+    console.log(baseData);
+    if (readingEntry) {
+      Object.keys(baseData).forEach((key) => {
+        formDataToSend.set(key, baseData[key]);
+      });
 
-    // Añadimos los ratings
-    Object.keys(ratings).forEach((key) => {
-      formDataToSend.append(key, ratings[key]);
-    });
+      Object.keys(ratings).forEach((key) => {
+        formDataToSend.set(key, ratings[key]);
+      });
+    } else {
+      // Añadimos el formData
+      Object.keys(baseData).forEach((key) => {
+        if (Array.isArray(baseData[key])) {
+          baseData[key].forEach((value) => {
+            formDataToSend.append(key, value);
+          });
+        } else {
+          formDataToSend.append(key, baseData[key]);
+        }
+      });
 
-    const result = await createJournal(formDataToSend); // Asegúrate que createJournal acepte FormData
+      // Añadimos los ratings
+      Object.keys(ratings).forEach((key) => {
+        formDataToSend.append(key, ratings[key]);
+      });
+    }
+
+    const result = readingEntry
+      ? await updateJournal(formData?._id, formDataToSend)
+      : await createJournal(formDataToSend); // Asegúrate que createJournal acepte FormData
+    console.log(result);
+
     if (result.error) {
       alert("Error: " + result.error);
     } else {
@@ -181,15 +199,15 @@ export default function readingJournal() {
 
     const journalAux = await getJournal(user._id, _id);
     if (journalAux) {
-      setReadingEntry(journalAux);
-      setFormData(journalAux);
+      setReadingEntry(journalAux.data);
+      setFormData(journalAux.data);
       setRatings({
-        rating: journalAux.rating || 0,
-        romantic: journalAux.romantic || 0,
-        happy: journalAux.happy || 0,
-        sad: journalAux.sad || 0,
-        spicy: journalAux.spicy || 0,
-        plot: journalAux.plot || 0,
+        rating: journalAux.data.rating || 0,
+        romantic: journalAux.data.romantic || 0,
+        happy: journalAux.data.happy || 0,
+        sad: journalAux.data.sad || 0,
+        spicy: journalAux.data.spicy || 0,
+        plot: journalAux.data.plot || 0,
       });
     }
   };
@@ -207,16 +225,8 @@ export default function readingJournal() {
             <div>
               <div className={styles.imageContainer}>
                 <img
-                  src={
-                    readingEntry && readingEntry.data?.image
-                      ? readingEntry.data?.image
-                      : book?.image
-                  }
-                  alt={
-                    readingEntry && readingEntry.data?.image
-                      ? readingEntry.data?.image
-                      : book?.title
-                  }
+                  src={formData?.image || book?.image}
+                  alt={formData?.image || book?.title}
                   className={styles.image}
                 />
               </div>
@@ -226,12 +236,7 @@ export default function readingJournal() {
                   <FontAwesomeIcon
                     key={index}
                     icon={
-                      index + 1 <=
-                      (readingEntry && readingEntry.data?.rating
-                        ? readingEntry.data?.rating
-                        : ratings.rating)
-                        ? faStarSolid
-                        : faStarRegular
+                      index + 1 <= ratings.rating ? faStarSolid : faStarRegular
                     } // Si el índice es menor que la calificación, usa la estrella rellena
                     onClick={() => handleStarClick("rating")(index)} // Actualiza el rating al hacer clic
                     style={{ cursor: "pointer", margin: "0 5px" }}
@@ -245,22 +250,14 @@ export default function readingJournal() {
               <input
                 type="text"
                 id="title"
-                value={
-                  readingEntry && readingEntry.data?.title
-                    ? readingEntry.data?.title
-                    : book?.title
-                }
+                value={formData?.title || book?.title}
                 readOnly
               />
               <label htmlFor="author">Autor</label>
               <input
                 type="text"
                 id="author"
-                value={
-                  readingEntry && readingEntry.data?.author
-                    ? readingEntry.data?.author
-                    : book?.author
-                }
+                value={formData?.author || book?.author}
                 readOnly
               />
               <div className={styles.bookProgressInfo}>
@@ -270,11 +267,7 @@ export default function readingJournal() {
                     type="number"
                     id="pages"
                     onChange={handleChange}
-                    value={
-                      readingEntry && readingEntry.data?.pages
-                        ? readingEntry.data?.pages
-                        : formData?.pages || ""
-                    }
+                    defaultValue={formData?.pages || ""}
                   />
                 </div>
                 <div>
@@ -283,9 +276,9 @@ export default function readingJournal() {
                     type="date"
                     id="start_date"
                     onChange={handleChange}
-                    value={
-                      readingEntry && readingEntry.data?.start_date
-                        ? new Date(readingEntry.data?.start_date)
+                    defaultValue={
+                      formData && formData.start_date
+                        ? new Date(formData.start_date)
                             .toISOString()
                             .split("T")[0]
                         : formData?.start_date || ""
@@ -298,9 +291,9 @@ export default function readingJournal() {
                     type="date"
                     id="end_date"
                     onChange={handleChange}
-                    value={
-                      readingEntry && readingEntry.data?.end_date
-                        ? new Date(readingEntry.data?.end_date)
+                    defaultValue={
+                      formData && formData.end_date
+                        ? new Date(formData.end_date)
                             .toISOString()
                             .split("T")[0]
                         : formData?.end_date || ""
@@ -320,14 +313,11 @@ export default function readingJournal() {
                     <FontAwesomeIcon
                       key={index}
                       icon={
-                        index + 1 <=
-                        (readingEntry && readingEntry.data?.romantic
-                          ? readingEntry.data?.romantic
-                          : ratings.romantic)
+                        index + 1 <= ratings.romantic
                           ? faHeartSolid
                           : faHeartRegular
-                      } // Si el índice es menor que la calificación, usa la estrella rellena
-                      onClick={() => handleStarClick("romantic")(index)} // Actualiza el rating al hacer clic
+                      }
+                      onClick={() => handleStarClick("romantic")(index)}
                       style={{ cursor: "pointer", margin: "0 5px" }}
                     />
                   ))}
@@ -341,14 +331,11 @@ export default function readingJournal() {
                     <FontAwesomeIcon
                       key={index}
                       icon={
-                        index + 1 <=
-                        (readingEntry && readingEntry.data?.happy
-                          ? readingEntry.data?.happy
-                          : ratings.happy)
+                        index + 1 <= ratings.happy
                           ? faFaceSmileSolid
                           : faFaceSmileRegular
-                      } // Si el índice es menor que la calificación, usa la estrella rellena
-                      onClick={() => handleStarClick("happy")(index)} // Actualiza el rating al hacer clic
+                      }
+                      onClick={() => handleStarClick("happy")(index)}
                       style={{ cursor: "pointer", margin: "0 5px" }}
                     />
                   ))}
@@ -362,14 +349,11 @@ export default function readingJournal() {
                     <FontAwesomeIcon
                       key={index}
                       icon={
-                        index + 1 <=
-                        (readingEntry && readingEntry.data?.sad
-                          ? readingEntry.data?.sad
-                          : ratings.sad)
+                        index + 1 <= ratings.sad
                           ? faFaceSadTearSolid
                           : faFaceSadTearRegular
-                      } // Si el índice es menor que la calificación, usa la estrella rellena
-                      onClick={() => handleStarClick("sad")(index)} // Actualiza el rating al hacer clic
+                      }
+                      onClick={() => handleStarClick("sad")(index)}
                       style={{ cursor: "pointer", margin: "0 5px" }}
                     />
                   ))}
@@ -380,10 +364,7 @@ export default function readingJournal() {
                 <div>
                   {/* Ignoramos el primer valor, por eso usamos _ */}
                   {[...Array(5)].map((_, index) =>
-                    index + 1 <=
-                    (readingEntry && readingEntry.data?.spicy
-                      ? readingEntry.data?.spicy
-                      : ratings.spicy) ? (
+                    index + 1 <= ratings.spicy ? (
                       <PiPepperFill
                         onClick={() => handleStarClick("spicy")(index)}
                         style={{ cursor: "pointer", margin: "0 5px" }}
@@ -405,10 +386,7 @@ export default function readingJournal() {
                     <FontAwesomeIcon
                       key={index}
                       icon={
-                        index + 1 <=
-                        (readingEntry && readingEntry.data?.plot
-                          ? readingEntry.data?.plot
-                          : ratings.plot)
+                        index + 1 <= ratings.plot
                           ? faFaceSurprisesolid
                           : faFaceSurpriseRegular
                       } // Si el índice es menor que la calificación, usa la estrella rellena
@@ -425,11 +403,7 @@ export default function readingJournal() {
               <label htmlFor="format">Formato:</label>
               <select
                 id="format"
-                value={
-                  readingEntry && readingEntry.data?.format
-                    ? readingEntry.data?.format
-                    : formData?.format || ""
-                }
+                value={formData?.format || ""}
                 onChange={handleChange}
               >
                 <option value="">Selecciona un formato</option>
@@ -442,11 +416,7 @@ export default function readingJournal() {
               <label htmlFor="type">Tipo:</label>
               <select
                 id="type"
-                value={
-                  readingEntry && readingEntry.data?.type
-                    ? readingEntry.data?.type
-                    : formData?.type || ""
-                }
+                value={formData?.type || ""}
                 onChange={handleChange}
               >
                 <option value="">Selecciona el tipo</option>
@@ -462,11 +432,7 @@ export default function readingJournal() {
                 type="text"
                 id="playlist"
                 onChange={handleChange}
-                value={
-                  readingEntry && readingEntry.data?.playlist
-                    ? readingEntry.data?.playlist
-                    : formData?.playlist || ""
-                }
+                defaultValue={formData?.playlist || ""}
               />
             </div>
           </div>
@@ -477,11 +443,7 @@ export default function readingJournal() {
               type="text"
               id="characters"
               onChange={handleChange}
-              value={
-                readingEntry && readingEntry.data?.characters
-                  ? readingEntry.data?.characters
-                  : formData?.characters || ""
-              }
+              defaultValue={formData?.characters || ""}
             />
           </div>
 
@@ -492,11 +454,7 @@ export default function readingJournal() {
               rows="4"
               cols="50"
               onChange={handleChange}
-              value={
-                readingEntry && readingEntry.data?.favoriteMoments
-                  ? readingEntry.data?.favoriteMoments
-                  : formData?.favoriteMoments || ""
-              }
+              defaultValue={formData?.favoriteMoments || ""}
             />
           </div>
 
@@ -508,12 +466,17 @@ export default function readingJournal() {
         {showSuccessMessage && (
           <div className={styles.successModal}>
             <div className={styles.successContent}>
-              <p>📚 ¡Tu reading journal se ha agregado correctamente!</p>
+              {!readingEntry ? (
+                <p>📚 ¡Tu reading journal se ha agregado correctamente!</p>
+              ) : (
+                <p>📚 ¡Tu reading journal se ha actualizado correctamente!</p>
+              )}
               <button onClick={getReading}>Aceptar</button>
             </div>
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import styles from "./bookEdit.module.css";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
+import Footer from "@/components/Footer/Footer";
 
 export default function bookEdit() {
   const router = useRouter();
@@ -292,7 +293,7 @@ export default function bookEdit() {
           </button>
         </form>
       </div>
-
+      <Footer />
       {showSuccessMessage && (
         <div className={styles.successModal}>
           <div className={styles.successContent}>

@@ -15,6 +15,7 @@ import { useFavorites } from "@/core/contexts/FavoritesContext";
 import { useAuth } from "@/core/contexts/AuthContext";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 import { newOrderAndPayment } from "@/api/orderFetch";
+import Footer from "@/components/Footer/Footer";
 
 export default function Checkout() {
   const {
@@ -79,7 +80,7 @@ export default function Checkout() {
     );
     if (result && result.status === "Succeeded") {
       setPurchaseMade(true);
-      setCart([])
+      setCart([]);
       localStorage.removeItem(`cart`);
       sessionStorage.removeItem(`cart`);
     } else {
@@ -273,6 +274,7 @@ export default function Checkout() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

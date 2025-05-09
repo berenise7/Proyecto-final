@@ -4,6 +4,7 @@ import News from "@/components/Home/News"
 import React from "react";
 import Recommendations from "@/components/Home/Recommendations";
 import HeaderAnsSearch from "@/components/Header/HeaderAndSearch";
+import Footer from "@/components/Footer/Footer";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <div className="page-container"><TopSellers /></div>
       <div className="page-container"><News /></div>
       <div className="page-container"><Recommendations /></div>
+      <Footer />
     </>
   );
 }

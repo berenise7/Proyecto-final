@@ -79,6 +79,7 @@ const getBooksFilter = async (req, res) => {
     try {
         const { bestSeller, isNewBook, isRecommendation } = req.query;
 
+        const limit = 15;
         const filter = {};
         if (bestSeller !== undefined) {
             filter.bestSeller = bestSeller === "true"
@@ -91,7 +92,7 @@ const getBooksFilter = async (req, res) => {
         }
 
 
-        const books = await bookModel.find(filter)
+        const books = await bookModel.find(filter).sort({ createdAt: -1 }).limit(limit)
         res.status(200).json({
             status: "Succeeded",
             data: books,

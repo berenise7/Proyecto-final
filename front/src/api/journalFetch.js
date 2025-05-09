@@ -5,7 +5,7 @@ export const getJournal = async (userId, bookId) => {
             console.log(response);
 
             const errorData = await response.json()
-            return { error: errorData.message || `Error en la petición: ${response.status} ${response.statusText}` };
+            return { error: errorData.error || `Error en la petición: ${response.status} ${response.statusText}` };
         }
         const journal = await response.json()
         return journal;
@@ -17,6 +17,22 @@ export const getJournal = async (userId, bookId) => {
 }
 
 
+export const getAllJournals = async (userId, page = 1) => {
+    try {
+        const response = await fetch(`http://localhost:9000/journal/getAllJournals?userId=${userId}&page=${page}`)
+
+        const data = await response.json();
+
+        if (response.ok) {
+            return data;
+        } else {
+            console.error("mensaje de error:", data.error);
+        }
+    } catch (error) {
+        return { error: "Ocurrió un error inesperado" };
+    }
+}
+
 export const createJournal = async (bodyParam) => {
     try {
         const response = await fetch('http://localhost:9000/journal/create', {
@@ -27,13 +43,50 @@ export const createJournal = async (bodyParam) => {
             console.log(response);
 
             const errorData = await response.json()
-            return { error: errorData.message || `Error en la petición: ${response.status} ${response.statusText}` };
+            return { error: errorData.error || `Error en la petición: ${response.status} ${response.statusText}` };
         }
         const bookCreated = await response.json()
         return bookCreated;
 
     } catch (error) {
         console.error("Error al crear el reading journal:", error);
+        return { error: "Ocurrió un error inesperado" };
+    }
+}
+
+
+export const deleteJournal = async (_id) => {
+    try {
+        const response = await fetch(`http://localhost:9000/journal/${_id}`, {
+            method: "DELETE",
+        })
+
+        const data = await response.json();
+        if (response.ok) {
+            return data;
+        } else {
+            console.error("mensaje de error:", data.error);
+        }
+    } catch (error) {
+        return { error: "Ocurrió un error inesperado" };
+    }
+}
+
+export const updateJournal = async (_id, bodyParam) => {
+    try {
+        const response = await fetch(`http://localhost:9000/journal/${_id}`, {
+            method: "PUT",
+            body: bodyParam,
+        })
+
+        const data = await response.json();
+        console.log(data);
+        if (response.ok) {
+            return data;
+        } else {
+            console.error("mensaje de error:", data.error);
+        }
+    } catch (error) {
         return { error: "Ocurrió un error inesperado" };
     }
 }

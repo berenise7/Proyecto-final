@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
+import Footer from "@/components/Footer/Footer";
 
 export default function allBooks() {
   const router = useRouter();
@@ -176,6 +177,7 @@ export default function allBooks() {
           </button>
         </div>
       </div>
+      <Footer/>
     </>
   );
 }

@@ -5,6 +5,7 @@ import { getOrderAndPayment } from "@/api/orderFetch";
 import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 import styles from "./orders.module.css";
 import { useRouter } from "next/router";
+import Footer from "@/components/Footer/Footer";
 
 export default function orders() {
   const router = useRouter();
@@ -73,7 +74,9 @@ export default function orders() {
               orders.map((order) => (
                 <tr
                   key={order._id}
-                  onClick={() => router.push(`/myaccount/my-orders/${order._id}`)}
+                  onClick={() =>
+                    router.push(`/myaccount/my-orders/${order._id}`)
+                  }
                 >
                   <td>{order._id}</td>
                   <td>{new Date(order.created_at).toLocaleDateString()}</td>
@@ -110,6 +113,7 @@ export default function orders() {
           </button>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

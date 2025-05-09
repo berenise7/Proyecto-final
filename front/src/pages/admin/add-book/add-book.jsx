@@ -7,6 +7,7 @@ import { useAuth } from "@/core/contexts/AuthContext";
 
 import styles from "./AddBook.module.css";
 import { createBook } from "@/api/booksFetch";
+import Footer from "@/components/Footer/Footer";
 
 export default function addBook() {
   const { user } = useAuth();
@@ -373,6 +374,7 @@ export default function addBook() {
       ) : (
         <p>Cargando...</p>
       )}
+      <Footer />
     </div>
   );
 }
