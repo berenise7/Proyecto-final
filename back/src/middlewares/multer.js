@@ -4,7 +4,7 @@ import path from 'path'
 // Configuración de multer para almacenar las imágenes temporalmente
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'src/uploads/'); // Asegúrate de tener esta carpeta creada
+    cb(null, 'src/uploads/'); 
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
