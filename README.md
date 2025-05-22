@@ -12,11 +12,13 @@ Este repositorio contiene el proyecto final desarrollado como parte del curso de
 
 ## 📂 Estructura del Proyecto
 
+```
 PROYECTO FINAL/
 ├── back/
 ├── front/
 ├── .gitignore
 └── README.md
+```
 
 
 Para más detalles sobre cada parte del proyecto, consulta los archivos README correspondientes en los directorios `frontend` y `backend`.
