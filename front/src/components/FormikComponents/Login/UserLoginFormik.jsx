@@ -8,8 +8,13 @@ import Link from "next/link";
 import { useAuth } from "@/core/contexts/AuthContext";
 
 export default function UserLoginFormik() {
+  // uso de user context
   const { loginError, handleLogin } = useAuth();
+
+  // useState
   const [showPassword, setShowPassword] = useState(false);
+
+  // Validación con yup
   const validationSchema = Yup.object({
     email: Yup.string().email("Correo inválido").required("Correo requerido"),
     password: Yup.string()
@@ -23,6 +28,7 @@ export default function UserLoginFormik() {
       )
       .required("Contraseña requerida"),
   });
+
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>

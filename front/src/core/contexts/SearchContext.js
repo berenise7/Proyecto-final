@@ -1,16 +1,18 @@
 import { createContext, useState, useContext, useRef, useEffect } from "react";
 
 export const SearchContext = createContext();
+
 export const SearchProvider = ({ children }) => {
+    // useState
     const [results, setResults] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
 
+    // Funcion para resetear la búsqueda
     const clearSearch = () => {
         setSearchQuery("");
         setResults([])
     };
 
-   
     return (
         <SearchContext.Provider value={{ results, setResults, searchQuery, setSearchQuery, clearSearch }}>
             {children}

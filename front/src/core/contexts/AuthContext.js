@@ -11,13 +11,20 @@ const AuthContext = createContext();
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
+    // Uso de favorites context
     const { setFavorites } = useFavorites();
+    // Uso de cart context
     const { setCart} = useCart()
+
+    // useState
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const [loginError, setLoginError] = useState(null);
+
+    // useRouter
     const router = useRouter();
 
+    // useEffect
     // Verificar si hay sesión al cargar la página
     useEffect(() => {
         const storedToken = localStorage.getItem("token") || sessionStorage.getItem("token");

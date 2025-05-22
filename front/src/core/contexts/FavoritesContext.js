@@ -6,8 +6,10 @@ const FavoritesContext = createContext();
 export default FavoritesContext;
 
 export const FavoritesProvider = ({ children }) => {
+    // useState
     const [favorites, setFavorites] = useState([]);
 
+    // useEffect
     // Cargar los favoritos desde localStorage cuando el usuario inicia sesión
     useEffect(() => {
         const storedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
@@ -18,6 +20,7 @@ export const FavoritesProvider = ({ children }) => {
             setFavorites(parsedUser?.favorites)
         }
     }, []);
+
     // Función para alternar favoritos
     const toggleFavorite = async (book) => {
         const storedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
@@ -36,7 +39,6 @@ export const FavoritesProvider = ({ children }) => {
 
             if (isFavorite) {
                 result = await removeFavoriteBook(user._id, book._id, token);
-
             } else {
                 result = await addFavoriteBook(user._id, book._id, token);
             }
@@ -46,20 +48,15 @@ export const FavoritesProvider = ({ children }) => {
             updatedFavorites = result.data.favorites;
             setFavorites(updatedFavorites);
 
-
             const updatedUser = { ...user, favorites: updatedFavorites };
             localStorage.setItem("user", JSON.stringify(updatedUser));
             sessionStorage.setItem("user", JSON.stringify(updatedUser));
-
 
             if (result && result.token) {
                 token = result.token;
                 localStorage.setItem("token", token);
                 sessionStorage.setItem("token", token);
             }
-
-
-     
 
         } catch (error) {
             console.error("Error en la solicitud:", error);

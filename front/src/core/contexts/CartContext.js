@@ -7,9 +7,11 @@ export default CartContext
 
 // Proveedor del contexto
 export const CartProvider = ({ children }) => {
+    // useState
     const [cart, setCart] = useState([]);
     const [subtotal, setSubtotal] = useState("")
 
+    // useEffect
     // Cargar el carrito desde localStorage al inicio o de user
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user")) || JSON.parse(sessionStorage.getItem("user"));
@@ -158,13 +160,8 @@ export const CartProvider = ({ children }) => {
         }
     };
 
-
     // Total de productos añadidos
-
     const totalQuantity = cart?.reduce((total, item) => total + item.quantity, 0) || cart?.reduce((total, item) => total + item.book_id.quantity, 0);
-
-
-
 
     // Función para formatear el precio
     const formatPrice = (price) => {

@@ -2,7 +2,7 @@ import bookModel from "../models/Book.js";
 import cartModel from "../models/Cart.js";
 import userModel from "../models/User.js";
 
-// Añade libros al carrito
+// POST Añade libros al carrito
 const addBookToCart = async (req, res) => {
     try {
         const { userId, bookId, quantity } = req.body;
@@ -60,7 +60,7 @@ const addBookToCart = async (req, res) => {
 
 }
 
-// Obtener el carrito del usuario
+// GET Obtener el carrito del usuario
 const getCart = async (req, res) => {
     try {
         const { userId } = req.params;
@@ -83,7 +83,7 @@ const getCart = async (req, res) => {
     }
 }
 
-// Fusiona el carrito con localStorage
+// POST Fusiona el carrito con localStorage
 const mergeCart = async (req, res) => {
     try {
         const { userId, localCart } = req.body;
@@ -112,6 +112,7 @@ const mergeCart = async (req, res) => {
                 })),
                 subtotal: localCart.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2),
             });
+        // Si hay carrito en la bbdd se 
         } else if (cart && localCart.length > 0) {
 
             localCart.forEach(localItem => {
@@ -142,7 +143,7 @@ const mergeCart = async (req, res) => {
     }
 }
 
-
+// PUT actualizar el item del carrito 
 const updateCartItem = async (req, res) => {
     try {
         const { userId, bookId, quantity } = req.body;
@@ -177,6 +178,7 @@ const updateCartItem = async (req, res) => {
     }
 }
 
+// DELETE elimina un libro del carrito
 const removeBookFromCart = async (req, res) => {
     try {
         const { userId, bookId } = req.body;

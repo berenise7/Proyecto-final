@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+// Definición del esquema del pago
 const PaymentSchema = new Schema({
     order_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -35,6 +36,6 @@ const PaymentSchema = new Schema({
     }
 });
 
+// Crea el modelo y lo exporta
 const paymentModel = mongoose.model("Payments", PaymentSchema, "Payments");
-
 export default paymentModel;

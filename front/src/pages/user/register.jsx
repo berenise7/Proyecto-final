@@ -14,8 +14,13 @@ import { useAuth } from "@/core/contexts/AuthContext";
 import Footer from "@/components/Footer/Footer";
 
 export default function register() {
+  // useRouter
   const router = useRouter();
+
+  // Uso de auth context
   const { setUser, setToken } = useAuth();
+
+  // useState
   const [showGenres, setShowGenres] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -27,6 +32,7 @@ export default function register() {
   const [dontMatchPassword, setDontMatchPassword] = useState("");
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
+  // Estado inicial de los datos del formulario
   const initialFormData = {
     name: "",
     lastname: "",
@@ -41,6 +47,7 @@ export default function register() {
   };
   const [formData, setFormData] = useState(initialFormData);
 
+  // Validacion del formulario
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = "El nombre es obligatorio";
@@ -61,10 +68,12 @@ export default function register() {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Alterna la visibilidad de la lista de géneros
   const toggleGenres = () => {
     setShowGenres((prev) => !prev);
   };
 
+  // Función para manejar cambios y actualizar el estado del formulario
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -74,6 +83,7 @@ export default function register() {
     setErrorEmail("");
   };
 
+  // Actualiza la lista de géneros favoritos según si se selecciona o deselecciona una opción
   const handleGenreChange = (e) => {
     const { value, checked } = e.target;
     setFormData((prev) => ({
@@ -83,6 +93,8 @@ export default function register() {
         : prev.favoritesGenres.filter((genre) => genre !== value),
     }));
   };
+
+  // Función para manejar el cambio de imagen y guardarla en una vista previa
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -91,6 +103,7 @@ export default function register() {
     }
   };
 
+  // Valida y envía los datos del formulario para registrar un usuario
   const saveUser = async (e) => {
     e.preventDefault();
     if (validateForm()) {
@@ -131,6 +144,7 @@ export default function register() {
     }
   };
 
+  // Para volver a la página anterior
   const goBack = () => {
     router.back();
   };

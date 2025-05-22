@@ -8,11 +8,15 @@ import { getOrder } from "@/api/orderFetch";
 import Footer from "@/components/Footer/Footer";
 
 export default function IdOrder() {
+  // useRouter
   const router = useRouter();
   const { _id } = router.query;
 
+  // useState
   const [order, setOrder] = useState(null);
 
+  // useEffect
+  // Obtención de un pedido
   useEffect(() => {
     const loadOrder = async () => {
       const orderAux = await getOrder(_id);
@@ -20,11 +24,13 @@ export default function IdOrder() {
     };
     loadOrder();
   }, [_id]);
-  console.log(order);
+
+  // Para volver a la página anterior
   const goBack = () => {
     router.back();
   };
 
+  // Mensaje si no se encuentra el pedido
   if (!order) {
     return (
       <>

@@ -24,10 +24,11 @@ import { createJournal, getJournal, updateJournal } from "@/api/journalFetch";
 import Footer from "@/components/Footer/Footer";
 
 export default function readingJournal() {
+  // useRouter
   const router = useRouter();
-  //   Buscar el producto por su id
   const { _id } = router.query;
 
+  // useState
   const [book, setBook] = useState(null);
   const [readingEntry, setReadingEntry] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -40,6 +41,7 @@ export default function readingJournal() {
     plot: 0,
   });
 
+  // Estado inicial de los datos del formulario
   const initialFormData = {
     pages: 0,
     start_date: "",
@@ -50,20 +52,24 @@ export default function readingJournal() {
     playlist: "",
     favoriteMoments: "",
   };
-
   const [formData, setFormData] = useState(initialFormData);
 
+  // Obtiene el usuario del almacenamiento
   const storedUser =
     typeof window !== "undefined" &&
     (localStorage.getItem("user") || sessionStorage.getItem("user"));
+  // Si hay un usuario almacenado lo parsea y si no hay se convierte en null
   const user = storedUser ? JSON.parse(storedUser) : null;
 
+  // useEffect
+  // Verifica si existe un usuario y sino redirige al login
   useEffect(() => {
     if (!user) {
       router.push("/user/login");
     }
   }, []);
-  // Buscar el producto por su id
+
+  // Carga el libro y, si hay un journal, se actualiza con los datos de la BBDD
   useEffect(() => {
     if (!_id || !user) return;
 
@@ -91,6 +97,7 @@ export default function readingJournal() {
     loadBook();
   }, [_id]);
 
+  // Actualiza el estado ratings cuando cambian los datos del formulario
   useEffect(() => {
     if (formData) {
       setRatings((prevRatings) => ({
@@ -110,19 +117,20 @@ export default function readingJournal() {
     router.back();
   };
 
+  // Actualiza la puntuación de una categoría; si se repite la estrella, se reinicia
   const handleStarClick = (category) => (index) => {
     setRatings((prevRatings) => {
-      // Si el índice ya es igual al rating actual de la categoría, lo reseteamos a 0
       const currentRating = prevRatings[category];
       const newRating = currentRating === index + 1 ? 0 : index + 1;
 
       return {
-        ...prevRatings, // Conserva las demás categorías
-        [category]: newRating, // Solo actualiza la categoría correspondiente
+        ...prevRatings,
+        [category]: newRating,
       };
     });
   };
 
+  // Función para manejar cambios y actualizar el estado del formulario
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevFormData) => ({
@@ -131,6 +139,7 @@ export default function readingJournal() {
     }));
   };
 
+  // Envía el formulario para crear o actualizar el diario de lectura y actualiza el estado con la respuesta
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
@@ -140,8 +149,9 @@ export default function readingJournal() {
       userId: user._id,
       ...formData,
     };
-    console.log(baseData);
+
     if (readingEntry) {
+      // Si existe un reading journal: (edita)
       Object.keys(baseData).forEach((key) => {
         formDataToSend.set(key, baseData[key]);
       });
@@ -150,7 +160,7 @@ export default function readingJournal() {
         formDataToSend.set(key, ratings[key]);
       });
     } else {
-      // Añadimos el formData
+      // Si no hay un reading jorunal: (crea uno nuevo)
       Object.keys(baseData).forEach((key) => {
         if (Array.isArray(baseData[key])) {
           baseData[key].forEach((value) => {
@@ -167,33 +177,18 @@ export default function readingJournal() {
       });
     }
 
+    // Actualiza si existe un reading journal y sino crea uno nuevo
     const result = readingEntry
       ? await updateJournal(formData?._id, formDataToSend)
-      : await createJournal(formDataToSend); // Asegúrate que createJournal acepte FormData
-    console.log(result);
+      : await createJournal(formDataToSend);
 
     if (result.error) {
       alert("Error: " + result.error);
     } else {
       setShowSuccessMessage(true);
     }
-
-    // Una vez guardado se vuelve a cargar el reading journal
-    const journalAux = await getJournal(user._id, _id);
-    if (journalAux) {
-      setReadingEntry(journalAux);
-      setFormData(journalAux);
-      setRatings({
-        rating: journalAux.rating || 0,
-        romantic: journalAux.romantic || 0,
-        happy: journalAux.happy || 0,
-        sad: journalAux.sad || 0,
-        spicy: journalAux.spicy || 0,
-        plot: journalAux.plot || 0,
-      });
-    }
   };
-
+  // Una vez guardado, se vuelve a cargar el reading journal con los datos actualizados
   const getReading = async () => {
     setShowSuccessMessage(false);
 

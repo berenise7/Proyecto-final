@@ -4,8 +4,8 @@ import paymentModel from "../models/Payment.js";
 import { sendEmail } from "../services/emailServices.js";
 import { orderConfirmationTemplate } from "../services/templates/orderConfirmation.js";
 
-// Listado de pedidos y pagos por usuarios
-const getOrderAndPayment = async (req, res) => {
+//POST Listado de pedidos y pagos por usuarios
+const postOrderAndPayment = async (req, res) => {
     try {
         // Se buscan por email por si antes de crear una cuenta hizo pedidos
         const { email } = req.body;
@@ -42,7 +42,7 @@ const getOrderAndPayment = async (req, res) => {
     }
 }
 
-// Get de un pedido
+// GET obtencion de un pedido
 const getIdOrders = async (req, res) => {
     try {
         const { id } = req.params;
@@ -70,7 +70,7 @@ const getIdOrders = async (req, res) => {
     }
 }
 
-// Creacion de un nuevo pedido y pago
+// POST Creación de un nuevo pedido y pago
 const newOrderAndPayment = async (req, res) => {
     try {
         const { orderData, paymentData, cartData, userId } = req.body;
@@ -138,4 +138,4 @@ const newOrderAndPayment = async (req, res) => {
 }
 
 
-export { newOrderAndPayment, getIdOrders, getOrderAndPayment }
+export { newOrderAndPayment, getIdOrders, postOrderAndPayment }

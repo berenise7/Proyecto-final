@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
+// Definición del esquema del reading journal
 const ReadingJournalSchema = new Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -146,6 +147,6 @@ const ReadingJournalSchema = new Schema({
 
 }, { timestamps: true });
 
+// Crea el modelo y lo exporta
 const journalModel = mongoose.model('Journal', ReadingJournalSchema, 'Journal');
-
 export default journalModel;

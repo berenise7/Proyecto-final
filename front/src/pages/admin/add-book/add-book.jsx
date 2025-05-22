@@ -10,8 +10,13 @@ import { createBook } from "@/api/booksFetch";
 import Footer from "@/components/Footer/Footer";
 
 export default function addBook() {
+  // uso de auth context
   const { user } = useAuth();
+
+  // useRouter
   const router = useRouter();
+
+  // useState
   const [isAuth, setIsAuth] = useState(false);
   const [showGenres, setShowGenres] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -21,6 +26,7 @@ export default function addBook() {
   const [error, setError] = useState(false);
   const [errorsFields, setErrorsFields] = useState({});
 
+  // Inicio de datos del formulario a enviar
   const initialFormData = {
     title: "",
     author: "",
@@ -35,7 +41,6 @@ export default function addBook() {
     bestSeller: false,
     isRecommendation: false,
   };
-
   const [formData, setFormData] = useState(initialFormData);
 
   // Validacion de los campos
@@ -57,6 +62,8 @@ export default function addBook() {
     return Object.keys(newErrors).length === 0;
   };
 
+  // useEffect
+  // Verifica si hay token
   useEffect(() => {
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -68,22 +75,26 @@ export default function addBook() {
     }
   }, [router]);
 
+  // Muestra un mensaje mientras se verifica el login
   if (!isAuth) {
-    return <p>Cargando...</p>; // Muestra un mensaje mientras se verifica el login
+    return <p>Cargando...</p>;
   }
-
+  // Si su rol es user te redirige a home
   if (user.rol === "user") {
     router.push("/");
   }
 
+  // Función para volver a la página anterior
   const goBack = () => {
     router.back();
   };
 
+  // Función para alternar el estado de los generos
   const toggleGenres = () => {
     setShowGenres((prev) => !prev);
   };
 
+  // Función para manejar cambios y actualizar el estado del formulario
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -93,6 +104,7 @@ export default function addBook() {
     setIsbnError("");
   };
 
+  // Función para manejar los cambios de los checkboxes de géneros
   const handleGenreChange = (e) => {
     const { value, checked } = e.target;
     setFormData((prev) => ({
@@ -103,6 +115,7 @@ export default function addBook() {
     }));
   };
 
+  // Función para manejar el cambio de imagen y guardarla en una vista previa
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -111,6 +124,7 @@ export default function addBook() {
     }
   };
 
+  // Función para resetear el formulario
   const resetForm = () => {
     setFormData(initialFormData);
     setSelectedImage(null);
@@ -118,10 +132,13 @@ export default function addBook() {
     setShowSuccessMessage(false);
   };
 
+  // Función para el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (validateForm()) {
       const sendData = new FormData();
+      // Agrega todos los campos al FormData
       Object.keys(formData).forEach((key) => {
         if (Array.isArray(formData[key])) {
           formData[key].forEach((value) => sendData.append(key, value));
@@ -130,9 +147,8 @@ export default function addBook() {
         }
       });
 
+      // Agrega una imagen si la hay
       if (imageFile) sendData.append("file", imageFile);
-      console.log(sendData.get(title));
-      console.log(sendData);
 
       const response = await createBook(sendData);
 

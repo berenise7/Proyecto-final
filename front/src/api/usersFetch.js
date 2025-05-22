@@ -1,4 +1,4 @@
-// Inicio de sesión
+//Petición para el inicio de sesión
 export const handleLoginFetch = async (email, password) => {
     try {
         const response = await fetch(`http://localhost:9000/users/login`, {
@@ -16,7 +16,7 @@ export const handleLoginFetch = async (email, password) => {
     }
 }
 
-// Registro de usuarios
+// Petición de registro de usuarios
 export const registerUser = async (formData) => {
     try {
         const response = await fetch(`http://localhost:9000/users/register`, {
@@ -43,7 +43,7 @@ export const registerUser = async (formData) => {
     }
 };
 
-
+// Petición para el olvido de contraseñá
 export const forgotPassword = async (email) => {
     try {
         const response = await fetch(`http://localhost:9000/users/forgot-password`, {
@@ -64,6 +64,8 @@ export const forgotPassword = async (email) => {
         return { error: "Ocurrió un error inesperado" };
     }
 }
+
+// Petición para restaurar contraseña
 export const resetPassword = async (resetToken, newPassword, confirmPassword) => {
     try {
         const response = await fetch(`http://localhost:9000/users/reset-password`, {
@@ -86,7 +88,7 @@ export const resetPassword = async (resetToken, newPassword, confirmPassword) =>
 }
 
 
-// Listado de usuarios
+// Petición para ver el listado de usuarios
 export const getUsers = async (page = 1) => {
     try {
         const token = localStorage.getItem("token") || sessionStorage.getItem("token")
@@ -111,7 +113,7 @@ export const getUsers = async (page = 1) => {
 };
 
 
-// Editar rol de usuario
+// Peticíon para editar el rol de usuario
 export const updateNewRole = async (userId, newRole) => {
     try {
         const token = localStorage.getItem("token") || sessionStorage.getItem("token")
@@ -137,7 +139,7 @@ export const updateNewRole = async (userId, newRole) => {
     }
 }
 
-// Eliminar usuario
+// Peticón para eliminar un usuario
 export const deleteUser = async (userId) => {
     try {
         const token = localStorage.getItem("token") || sessionStorage.getItem("token")
@@ -162,7 +164,7 @@ export const deleteUser = async (userId) => {
     }
 }
 
-// Busqueda de usuarios
+// Petcion para la busqueda de usuarios
 export const searchUsers = async (query) => {
     const token = localStorage.getItem("token") || sessionStorage.getItem("token")
 
@@ -188,7 +190,7 @@ export const searchUsers = async (query) => {
     }
 }
 
-// Añadir libros a favoritos
+// Petición para añadir libros a favoritos
 export const addFavoriteBook = async (userId, bookId, token) => {
     try {
         const response = await fetch(`http://localhost:9000/users/favorites`, {
@@ -212,7 +214,7 @@ export const addFavoriteBook = async (userId, bookId, token) => {
     }
 }
 
-// Eliminar libros de favoritos
+// Petición apra eliminar libros de favoritos
 export const removeFavoriteBook = async (userId, bookId, token) => {
     try {
         const response = await fetch(`http://localhost:9000/users/favorites`, {
@@ -236,7 +238,7 @@ export const removeFavoriteBook = async (userId, bookId, token) => {
     }
 }
 
-// Editar usuario
+// Peticion para editar usuario
 export const updateProfileFetch = async (formDataToSend) => {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token');
     if (!token) {
@@ -245,7 +247,6 @@ export const updateProfileFetch = async (formDataToSend) => {
     }
 
     try {
-        console.log("Antes de llamada");
 
         const response = await fetch(`http://localhost:9000/users/profile`, {
             method: "PUT",

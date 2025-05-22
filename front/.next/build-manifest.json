@@ -23,20 +23,20 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/myaccount/my-orders/[_id]": [
+    "/myaccount/favorites/favorites": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/myaccount/my-orders/[_id].js"
+      "static/chunks/pages/myaccount/favorites/favorites.js"
+    ],
+    "/myaccount/my-library/my-library": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/myaccount/my-library/my-library.js"
     ],
     "/reading-journal/[title]/[_id]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/reading-journal/[title]/[_id].js"
-    ],
-    "/user/login": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/user/login.js"
     ]
   },
   "ampFirstPages": []

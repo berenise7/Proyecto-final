@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+// Definición del esquema del carrito
 const CartSchema = new Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -49,6 +50,6 @@ const CartSchema = new Schema({
     }
 });
 
+// Crea el modelo y lo exporta
 const cartModel = mongoose.model("Cart", CartSchema, "Cart");
-
 export default cartModel

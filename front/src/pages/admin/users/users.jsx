@@ -18,7 +18,10 @@ import styles from "./users.module.css";
 import Footer from "@/components/Footer/Footer";
 
 export default function Users() {
+  // useRouter
   const router = useRouter();
+
+  // useState
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [totalPages, setTotalPages] = useState(1);
@@ -29,6 +32,9 @@ export default function Users() {
   const [updatedUser, setUpdatedUser] = useState(null);
   const [changeRolMessage, setChangeRolMessage] = useState(false);
 
+  // useEffect
+  // Verifica si el usuario es admin sino redirige
+  // Carga usuarios si hay una búsqueda y sino obtiene todos los usuarios con paginación
   useEffect(() => {
     const user =
       JSON.parse(localStorage.getItem("user")) ||
@@ -53,26 +59,31 @@ export default function Users() {
     fetchUsers();
   }, [router, currentPage, searchQuery]);
 
+  // Función para volver a la página anterior
   const goBack = () => {
     router.back();
   };
 
+  // Actualiza el estado de búsqueda
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
+  // Para pasar a la página siguiente si no es la última
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
     }
   };
 
+  // Para pasar a la página anterior si no es la primera
   const goToPrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);
     }
   };
 
+  // Función para el cambio de role de usuario
   const handleRoleChange = async (userId, newRole) => {
     const result = await updateNewRole(userId, newRole);
     if (result && result.status === "Succeeded") {
@@ -89,16 +100,20 @@ export default function Users() {
     }
   };
 
+  // Abre el modal de confirmacion para eliminar un usuario
   const openModal = (user) => {
     setUserToDelete(user);
     setIsModalOpen(true);
   };
 
+  // Cierra el modal de confirmacion para eliminar un usuario
   const closeModal = () => {
     setIsModalOpen(false);
     setUserToDelete(null);
     setShowSuccessMessage(true);
   };
+
+  // Función para eliminar un usuario
   const confirmDelete = async () => {
     if (!userToDelete) return;
     try {
@@ -118,6 +133,7 @@ export default function Users() {
     }
     closeModal();
   };
+
   return (
     <>
       <HeaderAndSearch />
@@ -209,6 +225,7 @@ export default function Users() {
         </div>
       </div>
       <Footer />
+      {/* Modal para la confirmar la eliminacion de usuario */}
       {isModalOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
@@ -232,6 +249,7 @@ export default function Users() {
         </div>
       )}
 
+      {/* Mensaje de usuario eliminado correctamente */}
       {showSuccessMessage && (
         <div className={styles.successModal}>
           <div className={styles.successContent}>
@@ -243,6 +261,7 @@ export default function Users() {
         </div>
       )}
 
+      {/* Mensaje de rol cambiado correctamente */}
       {changeRolMessage && (
         <div className={styles.successModal}>
           <div className={styles.successContent}>

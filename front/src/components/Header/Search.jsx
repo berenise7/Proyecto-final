@@ -5,23 +5,27 @@ import React, { useState, useEffect } from "react";
 import { useSearch } from "@/core/contexts/SearchContext";
 
 export default function Search() {
-  const { setResults,  } = useSearch();
+  // Uso de search context
+  const { setResults } = useSearch();
+
+  // useState
   const [query, setQuery] = useState("");
 
+  // useEffect
   useEffect(() => {
     if (query.length < 3) {
       setResults([]); // Limpia los resultados si la query es muy corta
       return;
     }
+    // Funcion para quitar los acentos y convertirlo en minúsculas
     const removeAccents = (str) => {
       return str
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase();
     };
-
+    // Funcion para hacer la busqueda con un tiempo: 500ms
     const timer = setTimeout(async () => {
-      console.log("Searching for:", query);
       const normalizedQuery = removeAccents(query);
       const books = await searchBooks(normalizedQuery);
       setResults(books);
@@ -29,7 +33,6 @@ export default function Search() {
 
     return () => clearTimeout(timer); // Limpia el temporizador si el usuario sigue escribiendo
   }, [query, setResults]);
-
 
   return (
     <div className={styles.searchContainer}>

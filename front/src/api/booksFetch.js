@@ -1,7 +1,7 @@
-// Peticion para obtener toda la lista de libros
+// Petición para obtener toda la lista de libros
 export const getAllBooks = async (sortBy = "", page = 1, genre = "") => {
     try {
-        // Peticion al back
+        // Petición al back
         const genreQuery = genre ? `&genre=${genre}` : "";
         const response = await fetch(`http://localhost:9000/books?sortBy=${sortBy}&page=${page}${genreQuery}`)
         if (!response.ok) {
@@ -16,7 +16,7 @@ export const getAllBooks = async (sortBy = "", page = 1, genre = "") => {
     }
 };
 
-// Peticion para obtener los libros segun el filtro(bestSeller, isPresale o isRecommendation)
+// Petición para obtener los libros segun el filtro(bestSeller, isPresale o isRecommendation)
 export const getBooksFilter = async (filter) => {
     try {
         const query = new URLSearchParams(filter).toString();
@@ -33,14 +33,15 @@ export const getBooksFilter = async (filter) => {
     }
 }
 
-// Peticion para obtener un libro por id
+// Petición para obtener un libro por id
 export const getBook = async (_id) => {
-    //  Peticion al back
+    //  Petición al back
     const response = await fetch(`http://localhost:9000/books/${_id}`)
     const book = await response.json()
     return book
 };
 
+// Petición para obtener los favoritos
 export const getFavorites = async (favorites, page = 1) => {
     try {
         const response = await fetch(`http://localhost:9000/books/getFavorites?page=${page}`, {
@@ -62,7 +63,7 @@ export const getFavorites = async (favorites, page = 1) => {
     }
 }
 
-
+// Petición de busqueda por query
 export const searchBooks = async (query) => {
     if (!query || query.length < 3) return [];
     try {
@@ -80,6 +81,7 @@ export const searchBooks = async (query) => {
     }
 }
 
+// Petición para crear un nuevo libro
 export const createBook = async (bodyParam) => {
     try {
         const response = await fetch('http://localhost:9000/books/create', {
@@ -99,6 +101,7 @@ export const createBook = async (bodyParam) => {
     }
 }
 
+// Petición para editar un libro
 export const updateBook = async (_id, bodyParam) => {
     try {
 
@@ -119,6 +122,7 @@ export const updateBook = async (_id, bodyParam) => {
     }
 }
 
+// Petición para eliminar un libro
 export const deleteBook = async (_id) => {
     try {
         const response = await fetch(`http://localhost:9000/books/${_id}`, {

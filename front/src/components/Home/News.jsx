@@ -13,20 +13,26 @@ import {
 import Link from "next/link";
 
 export default function HomeLiterary() {
+  // uso de cart context
   const { addToCart, formatPrice } = useCart();
+  // uso de favorites context
   const { favorites, toggleFavorite } = useFavorites();
+
+  // useState
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [books, setBooks] = useState([]);
 
+  // useEffect
+  // Obtiene los libros nuevos
   useEffect(() => {
     const fetchBooks = async () => {
       const filters = {
-        isNewBook: true, 
+        isNewBook: true,
       };
       const booksData = await getBooksFilter(filters);
-      console.log('nuevos',booksData);
+      console.log("nuevos", booksData);
 
       if (booksData) {
         // Actualiza el estado con los libros obtenidos
@@ -69,12 +75,14 @@ export default function HomeLiterary() {
     };
   }, []);
 
-  // Muestra solo las novedades
+  // Calcula número total del páginas
   const totalPages = Math.ceil(books.length / itemsPerPage);
+  // Muestra los productos correspondientes en la pagina actual
   const displayedProducts = books.slice(
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );
+
   return (
     <>
       <div className={styles.container}>

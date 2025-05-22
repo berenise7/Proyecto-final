@@ -11,6 +11,7 @@ const storage = multer.diskStorage({
   }
 });
 
+// Configura multer con el almacenamiento y filtro de archivos permitidos
 const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {

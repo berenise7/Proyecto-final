@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 
+// Middleware de autenticación:
+// Verifica que el usuario tenga un token JWT válido (de acceso o refresh).
 const authMiddleware = (req, res, next) => {
     const token = req.header('Authorization')?.split(' ')[1];
     if (!token) {

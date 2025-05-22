@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
+
 const Schema = mongoose.Schema;
 
-
+// Definición del esquema del usuario
 const UserSchema = new Schema({
   name: {
     type: String,
@@ -69,8 +70,8 @@ const UserSchema = new Schema({
 
 }, { timestamps: true });
 
+// Crea el modelo y lo exporta
 const userModel = mongoose.model('Users', UserSchema, 'Users');
-
 export default userModel;
 
 

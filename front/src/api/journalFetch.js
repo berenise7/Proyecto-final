@@ -1,3 +1,4 @@
+// Petición para ver un journal
 export const getJournal = async (userId, bookId) => {
     try {
         const response = await fetch(`http://localhost:9000/journal/getJournal?userId=${userId}&bookId=${bookId}`)
@@ -16,7 +17,7 @@ export const getJournal = async (userId, bookId) => {
     }
 }
 
-
+// Petición para ver todos los journals de un user
 export const getAllJournals = async (userId, page = 1) => {
     try {
         const response = await fetch(`http://localhost:9000/journal/getAllJournals?userId=${userId}&page=${page}`)
@@ -33,6 +34,7 @@ export const getAllJournals = async (userId, page = 1) => {
     }
 }
 
+// Petición para crear un journal
 export const createJournal = async (bodyParam) => {
     try {
         const response = await fetch('http://localhost:9000/journal/create', {
@@ -54,7 +56,7 @@ export const createJournal = async (bodyParam) => {
     }
 }
 
-
+// Petición para eliminar un journal
 export const deleteJournal = async (_id) => {
     try {
         const response = await fetch(`http://localhost:9000/journal/${_id}`, {
@@ -72,6 +74,7 @@ export const deleteJournal = async (_id) => {
     }
 }
 
+// Petición para editar un journal
 export const updateJournal = async (_id, bodyParam) => {
     try {
         const response = await fetch(`http://localhost:9000/journal/${_id}`, {

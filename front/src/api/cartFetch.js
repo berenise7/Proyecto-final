@@ -1,4 +1,4 @@
-// Fetch para añadir un libro al carrito
+// Petición para añadir un libro al carrito
 export const addBookToCart = async (userId, bookId, quantity) => {
     try {
         const response = await fetch(`http://localhost:9000/cart/add`, {
@@ -20,7 +20,7 @@ export const addBookToCart = async (userId, bookId, quantity) => {
     }
 }
 
-// Fetch para ver el carro
+// Petición para ver el carro
 export const getCart = async (userId) => {
     try {
         const response = await fetch(`http://localhost:9000/cart/${userId}`)
@@ -33,7 +33,7 @@ export const getCart = async (userId) => {
     }
 }
 
-// Fetch borrar libro del carrito
+// Petición para borrar libro del carrito
 export const removeBookFromCart = async (userId, bookId) => {
     try {
         const response = await fetch(`http://localhost:9000/cart/remove`, {
@@ -55,7 +55,7 @@ export const removeBookFromCart = async (userId, bookId) => {
     }
 }
 
-// Actualizar el carro
+// Petición para actualizar el carro
 export const updateCartItem = async (userId, bookId, quantity) => {
     try {
         const response = await fetch(`http://localhost:9000/cart/update`, {
@@ -77,7 +77,7 @@ export const updateCartItem = async (userId, bookId, quantity) => {
     }
 }
 
-// Fetch para juntar el carrito local con el carrito de la base de datos
+// Petición para juntar el carrito local con el carrito de la base de datos
 export const mergeCart = async (userId, localCart) => {
     try {
         const response = await fetch(`http://localhost:9000/cart/merge`, {

@@ -1,4 +1,4 @@
-
+// Petición para ver los pedidos
 export const getOrderAndPayment = async (email, page = 1) => {
     try {
         const response = await fetch(`http://localhost:9000/order?page=${page}`, {
@@ -21,7 +21,7 @@ export const getOrderAndPayment = async (email, page = 1) => {
     }
 }
 
-
+// Peticion para ver un pedido
 export const getOrder = async (_id) => {
     try {
         const response = await fetch(`http://localhost:9000/order/${_id}`)
@@ -37,6 +37,7 @@ export const getOrder = async (_id) => {
     }
 }
 
+// Petición para crear un nuevo pedido
 export const newOrderAndPayment = async (cartData, orderData, paymentData, userId) => {
     try {
         const response = await fetch(`http://localhost:9000/order/newOrder`, {

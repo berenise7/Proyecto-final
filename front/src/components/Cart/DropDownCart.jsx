@@ -10,7 +10,7 @@ import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "@/core/contexts/AuthContext";
 
 export default function DropDownCart({ cartRef }) {
-  // Uso de context
+  // Uso de cart context
   const {
     cart,
     subtotal,
@@ -20,11 +20,16 @@ export default function DropDownCart({ cartRef }) {
     calculateTotal,
     formatPrice,
   } = useCart();
+  // Uso de favorites context
   const { favorites, toggleFavorite } = useFavorites();
+  // Uso de user context
   const { user } = useAuth();
 
   return (
-    <div className={cart?.length ? styles.cart : styles.emptyCart} ref={cartRef}>
+    <div
+      className={cart?.length ? styles.cart : styles.emptyCart}
+      ref={cartRef}
+    >
       <h2>Tu cesta</h2>
 
       {cart?.length === 0 || !cart ? (
@@ -112,7 +117,9 @@ export default function DropDownCart({ cartRef }) {
                     >
                       <FontAwesomeIcon
                         icon={
-                          favorites.some((fav) => fav.book_id === product.book_id._id)
+                          favorites.some(
+                            (fav) => fav.book_id === product.book_id._id
+                          )
                             ? faHeartSolid
                             : faHeart
                         }
@@ -124,7 +131,8 @@ export default function DropDownCart({ cartRef }) {
             ))}
           </ul>
           <div className={styles.total}>
-            Total: {user ? formatPrice(subtotal) : formatPrice(calculateTotal())}€
+            Total:{" "}
+            {user ? formatPrice(subtotal) : formatPrice(calculateTotal())}€
           </div>
           <button className={styles.checkoutBtn}>
             <Link href="/cart/checkout">Ir a pagar</Link>

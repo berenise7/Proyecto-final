@@ -17,21 +17,24 @@ import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 import Footer from "@/components/Footer/Footer";
 
 export default function favorites() {
-  const { addToCart } = useCart();
-  const { favorites, toggleFavorite } = useFavorites();
-
-  const [isAuth, setIsAuth] = useState(false);
-  const [books, setBooks] = useState([]);
-  const [sortBy, setSortBy] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  // useRouter
   const router = useRouter();
 
+  // Uso de cart context
+  const { addToCart } = useCart();
+  // Uso de favorites context
+  const { favorites, toggleFavorite } = useFavorites();
+
+  // useState
+  const [books, setBooks] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  // Cargar los libros favoritos del usuario
   useEffect(() => {
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
     if (token) {
-      setIsAuth(true);
       const decoded = jwtDecode(token);
       const favorites = decoded.favorites?.map((fav) => fav.book_id) || [];
 
@@ -48,8 +51,6 @@ export default function favorites() {
           .catch((error) =>
             console.error("Error al obtener libros favoritos:", error)
           );
-      } else {
-        setIsAuth(false);
       }
     }
   }, [router, books]);
@@ -59,21 +60,19 @@ export default function favorites() {
     return title.toLowerCase().split(" ").join("-");
   };
 
+  // Para volver a la página anterior
   const goBack = () => {
     router.back();
   };
 
-  const handleSortChange = (e) => {
-    setSortBy(e.target.value);
-    setCurrentPage(1);
-  };
-
+  // Para pasar a la página siguiente si no es la última
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
     }
   };
 
+  // Para pasar a la página anterior si no es la primera
   const goToPrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);

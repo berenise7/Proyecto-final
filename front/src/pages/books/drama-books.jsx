@@ -16,15 +16,23 @@ import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 import Footer from "@/components/Footer/Footer";
 
 export default function dramaBooks() {
+  // useRouter
   const router = useRouter();
+
+  // Uso de cart context
   const { addToCart, formatPrice } = useCart();
+  // Uso de favorites context
   const { favorites, toggleFavorite } = useFavorites();
+
+  // useState
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [books, setBooks] = useState([]);
   const [sortBy, setSortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  // useEffect
+  // Carga los libros con filtrado, paginación y género
   useEffect(() => {
     const fetchBooks = async () => {
       const booksData = await getAllBooks(sortBy, currentPage, "Drama");
@@ -33,7 +41,6 @@ export default function dramaBooks() {
         setTotalPages(booksData.totalPages);
       } else {
         console.error("La respuesta no es un array", booksData);
-        setError("No se pudieron cargar los libros. Intenta más tarde.");
       }
     };
     fetchBooks();
@@ -52,21 +59,25 @@ export default function dramaBooks() {
     return title.toLowerCase().split(" ").join("-");
   };
 
+  // Para volver a la página anterior
   const goBack = () => {
     router.back();
   };
 
+  // Cambia el filtro y reinicia a la página 1
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
     setCurrentPage(1);
   };
 
+  // Para pasar a la página siguiente si no es la última
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
     }
   };
 
+  // Para pasar a la página anterior si no es la primera
   const goToPrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);

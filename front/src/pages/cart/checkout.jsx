@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart as faHeartSolid,
@@ -18,6 +19,10 @@ import { newOrderAndPayment } from "@/api/orderFetch";
 import Footer from "@/components/Footer/Footer";
 
 export default function Checkout() {
+  // useRouter
+  const router = useRouter();
+
+  // Uso de cart context
   const {
     cart,
     setCart,
@@ -28,8 +33,12 @@ export default function Checkout() {
     calculateTotal,
     formatPrice,
   } = useCart();
+  // Uso de favorites context
   const { favorites, toggleFavorite } = useFavorites();
+  // Uso de auth context
   const { user } = useAuth();
+
+  // useState
   const [cartEmpty, setCartEmpty] = useState(false);
   const [purchaseMade, setPurchaseMade] = useState(false);
   const [problemPurchase, setProblemPurchase] = useState(false);
@@ -42,22 +51,26 @@ export default function Checkout() {
     zip: "",
     country: "",
   });
-
   const [paymentData, setPaymentData] = useState({
     paymentMethod: "credit_card",
   });
 
+  // Asegura que el subtotal sea un número válido
   const safeSubtotal = isNaN(subtotal) ? 0 : subtotal;
 
+  // Maneja los cambios en los inputs y actualiza los estados
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setPaymentData({ ...paymentData, [e.target.name]: e.target.value });
   };
+
+  // Procesa el checkout
   const handleCheckout = async () => {
     if (cart?.length === 0 || !cart) {
       setCartEmpty(true);
     }
 
+    // Datos del pedido
     const orderData = {
       full_name: formData.name,
       email: formData.email,
@@ -68,10 +81,12 @@ export default function Checkout() {
       zip_code: formData.zip,
     };
 
+    // Método de pago
     const paymentInfo = {
       method: paymentData.paymentMethod,
     };
 
+    // Envio del orden y pago al backend
     const result = await newOrderAndPayment(
       cart,
       orderData,
@@ -89,6 +104,7 @@ export default function Checkout() {
     }
   };
 
+  // Manejo del envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     await handleCheckout();
@@ -274,6 +290,15 @@ export default function Checkout() {
           </div>
         </div>
       </div>
+      {/* Mensaje de compra realizada */}
+      {purchaseMade && (
+        <div className={styles.successModal}>
+          <div className={styles.successContent}>
+            <p>📚 ¡Compra realizada con exito!</p>
+            <button onClick={() => router.push("/")}>Aceptar</button>
+          </div>
+        </div>
+      )}
       <Footer />
     </div>
   );

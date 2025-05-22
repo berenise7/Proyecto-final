@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+// Definición del esquema del pedido
 const OrderSchema = new Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -77,6 +78,6 @@ const OrderSchema = new Schema({
     }
 });
 
+// Crea el modelo y lo exporta
 const orderModel = mongoose.model("Orders", OrderSchema, "Orders");
-
 export default orderModel;

@@ -8,7 +8,7 @@ import { generateToken } from '../core/utils/utils.js';
 import { sendEmail } from "../services/emailServices.js";
 
 
-
+// POST login 
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -61,6 +61,7 @@ const login = async (req, res) => {
     }
 }
 
+// POST recuperar contraseña
 const forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
@@ -91,6 +92,7 @@ const forgotPassword = async (req, res) => {
     }
 }
 
+// POST resetear contraseña
 const resetPassword = async (req, res) => {
     try {
         const { resetToken, newPassword, confirmPassword } = req.body;
@@ -145,6 +147,7 @@ const resetPassword = async (req, res) => {
     }
 }
 
+// POST registro de un nuevo usuario
 const registerUser = async (req, res) => {
     try {
         const { name, lastname, phone, address, email, confirmEmail, password, confirmPassword, birthday, favoritesGenres } = req.body;
@@ -215,6 +218,7 @@ const registerUser = async (req, res) => {
     }
 }
 
+// PUT Editar perfil de usuario
 const editProfile = async (req, res) => {
     try {
         const userId = req.user._id;
@@ -291,6 +295,7 @@ const editProfile = async (req, res) => {
 
 }
 
+// GET obtención de usuarios
 const getUsers = async (req, res) => {
     try {
         if (!req.user || req.user.rol !== "admin") {
@@ -315,6 +320,7 @@ const getUsers = async (req, res) => {
     }
 }
 
+// PUT Actualizar role del usuario
 const updateUserRole = async (req, res) => {
     try {
         // Si no hay usuario o no es admin lanza error
@@ -351,6 +357,7 @@ const updateUserRole = async (req, res) => {
     }
 }
 
+// DELETE eliminar usuario
 const deleteUser = async (req, res) => {
     try {
         if (!req.user || req.user.rol !== "admin") {
@@ -377,10 +384,12 @@ const deleteUser = async (req, res) => {
     }
 }
 
+// Elimina acentos y lo pone en minúsculas
 const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 };
 
+// GET busqueda de usuarios
 const getSearchUser = async (req, res) => {
     try {
         if (!req.user || req.user.rol !== "admin") {
@@ -418,6 +427,7 @@ const getSearchUser = async (req, res) => {
     }
 }
 
+// POST añadir libros a favoritos
 const addFavoriteBook = async (req, res) => {
     try {
 
@@ -454,7 +464,7 @@ const addFavoriteBook = async (req, res) => {
     }
 }
 
-
+// DELETE eliminar un libro de favoritos
 const removeFavoriteBook = async (req, res) => {
     try {
         const { userId, bookId } = req.body;
@@ -492,6 +502,7 @@ const removeFavoriteBook = async (req, res) => {
 
 }
 
+// GET añadir a la base de datos de usuarios de una lista
 const loadDataUsers = async (req, res) => {
     try {
         const usersToSave = await Promise.all(

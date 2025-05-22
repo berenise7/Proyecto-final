@@ -8,11 +8,16 @@ import { useRouter } from "next/router";
 import Footer from "@/components/Footer/Footer";
 
 export default function orders() {
+  // useRouter
   const router = useRouter();
+
+  // useState
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  // useEffect
+  // Carga y ordena los pedidos del usuario por fecha más reciente al cambiar la página
   useEffect(() => {
     const fetchOrders = async () => {
       const user =
@@ -37,21 +42,25 @@ export default function orders() {
     fetchOrders();
   }, [currentPage]);
 
+  // Para volver a la página anterior
   const goBack = () => {
     router.back();
   };
 
+  // Para pasar a la página siguiente si no es la última
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
     }
   };
 
+  // Para pasar a la página anterior si no es la primera
   const goToPrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);
     }
   };
+
   return (
     <>
       <HeaderAndSearch />

@@ -5,18 +5,25 @@ import { upload } from "../middlewares/multer.js";
 
 const userRouter = express.Router();
 
-
-userRouter.get('/', authMiddleware, getUsers);
-userRouter.get('/search', authMiddleware, getSearchUser)
+// Rutas
+// Autenticación y recuperación de contraseña
 userRouter.post("/login", login);
 userRouter.post("/register", upload.single("file"), registerUser);
 userRouter.post('/forgot-password', forgotPassword);
 userRouter.post('/reset-password', resetPassword);
-userRouter.post("/favorites", authMiddleware, addFavoriteBook);
-userRouter.delete("/favorites", authMiddleware, removeFavoriteBook);
+
+// Perfil de usuario
+userRouter.get('/', authMiddleware, getUsers);
+userRouter.get('/search', authMiddleware, getSearchUser)
 userRouter.put("/profile", authMiddleware, upload.single("file"), editProfile);
 userRouter.put('/new-role', authMiddleware, updateUserRole);
 userRouter.delete('/delete-user', authMiddleware, deleteUser)
+
+// Favoritos
+userRouter.post("/favorites", authMiddleware, addFavoriteBook);
+userRouter.delete("/favorites", authMiddleware, removeFavoriteBook);
+
+// Carga inicial de usuarios (solo si se necesita)
 // userRouter.get('/loadDataUser', loadDataUsers)
 
 export default userRouter

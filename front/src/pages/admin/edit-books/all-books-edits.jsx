@@ -15,8 +15,13 @@ import { useAuth } from "@/core/contexts/AuthContext";
 import Footer from "@/components/Footer/Footer";
 
 export default function allBooksEdits() {
+  // uso de auth context
   const { user } = useAuth();
+
+  // useRouter
   const router = useRouter();
+
+  // useState
   const [books, setBooks] = useState([]);
   const [sortBy, setSortBy] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,6 +30,8 @@ export default function allBooksEdits() {
   const [bookToDelete, setBookToDelete] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // useEffect
+  // Redirige si no es admin y carga libros si hay una búsqueda y sino obtiene todos los libros con paginación
   useEffect(() => {
     if (user?.rol !== "admin") {
       router.push("/");
@@ -50,37 +57,44 @@ export default function allBooksEdits() {
     router.back();
   };
 
+  // Actualiza el estado de búsqueda
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
+  // Cambia el filtro y reinicia a la página 1
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
     setCurrentPage(1);
   };
 
+  // Para pasar a la página siguiente si no es la última
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
     }
   };
 
+  // Para pasar a la página anterior si no es la primera
   const goToPrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);
     }
   };
 
+  // Abre el modal de confirmacion para eliminar un libro
   const openModal = (book) => {
     setBookToDelete(book);
     setIsModalOpen(true);
   };
 
+  // Cierra el modal de confirmacion para eliminar un libro
   const closeModal = () => {
     setIsModalOpen(false);
     setBookToDelete(null);
   };
 
+  // Confirma y ejecuta la eliminación de un libro
   const confirmDelete = async () => {
     if (!bookToDelete) return;
     try {
@@ -120,6 +134,7 @@ export default function allBooksEdits() {
           <FontAwesomeIcon icon={faSearch} className={styles.searchIcon} />
         </div>
         <div className={styles.selectAndPagination}>
+          {/* Filtrado */}
           <select
             onChange={handleSortChange}
             value={sortBy}
@@ -133,6 +148,7 @@ export default function allBooksEdits() {
             <option value="editorial_asc">Editorial (A-Z)</option>
             <option value="editorial_desc">Editorial (Z-A)</option>
           </select>
+          {/* Paginación */}
           <div className={styles.pagination}>
             <button onClick={goToPrevPage} disabled={currentPage === 1}>
               Anterior
@@ -148,6 +164,7 @@ export default function allBooksEdits() {
             </button>
           </div>
         </div>
+        {/* Mapeado de libros */}
         <div className={styles.grid}>
           {Array.isArray(books) && books.length > 0 ? (
             books.map((book) => (
@@ -183,6 +200,7 @@ export default function allBooksEdits() {
             <p>Ups.. al parecer no se ha encontrado ningún libro</p>
           )}
         </div>
+        {/* Paginación */}
         <div className={styles.pagination}>
           <button onClick={goToPrevPage} disabled={currentPage === 1}>
             Anterior
@@ -195,8 +213,9 @@ export default function allBooksEdits() {
           </button>
         </div>
       </div>
-      <Footer/>
+      <Footer />
 
+      {/* Ventana modal */}
       {isModalOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>

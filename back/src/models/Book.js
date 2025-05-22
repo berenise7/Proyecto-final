@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+// Definición del esquema del libro
 const bookSchema = new Schema({
     title: {
         type: String,
@@ -81,6 +82,6 @@ const bookSchema = new Schema({
     }
 }, { timestamps: true })
 
-
+// Crea el modelo y lo exporta
 const bookModel = mongoose.model("Books", bookSchema, "Books");
 export default bookModel;

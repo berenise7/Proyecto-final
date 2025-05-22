@@ -13,7 +13,10 @@ import { deleteJournal, getAllJournals } from "@/api/journalFetch";
 import Footer from "@/components/Footer/Footer";
 
 export default function MyLibrary() {
+  // useRouter
   const router = useRouter();
+
+  // useState
   const [isAuth, setIsAuth] = useState(false);
   const [journals, setJournals] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,11 +24,14 @@ export default function MyLibrary() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [journalToDelete, setJournalToDelete] = useState(null);
 
+  // Obtiene el usuario almacenado desde localStorage o sessionStorage
   const storedUser =
     typeof window !== "undefined" &&
     (localStorage.getItem("user") || sessionStorage.getItem("user"));
   const user = storedUser ? JSON.parse(storedUser) : null;
 
+  // useEffect
+  // Verifica si hay token y sino redirige al login
   useEffect(() => {
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -36,6 +42,7 @@ export default function MyLibrary() {
     }
   }, [router]);
 
+  // Obtencion de los reading journals
   useEffect(() => {
     const fetchJournals = async () => {
       const journalsData = await getAllJournals(user._id, currentPage);
@@ -54,36 +61,43 @@ export default function MyLibrary() {
     return <p>Cargando...</p>; // Muestra un mensaje mientras se verifica el login
   }
 
+  // Para remplazar los espacios por -
   const formatTitleForURL = (title) => {
     return title.toLowerCase().split(" ").join("-");
   };
 
+  // Para volver a la página anterior
   const goBack = () => {
     router.back();
   };
 
+  // Para pasar a la página siguiente si no es la última
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
     }
   };
 
+  // Para pasar a la página anterior si no es la primera
   const goToPrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);
     }
   };
 
+  // Abre el modal de confirmacion para eliminar un reading journal
   const openModal = (journal) => {
     setJournalToDelete(journal);
     setIsModalOpen(true);
   };
 
+  // Cierra el modal de confirmacion para eliminar un reading journal
   const closeModal = () => {
     setIsModalOpen(false);
     setJournalToDelete(null);
   };
 
+  // Función para eliminar un reading journal
   const confirmDelete = async () => {
     if (!journalToDelete) return;
     try {
@@ -104,6 +118,7 @@ export default function MyLibrary() {
     }
     closeModal();
   };
+
   return (
     <>
       <HeaderAndSearch />

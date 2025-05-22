@@ -2,8 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/myaccount/my-orders/[_id]": "pages/myaccount/my-orders/[_id].js",
-  "/reading-journal/[title]/[_id]": "pages/reading-journal/[title]/[_id].js",
-  "/myaccount/my-orders/orders": "pages/myaccount/my-orders/orders.js",
-  "/user/login": "pages/user/login.js"
+  "/myaccount/favorites/favorites": "pages/myaccount/favorites/favorites.js",
+  "/myaccount/my-library/my-library": "pages/myaccount/my-library/my-library.js",
+  "/reading-journal/[title]/[_id]": "pages/reading-journal/[title]/[_id].js"
 }

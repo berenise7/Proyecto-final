@@ -185,6 +185,7 @@
     background-color: #5c3e56;
 }
 
+
 /* Responsive */
 @media (max-width: 768px) {
     .searchInput, .select {

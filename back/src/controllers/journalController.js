@@ -2,6 +2,7 @@ import journalModel from "../models/Journal.js";
 import userModel from "../models/User.js";
 import bookModel from "../models/Book.js"
 
+// GET obtención de un journal
 const getJournal = async (req, res) => {
     try {
         const { bookId, userId } = req.query;
@@ -14,8 +15,6 @@ const getJournal = async (req, res) => {
         }
 
         const journal = await journalModel.findOne({ user_id: userId, book_id: bookId });
-
-
         if (!journal) {
             return res.status(404).json({ message: `No se encontró un Journal con esos datos.` });
         }
@@ -34,6 +33,7 @@ const getJournal = async (req, res) => {
     }
 }
 
+// GET obtención de todos los journals de un user
 const getAllJournals = async (req, res) => {
     try {
         const { userId, page = 1 } = req.query
@@ -43,7 +43,10 @@ const getAllJournals = async (req, res) => {
             return res.status(404).json({ message: `No se encontró el usuario` });
         }
 
-        const journals = await journalModel.find({ user_id: userId }).skip(skip).limit(limit)
+        const journals = await journalModel.find({ user_id: userId }).sort({ createdAt: -1 }).skip(skip).limit(limit)
+        if (!journals) {
+            return res.status(404).json({ message: `No se encontraron journals con ese user_id.` });
+        }
 
         const totalJournals = await journalModel.countDocuments({ user_id: userId })
 
@@ -63,6 +66,7 @@ const getAllJournals = async (req, res) => {
     }
 }
 
+// POST Crear nuevo journal
 const createJournal = async (req, res) => {
     try {
         const { bookId } = req.body
@@ -123,6 +127,7 @@ const createJournal = async (req, res) => {
     }
 }
 
+// DELETE eliminar un journal
 const deleteJournal = async (req, res) => {
     try {
         const { id } = req.params;
@@ -148,11 +153,11 @@ const deleteJournal = async (req, res) => {
     }
 }
 
+// PUT actualizar un journal
 const updateJournal = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Comprobar si existe en la base de datos
         const journal = await journalModel.findById(id);
         if (!journal) {
             return res.status(404).json({ message: `No se encontró un journal con el ID: ${id}` });

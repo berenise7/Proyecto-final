@@ -247,3 +247,122 @@
     cursor: pointer;
     border-radius: 5px;
 }
+
+@media (max-width: 1150px) {
+  .usersContainer {
+    max-width: 95%;
+    padding: 1.5rem;
+  }
+
+  .searchInput {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .userTable {
+    font-size: 0.95rem;
+    word-break: break-word;
+  }
+
+  .userTable th,
+  .userTable td {
+    padding: 8px;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 1024px) {
+    .usersContainer {
+        max-width: 90%;
+        padding: 1.5rem;
+    }
+
+    .searchInput {
+        width: 100%;
+        font-size: 1rem;
+    }
+
+    .searchContainer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .searchIcon {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        align-self: flex-end;
+    }
+
+    .pagination {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .paginationButton,
+    .pageInfo {
+        font-size: 1rem;
+        width: auto;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .usersContainer {
+        max-width: 95%;
+        padding: 1rem;
+    }
+
+    .searchInput {
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    .searchContainer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .searchIcon {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        align-self: flex-end;
+    }
+
+    .userTable {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .paginationButton,
+    .pageInfo {
+        font-size: 0.9rem;
+        width: 100%;
+        text-align: center;
+    }
+
+    .modalContent,
+    .successContent {
+        width: 90%;
+    }
+
+    .removeBtn {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+
+    .roleSelect {
+        width: 100%;
+    }
+}

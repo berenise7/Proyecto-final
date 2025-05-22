@@ -13,15 +13,23 @@ import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 import Footer from "@/components/Footer/Footer";
 
 export default function book() {
+  // Uso de cart context
   const { addToCart, formatPrice } = useCart();
+
+  // Uso de favorites context
   const { favorites, setFavorites } = useFavorites();
+
+  // useRouter
   const router = useRouter();
   const { _id } = router.query;
 
+  // useState
   const [showFull, setShowFull] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [book, setBook] = useState(null);
 
+  // useEffect
+  // Carga los datos de un libro
   useEffect(() => {
     const loadBook = async () => {
       const bookAux = await getBook(_id);
@@ -30,7 +38,7 @@ export default function book() {
     loadBook();
   }, [_id]);
 
-  // Verificar si un producto específico está en la lista de favoritos cuando la lista de favoritos o el producto cambian.
+  // Verifica si un producto específico está en la lista de favoritos cuando la lista de favoritos o el producto cambian.
   useEffect(() => {
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -105,7 +113,7 @@ export default function book() {
             <p className={styles.isbn}>
               {book.editorial} - {book.isbn}
             </p>
-            {/* 📖 Descripción */}
+            {/* Descripción */}
             <div>
               <p className={styles.description}>
                 <span className="bold">

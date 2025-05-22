@@ -13,20 +13,26 @@ import {
 import Link from "next/link";
 
 export default function Recommendations() {
+  // uso de cart context
   const { addToCart, formatPrice } = useCart();
+  // uso de favorites context
   const { favorites, toggleFavorite } = useFavorites();
+
+  // usestate
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [books, setBooks] = useState([]);
 
+  // useEffect
+  // Obtiene los libros recomendados
   useEffect(() => {
     const fetchBooks = async () => {
       const filters = {
         isRecommendation: true,
       };
       const booksData = await getBooksFilter(filters);
-      console.log('isRecommendation', booksData);
+      console.log("isRecommendation", booksData);
       if (booksData) {
         // Actualiza el estado con los libros obtenidos
         setBooks(booksData.data);
@@ -43,7 +49,7 @@ export default function Recommendations() {
       localStorage.getItem("token") || sessionStorage.getItem("token");
     setIsAuthenticated(!!token);
   }, []);
-  
+
   // Detectar el tamaño de la pantalla y ajustar itemsPerPage
   useEffect(() => {
     const updateItemsPerPage = () => {
@@ -68,8 +74,9 @@ export default function Recommendations() {
     };
   }, []);
 
-  // Muestra solo los recomendados
+  // Calcula número total del páginas
   const totalPages = Math.ceil(books.length / itemsPerPage);
+  // Muestra los productos correspondientes en la pagina actual
   const displayedProducts = books.slice(
     (page - 1) * itemsPerPage,
     page * itemsPerPage

@@ -6,12 +6,18 @@ import Link from "next/link";
 import styles from "./SearchResults.module.css";
 
 export default function SearchResults() {
+  // Uso de search context
   const { results, clearSearch } = useSearch();
+  // Uso de cart context
   const { formatPrice } = useCart();
 
+  // useState
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // useRef
   const searchRef = useRef(null);
 
+  // Funcion para alternar el estado de la barra de búsqueda
   const toggleSearch = (e) => {
     e.stopPropagation();
     setIsSearchOpen((prevState) => {
@@ -20,6 +26,8 @@ export default function SearchResults() {
     });
   };
 
+  // useEffect
+  // Cierra el cuadro de búsqueda al clicar fuera
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {

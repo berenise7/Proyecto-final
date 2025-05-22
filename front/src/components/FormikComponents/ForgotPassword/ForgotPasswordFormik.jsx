@@ -5,12 +5,15 @@ import styles from "./ForgotPasswordFormik.module.css";
 import { forgotPassword } from "@/api/usersFetch";
 
 export default function ForgotPasswordFormik() {
+  // useState
   const [message, setMessage] = useState("");
 
+  // Validación con yup
   const validationSchema = Yup.object({
     email: Yup.string().email("Correo inválido").required("Correo requerido"),
   });
 
+  //Función asíncrona que envía el formulario para restaurar la contraseña
   const handleForgotPassword = async (
     email,
     setMessage,
@@ -32,6 +35,7 @@ export default function ForgotPasswordFormik() {
       setSubmitting(false);
     }
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>

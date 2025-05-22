@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "@/components/Home/CardsMenu.module.css";
-import {  getBooksFilter } from "@/api/booksFetch";
+import { getBooksFilter } from "@/api/booksFetch";
 import { useCart } from "@/core/contexts/CartContext";
 import { useFavorites } from "@/core/contexts/FavoritesContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,21 +13,26 @@ import {
 import Link from "next/link";
 
 export default function topSellers() {
+  // uso de cart context
   const { addToCart, formatPrice } = useCart();
+  // uso de favorites context
   const { favorites, toggleFavorite } = useFavorites();
+
+  // useState
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [books, setBooks] = useState([]);
 
+  // useEffect
+  // Obtiene los libros nuevos
   useEffect(() => {
     const fetchBooks = async () => {
       const filters = {
         bestSeller: true,
       };
       const booksData = await getBooksFilter(filters);
-      console.log('bestSeller', booksData);
-      
+      console.log("bestSeller", booksData);
 
       if (booksData) {
         // Actualiza el estado con los libros obtenidos
@@ -70,8 +75,9 @@ export default function topSellers() {
     };
   }, []);
 
-  // Muestra solo los best sellers
+  // Calcula número total del páginas
   const totalPages = Math.ceil(books.length / itemsPerPage);
+  // Muestra los productos correspondientes en la pagina actual
   const displayedProducts = books.slice(
     (page - 1) * itemsPerPage,
     page * itemsPerPage

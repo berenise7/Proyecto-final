@@ -8,13 +8,21 @@ import { resetPassword } from "@/api/usersFetch";
 import { useAuth } from "@/core/contexts/AuthContext";
 
 export default function ResetPasswordFormik() {
+  // uso de user context
   const { setUser } = useAuth();
-  const router = useRouter();
-  const [message, setMessage] = useState("");
-  const searchParams = useSearchParams();
-  const resetToken = searchParams.get("token");
-  console.log(resetToken);
 
+  // useRouter
+  const router = useRouter();
+
+  // useState
+  const [message, setMessage] = useState("");
+
+  // Obtencion de parametros del url
+  const searchParams = useSearchParams();
+  // Obtencion del token mediante el url
+  const resetToken = searchParams.get("token");
+
+  // Validación con yup
   const validationSchema = Yup.object({
     newPassword: Yup.string()
       .min(8, "La contraseña debe tener al menos 8 caracteres")
@@ -38,6 +46,7 @@ export default function ResetPasswordFormik() {
       .required("Contraseña requerida"),
   });
 
+  // Función para restablecer la contraseña
   const handleResetPassword = async (values, { setSubmitting }) => {
     if (!resetToken) {
       setMessage("Token no válido o expirado");
@@ -51,7 +60,6 @@ export default function ResetPasswordFormik() {
       newPassword,
       confirmPassword
     );
-    console.log(response);
 
     if (response.error) {
       setMessage(response.error);
@@ -61,6 +69,7 @@ export default function ResetPasswordFormik() {
       localStorage.setItem("user", JSON.stringify(response.data));
       router.push("/");
     }
+
     setSubmitting(false);
   };
   return (

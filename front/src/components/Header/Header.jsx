@@ -14,6 +14,7 @@ import Search from "./Search";
 import AccountDropdown from "./AccountDropdown";
 
 export default function Header() {
+  // useState
   const [isMenuOpen, setIsMenuOpen] = useState(false); //Para saber si el menu esta abierto o cerrado
   const [isCartOpen, setIsCartOpen] = useState(false); //Para saber si el carrito esta abierto o cerrado
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
@@ -22,11 +23,12 @@ export default function Header() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
 
-  // Uso el context del carrito
+  // Uso de cart context
   const { cart, totalQuantity } = useCart();
-  // Uso el context de auth
+  // Uso de user context
   const { user } = useAuth();
 
+  // useRef
   const buttonMenuRef = useRef(null);
   const buttonAccountRef = useRef(null);
   const buttonAdminRef = useRef(null);
@@ -43,32 +45,36 @@ export default function Header() {
     event.stopPropagation();
     setIsMenuOpen((prevState) => !prevState);
   };
+
+  // Funcion para alternar el estado del la cuenta
   const toggleAccount = () => {
     setIsAccountOpen((prevState) => !prevState);
   };
+
+  // Funcion para alternar el estado del menu de administrador
   const toggleAdmin = () => {
     setIsAdminOpen((prevState) => !prevState);
   };
 
+  // Función para posicionar el dropdown debajo del boton "mi cuenta"
   const toggleAccountDropdown = () => {
     if (!isAccountDropdownOpen && buttonAccountDropdownRef.current) {
       const rect = buttonAccountDropdownRef.current.getBoundingClientRect();
       setDropdownPosition({
-        top: rect.bottom , // Justo debajo del botón
+        top: rect.bottom, // Justo debajo del botón
         left: rect.left, // Alineado con "Mi cuenta"
       });
     }
     setIsAccountDropdownOpen((prevState) => !prevState);
   };
 
-
-
   // Funcion para alternar el estado del carrito
   const onCartToggle = () => {
     setIsCartOpen((prevState) => !prevState);
   };
-
-  // Cierra el menú, mi cuenta o el carrito si se hace clic fuera de él o se vuelve a clicar en el boton
+  
+  // useEffect
+  // Cierra el menú, mi cuenta, el carrito, menu de admin y el menu de mi cuenta si se hace clic fuera de él o se vuelve a clicar en el boton
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (

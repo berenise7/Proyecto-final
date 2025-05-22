@@ -8,16 +8,20 @@ import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 import Footer from "@/components/Footer/Footer";
 
 export default function bookEdit() {
+  // useRouter
   const router = useRouter();
   const { _id } = router.query;
+
+  // useState
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [imageFile, setImageFile] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [showGenres, setShowGenres] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [error, setError] = useState("");
 
+  // useEffect
+  // Carga los datos de un libro
   useEffect(() => {
     const loadBook = async () => {
       if (!_id) return; // Evita llamar la API si _id no está definido
@@ -39,6 +43,7 @@ export default function bookEdit() {
     loadBook();
   }, [_id]);
 
+  // Mensaje mientras no encuentra un  libro
   if (loading) return <p>Cargando...</p>;
 
   // Para volver a la página anterior
@@ -46,6 +51,7 @@ export default function bookEdit() {
     router.back();
   };
 
+  // Función para manejar el cambio de imagen y guardarla en una vista previa
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -54,13 +60,14 @@ export default function bookEdit() {
     }
   };
 
+  // Función para alternar el estado de los generos
   const toggleGenres = () => {
     setShowGenres((prev) => !prev);
   };
 
+   // Función para manejar los cambios de los checkboxes de géneros
   const handleGenreChange = (e) => {
     const { value, checked } = e.target;
-
     setFormData((prev) => {
       const newGenres = checked
         ? [...prev.genres, value] // Agrega el género si está seleccionado
@@ -70,6 +77,7 @@ export default function bookEdit() {
     });
   };
 
+  // Función para manejar cambios y actualizar el estado del formulario
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -78,6 +86,7 @@ export default function bookEdit() {
     }));
   };
 
+  // Función para el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -101,7 +110,6 @@ export default function bookEdit() {
 
     const response = await updateBook(_id, formDataToSend);
     if (response.error) {
-      setError(response.error);
       return;
     }
     setShowSuccessMessage(true);
@@ -294,6 +302,8 @@ export default function bookEdit() {
         </form>
       </div>
       <Footer />
+      
+      {/* Modal para verificar si se ha editado correctamente */}
       {showSuccessMessage && (
         <div className={styles.successModal}>
           <div className={styles.successContent}>

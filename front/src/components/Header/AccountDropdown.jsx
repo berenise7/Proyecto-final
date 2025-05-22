@@ -8,6 +8,7 @@ export default function AccountDropdown({
   isOpen,
   dropdownPosition,
 }) {
+  // uso de user context
   const { user, handleLogout } = useAuth();
 
   return (
@@ -37,20 +38,22 @@ export default function AccountDropdown({
 
         {user?.rol === "admin" ? (
           <>
-          <li>
-            <Link href="/admin/add-book/add-book">Añadir nuevo libro</Link>
-          </li>
-          <li>
-            <Link href="/admin/edit-books/all-books-edits">Editar libros</Link>
-          </li>
-          <li>
-          <Link href="/admin/users/users">Editar usuarios</Link>
-          </li>
+            <li>
+              <Link href="/admin/add-book/add-book">Añadir nuevo libro</Link>
+            </li>
+            <li>
+              <Link href="/admin/edit-books/all-books-edits">
+                Editar libros
+              </Link>
+            </li>
+            <li>
+              <Link href="/admin/users/users">Editar usuarios</Link>
+            </li>
           </>
         ) : (
           ""
         )}
-      
+
         <hr />
         <li>
           <a onClick={handleLogout}>Cerrar sesión</a>

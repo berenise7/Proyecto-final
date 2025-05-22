@@ -1,3 +1,4 @@
+// Generación correo HTML para la confirmación del pedido
 export const orderConfirmationTemplate = (order,paymentMethod) => {
     return `
     <html>

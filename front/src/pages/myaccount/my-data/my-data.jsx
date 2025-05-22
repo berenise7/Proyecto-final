@@ -13,8 +13,13 @@ import HeaderAndSearch from "@/components/Header/HeaderAndSearch";
 import Footer from "@/components/Footer/Footer";
 
 export default function MyData() {
-  const { user, setUser, setToken } = useAuth();
+  // useRouter
   const router = useRouter();
+
+  // Uso de auth context
+  const { user, setUser, setToken } = useAuth();
+
+  // useState
   const [isAuth, setIsAuth] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [imageFile, setImageFile] = useState(null);
@@ -41,6 +46,8 @@ export default function MyData() {
     newPassword: "",
   });
 
+  // useEffect
+  // Verifica si hay token y sino redirige al login
   useEffect(() => {
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -51,12 +58,14 @@ export default function MyData() {
     }
   }, [router, user]);
 
+  // Si ya existe una imagen se carga esa
   useEffect(() => {
     if (user?.photo) {
       setSelectedImage(user.photo);
     }
   }, [user]);
 
+  // Carga los datos del usuario desde el almacenamiento
   useEffect(() => {
     const storedUser =
       JSON.parse(localStorage.getItem("user")) ||
@@ -71,14 +80,17 @@ export default function MyData() {
     }
   }, []);
 
+  // Muestra un mensaje mientras se verifica el login
   if (!isAuth) {
-    return <p>Cargando...</p>; // Muestra un mensaje mientras se verifica el login
+    return <p>Cargando...</p>;
   }
 
+  // Para volver a la página anterior
   const goBack = () => {
     router.back();
   };
 
+  // Función para manejar el cambio de imagen y guardarla en una vista previa
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -87,6 +99,7 @@ export default function MyData() {
     }
   };
 
+  // Función para manejar los cambios de los checkboxes de géneros
   const handleGenreChange = (e) => {
     const { value, checked } = e.target;
     setUserState((prev) => {
@@ -98,6 +111,7 @@ export default function MyData() {
     });
   };
 
+  // Función para manejar cambios y actualizar el estado del formulario
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setUserState((prev) => ({
@@ -182,8 +196,10 @@ export default function MyData() {
 
     setShowSuccessMessage(true);
   };
+
   // Lista de géneros para seleccionar
   const genres = ["Romance", "Fantasía", "Thriller", "Drama", "Terror"];
+
   return (
     <>
       <HeaderAndSearch />
