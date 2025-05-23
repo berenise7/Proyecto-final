@@ -3,7 +3,7 @@
 Este repositorio contiene el backend del proyecto **Literary Haven**, una plataforma para amantes de la lectura donde pueden registrarse, explorar libros, escribir diarios de lectura, realizar pedidos y más.
 
 Para el frontend visita el repositorio correspondiente:
-🔗 [Literary Haven Frontend](https://github.com/berenise7/Proyecto-final/front)
+🔗 [Literary Haven Frontend](https://github.com/berenise7/Proyecto-final/tree/main/front)
 
 ---
 
@@ -52,16 +52,17 @@ npm run start
 ```bash
 back/
 ├── src/
-│   ├── config/            # Configuración de entorno
-│   ├── controllers/       # Lógica de negocio
-│   ├── core/utils/        # Funciones reutilizables
+│   ├── config/            # Configuración general (Cloudinary)
+│   ├── controllers/       # Lógica principal de cada recurso (books, users, etc.)
+│   ├── core/
+│   │   └── utils/         # Funciones auxiliares o reutilizables
 │   ├── middlewares/       # Middlewares personalizados
 │   ├── mocks/             # Datos simulados para pruebas
 │   ├── models/            # Esquemas de Mongoose
-│   ├── routes/            # Endpoints de la API
+│   ├── routes/            # Definición de rutas API
 │   ├── services/          # Lógica de servicios externos
 │   │   └── templates/     # Plantillas para emails
-│   ├── uploads/           # Carpeta temporal para archivos
+│   ├── uploads/           # Archivos temporales subidos por Multer
 │   ├── utils/             # Funciones auxiliares (email, cloudinary, etc.)
 ├── index.js               # Archivo de entrada del servidor
 └──.env                    # Variables de entorno (ignorado en Git)
@@ -87,7 +88,7 @@ TOKEN_SECRET_REFRESH= tu_token_secreto_para_refresh_jwt
 
 ### 📖 Books
 
-#### 📕 Estructura Libro
+#### 📕 Estructura del documento `Books` (MongoDB)
 
 ```
 {
@@ -114,22 +115,34 @@ TOKEN_SECRET_REFRESH= tu_token_secreto_para_refresh_jwt
 
 #### 📕 Books Endpoints
 
-| Método | Ruta                                       | Descripción                                                       |
-| ------ | ------------------------------------------ | ----------------------------------------------------------------- |
-| GET    | `http://localhost:9000/books/`             | Obtener todos los libros.                                         |
-| GET    | `http://localhost:9000/books/filter`       | Obtener libros filtrados (por género, precio, etc.).              |
-| GET    | `http://localhost:9000/books/search`       | Buscar libros por palabra clave.                                  |
-| POST   | `http://localhost:9000/books/getFavorites` | Obtener múltiples libros por IDs (favoritos).                     |
-| GET    | `http://localhost:9000/books/:id`          | Obtener un libro por ID.                                          |
-| POST   | `http://localhost:9000/books/create`       | Crear un nuevo libro (requiere imagen con `multipart/form-data`). |
-| PUT    | `http://localhost:9000/books/:id`          | Modificar un libro por ID (también puede incluir imagen).         |
-| DELETE | `http://localhost:9000/books/:id`          | Eliminar un libro por ID.                                         |
+- ##### 📖 Obtener libros
+
+| Método | Ruta                  | Descripción                                  |
+| ------ | --------------------- | -------------------------------------------- |
+| GET    | `/books/`             | Obtener todos los libros                     |
+| GET    | `/books/filter`       | Filtrar libros por criterios específicos     |
+| GET    | `/books/search`       | Buscar libros por palabra clave              |
+| POST   | `/books/getFavorites` | Obtener libros favoritos por un array de IDs |
+| GET    | `/books/:id`          | Obtener un libro por su ID                   |
+
+- ##### ✏️ Crear y actualizar libros
+
+| Método | Ruta            | Descripción                   |
+| ------ | --------------- | ----------------------------- |
+| POST   | `/books/create` | Crear un nuevo libro          |
+| PUT    | `/books/:id`    | Actualizar un libro existente |
+
+- ##### 🗑️ Eliminar libros
+
+| Método | Ruta         | Descripción              |
+| ------ | ------------ | ------------------------ |
+| DELETE | `/books/:id` | Eliminar un libro por ID |
 
 ---
 
 ### 🤵 Users
 
-#### 👤 Estructura Usuarios
+#### 👤 Estructura del documeto `Users` (MongoDB)
 
 ```
 {
@@ -154,7 +167,7 @@ TOKEN_SECRET_REFRESH= tu_token_secreto_para_refresh_jwt
 
 #### 👤 Users Endpoints
 
-##### 🔐 Autenticación y recuperación de contraseña
+- ##### 🔐 Autenticación y recuperación de contraseña
 
 | Método | Ruta                                          | Descripción                                        |
 | ------ | --------------------------------------------- | -------------------------------------------------- |
@@ -163,7 +176,7 @@ TOKEN_SECRET_REFRESH= tu_token_secreto_para_refresh_jwt
 | POST   | `http://localhost:9000/users/forgot-password` | Solicitar enlace para restablecer contraseña.      |
 | POST   | `http://localhost:9000/users/reset-password`  | Cambiar la contraseña con el token recibido.       |
 
-##### 🧾 Perfil de usuario
+- ##### 🧾 Perfil de usuario
 
 | Método | Ruta                                      | Descripción                                          |
 | ------ | ----------------------------------------- | ---------------------------------------------------- |
@@ -173,7 +186,7 @@ TOKEN_SECRET_REFRESH= tu_token_secreto_para_refresh_jwt
 | PUT    | `http://localhost:9000/users/new-role`    | Actualizar el rol del usuario.                       |
 | DELETE | `http://localhost:9000/users/delete-user` | Eliminar la cuenta del usuario autenticado.          |
 
-##### ⭐ Favoritos
+- ##### ⭐ Favoritos
 
 | Método | Ruta                                    | Descripción                                 |
 | ------ | --------------------------------------- | ------------------------------------------- |
@@ -184,7 +197,7 @@ TOKEN_SECRET_REFRESH= tu_token_secreto_para_refresh_jwt
 
 ### 📝 Reading Journal
 
-#### 📓 Estructura Journals
+#### 📓 Estructura del documento `Journals` (MongoDB)
 
 ```
 {
@@ -215,21 +228,21 @@ TOKEN_SECRET_REFRESH= tu_token_secreto_para_refresh_jwt
 
 #### 📓 Journals Endpoints
 
-##### 📥 Lectura de journals
+- ##### 📥 Lectura de journals
 
 | Método | Ruta                                           | Descripción                     |
 | ------ | ---------------------------------------------- | ------------------------------- |
 | GET    | `http://localhost:9000/journal/getAllJournals` | Obtener todos los journals.     |
 | GET    | `http://localhost:9000/journal/getJournal`     | Obtener un journal específico . |
 
-##### ✏️ Crear y actualizar journals
+- ##### ✏️ Crear y actualizar journals
 
 | Método | Ruta                                   | Descripción                      |
 | ------ | -------------------------------------- | -------------------------------- |
 | POST   | `http://localhost:9000/journal/create` | Crear un nuevo journal.          |
 | PUT    | `http://localhost:9000/journal/:id`    | Actualizar un journal existente. |
 
-##### ❌ Eliminar journals
+- ##### ❌ Eliminar journals
 
 | Método | Ruta                                | Descripción                    |
 | ------ | ----------------------------------- | ------------------------------ |
@@ -239,7 +252,7 @@ TOKEN_SECRET_REFRESH= tu_token_secreto_para_refresh_jwt
 
 ### 🛒 Cart
 
-#### 🛒 Estructura Carrito
+#### 🛒 Estructura del documento `Cart` (MongoDB)
 
 ```
 {
@@ -273,26 +286,26 @@ TOKEN_SECRET_REFRESH= tu_token_secreto_para_refresh_jwt
 
 #### 🛒 Cart Endpoints
 
-##### 📥 Obtener carrito
+- ##### 📥 Obtener carrito
 
 | Método | Ruta                                 | Descripción                                 |
 | ------ | ------------------------------------ | ------------------------------------------- |
 | GET    | `http://localhost:9000/cart/:userId` | Obtener el carrito de un usuario por su ID. |
 
-##### ➕ Añadir o actualizar productos
+- ##### ➕ Añadir o actualizar productos
 
 | Método | Ruta                                | Descripción                         |
 | ------ | ----------------------------------- | ----------------------------------- |
 | POST   | `http://localhost:9000/cart/add`    | Añadir un libro al carrito.         |
 | PUT    | `http://localhost:9000/cart/update` | Actualizar la cantidad de un libro. |
 
-##### ❌ Eliminar productos
+- ##### ❌ Eliminar productos
 
 | Método | Ruta                                | Descripción                    |
 | ------ | ----------------------------------- | ------------------------------ |
 | DELETE | `http://localhost:9000/cart/remove` | Eliminar un libro del carrito. |
 
-##### 🔄 Fusionar carritos
+- ##### 🔄 Fusionar carritos
 
 | Método | Ruta                               | Descripción                                                                  |
 | ------ | ---------------------------------- | ---------------------------------------------------------------------------- |
@@ -302,16 +315,56 @@ TOKEN_SECRET_REFRESH= tu_token_secreto_para_refresh_jwt
 
 ### 📦 Orders
 
+#### 📄 Estructura de los documentos orders y payments
+
+- ##### 📋 Estructura del documento `Orders` (MongoDB)
+
+```
+{
+  "_id": { "$oid": "67e3eed49a3401876aa06881" },
+  "books": [
+    { "book_id": { "$oid": "67bcb00ddf4d28770e24db67" },
+      "quantity": 1,
+      "price": 21.8,
+      "total_price": 21.8
+      }],
+  "subtotal": 21.8,
+  "full_name": "Berenise María Rodríguez Cuenca",
+  "email": "rodriguezcuencaberenise@gmail.com",
+  "phone": "123453453",
+  "country": "España",
+  "city": "Málaga",
+  "address": "29010",
+  "zip_code": "29010",
+  "status": "completado",
+  "created_at": { "$date": "2025-03-26T12:11:00.511Z" }
+}
+```
+
+- ##### 📋 Estructura del documento `Payments` (MongoDB)
+
+```
+{
+  "_id": { "$oid": "67e3eed49a3401876aa06883" },
+  "order_id": { "$oid": "67e3eed49a3401876aa06881" },
+  "user_id": null,
+  "payment_method": "paypal",
+  "status": "completado",
+  "transaction_id": "SIM-3t4ry5c59",
+  "created_at": { "$date": "2025-03-26T12:11:00.511Z" },
+}
+```
+
 #### 🧾 Order Endpoints
 
-##### ➕ Crear nueva orden y procesar pago
+- ##### ➕ Crear nueva orden y procesar pago
 
 | Método | Ruta                                   | Descripción                                             |
 | ------ | -------------------------------------- | ------------------------------------------------------- |
 | POST   | `http://localhost:9000/order/`         | Listado de pedidos y pagos.                             |
 | POST   | `http://localhost:9000/order/newOrder` | Crear una nueva orden y procesar el pago (alternativa). |
 
-##### 📥 Obtener orden por ID
+- ##### 📥 Obtener orden por ID
 
 | Método | Ruta                              | Descripción                             |
 | ------ | --------------------------------- | --------------------------------------- |
