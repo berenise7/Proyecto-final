@@ -1,40 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# 📚 Literary Haven - Frontend
 
-## Getting Started
+Frontend del proyecto Literary Haven, una plataforma full stack para amantes de la literatura. Este repositorio contiene todo el código relacionado con la interfaz de usuario.
 
-First, run the development server:
+🔗 [Repositorio Backend](https://github.com/berenise7/Proyecto-final/tree/main/back)
+
+---
+
+## 📗 Presentación
+
+Hola, soy Berenise y este es mi proyecto final para el bootcamp. Literary Haven es una librería digital construida con tecnologías modernas como React, Next.js y Node.js. Este frontend está diseñado para ser rápido, responsivo y fácil de navegar, con características como búsqueda de libros, registro de libros leidos, gestión de carrito, inicio de sesión, registro y panel de usuario.
+
+---
+
+## ▶️ Comenzar
+
+Si deseas probar el proyecto en tu máquina local, sigue estos pasos:
+
+### ✅ Requisitos
+
+- Node.js (v18 o superior)
+- NPM
+- Tener el backend corriendo (ver enlace más arriba)
+
+### 📦 Instalación
+
+```bash
+git clone https://github.com/berenise7/Proyecto-final.git
+cd Proyecto-final/front
+npm install
+```
+
+### 🚀 Ejecutar en desarrollo
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Esto levantará el proyecto en `http://localhost:3000`.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+---
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## 🧩 Tecnologías Utilizadas
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+### 📦 Dependencias principales:
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Next.js**: Framework para React.
+- **React**: Librería para construir interfaces de usuario.
+- **Formik & Yup**: Manejo de formularios y validación.
+- **jwt-decode**: Decodificación de tokens JWT.
+- **react-icons** y **FontAwesome**: Iconografía.
+- **CSS Modules**: Estilos aislados por componente.
 
-## Learn More
+### 🧠 Arquitectura
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+│
+├── api/                   # Funciones para consumir la API (books, cart, journals, orders, users)
+│
+├── components/            # Componentes reutilizables
+│   ├── Cart/
+│   ├── Footer/
+│   ├── FormikComponents/
+│   ├── Header/
+│   └── Home/
+│
+├── core/
+│   └──contexts/         # Context API para estados globales
+│
+├── pages/                 # Páginas del sitio, organizadas por ruta
+│   ├── admin/
+│   ├── books/
+│   ├── cart/
+│   ├── myaccount/
+│   ├── reading-journal/
+│   ├── user/
+│   ├── _app.js
+│   ├── _document.js
+│   └── index.js
+│
+└── styles/                # Hojas de estilo CSS
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🔑 Autenticación
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Se gestiona mediante JWT. El usuario puede registrarse, iniciar sesión, y acceder a un panel personalizado con sus favoritos, perfil y pedidos.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+---
+
+## 📱 Responsividad
+
+El diseño se adapta a varios tamaños de pantalla. Algunos breakpoints usados:
+
+| Tamaño   | Dispositivo       |
+| -------- | ----------------- |
+| < 526px  | Móviles           |
+| < 768px  | Tablets pequeños  |
+| < 992px  | Tablets grandes   |
+| > 1200px | Pantallas grandes |
+
+---
+
+## 📬 Contacto
+
+Creado por **Berenise** como proyecto final del bootcamp.

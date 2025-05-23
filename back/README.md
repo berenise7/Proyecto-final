@@ -1,6 +1,6 @@
 # 📦 Literary Haven - Backend
 
-Este repositorio contiene el backend del proyecto **Literary Haven**, una plataforma para amantes de la lectura donde pueden registrarse, explorar libros, escribir diarios de lectura, realizar pedidos y más.
+Este repositorio contiene el backend del proyecto **Literary Haven**, una plataforma para amantes de la lectura donde pueden registrarse, explorar libros, registro de libros leidos, realizar pedidos y más.
 
 Para el frontend visita el repositorio correspondiente:
 🔗 [Literary Haven Frontend](https://github.com/berenise7/Proyecto-final/tree/main/front)
