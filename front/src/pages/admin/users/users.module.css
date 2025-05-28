@@ -249,30 +249,32 @@
 }
 
 @media (max-width: 1150px) {
-  .usersContainer {
-    max-width: 95%;
-    padding: 1.5rem;
-  }
+    .usersContainer {
+        max-width: 95%;
+        padding: 1.5rem;
+        position: relative;
+    }
 
-  .searchInput {
-    width: 100%;
-    max-width: 100%;
-  }
+    .searchInput {
+        width: 100%;
+        max-width: 100%;
+        padding: 10px 40px 10px 10px;
+    }
 
-  .userTable {
-    font-size: 0.95rem;
-    word-break: break-word;
-  }
+    .userTable {
+        font-size: 0.95rem;
+        word-break: break-word;
+    }
 
-  .userTable th,
-  .userTable td {
-    padding: 8px;
-  }
+    .userTable th,
+    .userTable td {
+        padding: 8px;
+    }
 
-  .pagination {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
+    .pagination {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
 }
 
 @media (max-width: 1024px) {
@@ -284,17 +286,6 @@
     .searchInput {
         width: 100%;
         font-size: 1rem;
-    }
-
-    .searchContainer {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .searchIcon {
-        margin-left: 0;
-        margin-top: 0.5rem;
-        align-self: flex-end;
     }
 
     .pagination {
@@ -323,17 +314,7 @@
         font-size: 0.9rem;
     }
 
-    .searchContainer {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .searchIcon {
-        margin-left: 0;
-        margin-top: 0.5rem;
-        align-self: flex-end;
-    }
-
+ 
     .userTable {
         display: block;
         overflow-x: auto;

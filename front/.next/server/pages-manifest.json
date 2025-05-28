@@ -2,7 +2,10 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/myaccount/favorites/favorites": "pages/myaccount/favorites/favorites.js",
-  "/myaccount/my-library/my-library": "pages/myaccount/my-library/my-library.js",
-  "/reading-journal/[title]/[_id]": "pages/reading-journal/[title]/[_id].js"
+  "/books/[url]/[_id]": "pages/books/[url]/[_id].js",
+  "/admin/edit-books/all-books-edits": "pages/admin/edit-books/all-books-edits.js",
+  "/myaccount/my-data/my-data": "pages/myaccount/my-data/my-data.js",
+  "/myaccount/my-orders/orders": "pages/myaccount/my-orders/orders.js",
+  "/admin/users/users": "pages/admin/users/users.js",
+  "/": "pages/index.js"
 }

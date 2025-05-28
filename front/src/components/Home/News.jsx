@@ -32,7 +32,6 @@ export default function HomeLiterary() {
         isNewBook: true,
       };
       const booksData = await getBooksFilter(filters);
-      console.log("nuevos", booksData);
 
       if (booksData) {
         // Actualiza el estado con los libros obtenidos

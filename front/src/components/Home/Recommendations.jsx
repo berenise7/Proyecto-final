@@ -32,7 +32,6 @@ export default function Recommendations() {
         isRecommendation: true,
       };
       const booksData = await getBooksFilter(filters);
-      console.log("isRecommendation", booksData);
       if (booksData) {
         // Actualiza el estado con los libros obtenidos
         setBooks(booksData.data);

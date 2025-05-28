@@ -11,26 +11,35 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     position: relative;
+    width: 100%;
+    overflow-x: auto;
 }
 
+.tableWrapper {
+    width: 100%;
+    overflow-x: auto;
+}
 
 .orderTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    min-width: 500px;
 }
 
 .orderTable th,
 .orderTable td {
-  
+
     border: 1px solid #ddd;
     padding: 10px;
     text-align: center;
 }
-.orderTable td a{
+
+.orderTable td a {
     text-decoration: none;
     color: inherit;
 }
+
 .orderTable th {
     background-color: #694a6d;
     color: white;
@@ -59,6 +68,7 @@
     align-items: center;
     margin-top: 20px;
     gap: 10px;
+
 }
 
 .paginationButton {

@@ -69,39 +69,43 @@ export default function orders() {
           <FontAwesomeIcon icon={faChevronLeft} /> Volver atras
         </a>
         <h2>Todos los pedidos</h2>
-        <table className={styles.orderTable}>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Fecha</th>
-              <th>Estado</th>
-              <th>Subtotal</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.isArray(orders) && orders?.length > 0 ? (
-              orders.map((order) => (
-                <tr
-                  key={order._id}
-                  onClick={() =>
-                    router.push(`/myaccount/my-orders/${order._id}`)
-                  }
-                >
-                  <td>{order._id}</td>
-                  <td>{new Date(order.created_at).toLocaleDateString()}</td>
-                  <td>{order.status}</td>
-                  <td>{order.subtotal.toFixed(2)} €</td>
-                </tr>
-              ))
-            ) : (
+        <div className={styles.tableWrapper}>
+          <table className={styles.orderTable}>
+           
+            <thead>
               <tr>
-                <td colSpan="4" className={styles.noOrders}>
-                  No hay pedidos desponibles
-                </td>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Subtotal</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {Array.isArray(orders) && orders?.length > 0 ? (
+                orders.map((order) => (
+                  <tr
+                    key={order._id}
+                    onClick={() =>
+                      router.push(`/myaccount/my-orders/${order._id}`)
+                    }
+                  >
+                    <td>{order._id}</td>
+                    <td>{new Date(order.created_at).toLocaleDateString()}</td>
+                    <td>{order.status}</td>
+                    <td>{order.subtotal.toFixed(2)} €</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className={styles.noOrders}>
+                    No hay pedidos desponibles
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+    
         <div className={styles.pagination}>
           <button
             onClick={goToPrevPage}
